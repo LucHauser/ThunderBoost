@@ -1,0 +1,45 @@
+Data for Product:
+
+- Id
+- Name
+- Type
+- Price
+- Usage
+- Description
+- Img
+- Servings
+- Active
+
+Data for User:
+
+- Id
+- Title
+- Username
+- FirstName
+- LastName
+- Email
+- Since
+- Password
+
+Data for Product Feedback
+
+- Id
+- Title
+- Text
+- Point
+- ProductId
+- UserID
+
+Data For Chart
+
+- Id
+- Name
+- UserID
+- Products []
+
+Data for Last Purcase
+
+- Id
+- Date
+- UserId
+- Products []

@@ -1,0 +1,125 @@
+
+
+.iconBtn {
+    width: 55px;
+    height: 55px;
+    border-radius: 30px;
+    background-color: #D707F1;
+    border: none
+}
+
+.iconBtn:hover {
+    background-color: #9305A7;
+    cursor: pointer;
+}
+
+.faIcon {
+    width: 45px
+}
+
+.pageTitle {
+    color: #8DF3E8;
+    font-size: 60px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.pageSubtitle {
+    font-size: 40px;
+    font-family: Arial, sans-serif;
+    color: #8DF3E8;
+    margin-bottom: 28px;
+
+}
+
+.formGroup {
+    display: grid;
+    grid-gap: 8px;
+    margin-bottom: 20px;
+}
+
+.formTitle {
+    color: white;
+    font-size: 30px;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px
+}
+
+.formSeparatorLine {
+    width: auto;
+    height: 2px;
+    background-color: #8DF3E8;
+    margin-bottom: 30px;
+}
+
+.formInputField {
+    height: 50px;
+    background: transparent;
+    border: solid white 2px;
+    border-radius: 6px;
+    padding: 10px;
+    color: white;
+    font-size: 20px;
+}
+
+.formInputField > option {
+    color: #FFFFFF;
+    background-color: #060525;
+}
+
+.formInputField:focus {
+    outline: none
+}
+
+.formCheckbox {
+    width: 25px;
+    height: 25px;
+    border-radius: 6px;
+}
+
+.formCheckbox:checked {
+    accent-color: #8DF3E8;
+}
+
+.formLabel {
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+}
+
+.formLabel > a {
+    color: #8DF3E8;
+    text-decoration: underline;
+}
+
+.formGroup > p {
+    color: #D707F1;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.buttonFilled {
+    background-color: #8DF3E8;
+    height: 50px;
+    width: 100%;
+    border: solid #8DF3E8 2px;
+    border-radius: 6px;
+    font-size: 20px;
+}
+
+.buttonFilled:hover {
+    cursor: pointer;
+}
+
+.buttonFilledAutoWidth {
+    width: auto;
+    padding: 0 15px;
+}
+
+.tableContainer {
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 20px
+
+}

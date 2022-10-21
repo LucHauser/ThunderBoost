@@ -1,0 +1,65 @@
+.loginPage {
+    display: grid;
+    padding-top: 60px;
+}
+
+.formsContainer {
+    justify-self: center;
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+    gap: 16px
+}
+
+.formContainer {
+    width: 536px;
+    gap: 20px;
+    border: solid #8DF3E8 2px;
+    border-radius: 6px;
+    padding: 60px;
+}
+
+.formContainer > button {
+    margin-top: 10px
+}
+
+.userBenefitsContainer {
+    background-color: #14318C;
+    width: 100%;
+    padding: 15px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    list-style-type: none;
+    margin-bottom: 30px;
+    display: grid;
+    grid-gap: 15px
+}
+
+.userBenefitsContainer > li > svg {
+    margin-right: 25px;
+}
+
+.formGroupTerms {
+    display: grid;
+    grid-template-columns: 25px auto;
+    align-items: center;
+    grid-gap: 20px
+}
+
+.errorText {
+    height: 50px;
+    background-color: #9305A7;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.faExclamation {
+    margin-right: 10px;
+}

@@ -1,0 +1,34 @@
+{
+  "technologies": [
+    {
+      "id": 1,
+      "name": "reactjs"
+    },
+    {
+      "id": 2,
+      "name": "nextjs"
+    }
+  ],
+  "users": [
+    {
+      "email": "admin@admin.ch",
+      "title": "Mr",
+      "firstName": "Adam",
+      "lastName": "Admin",
+      "since": "2022-10-19",
+      "password": "$2a$10$YkFbz7nkfUtM64tKLMfPme2IOwuBEVCWXcGv75NP6BEdeV94eQ/TG",
+      "username": "Adam Admin",
+      "id": 1
+    },
+    {
+      "email": "nilswittwer2004@gmail.com",
+      "password": "$2a$10$2kduE8eXelqt7Wsfi9QZrekB.LjoqA4U72fglU6mTygqZzGUuequu",
+      "title": "Mr",
+      "firstName": "Nils",
+      "lastName": "Wittwer",
+      "username": "nilxxi",
+      "since": "21-9-2022",
+      "id": 2
+    }
+  ]
+}

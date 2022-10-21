@@ -1,0 +1,72 @@
+.navBarWrapper {
+    display: grid;
+}
+
+.navbar {
+    background: #14318C;
+    height: 75px;
+    display: grid;
+    grid-template-columns: 200px auto 200px;
+}
+
+.logo {
+    padding-top: 6px
+}
+
+.logoImage:hover {
+    cursor: pointer;
+}
+
+.navbarLinks {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 100px;
+    align-items: center;
+}
+
+.navLink {
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+}
+
+.caretDown {
+    margin-left: 5px
+}
+
+.iconBtnGroup {
+    display: flex;
+    padding: 0 5%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subNavShopBy {
+    max-height: 100px;
+    width: 100%;
+    background-color: #14318C;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 75px;
+    z-index: 10;
+    transition: 0.5s ease-in;
+}
+
+.hideSubNavShopBy {
+    display: none;
+}
+
+.shopByOptions {
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    width: 33.3%;
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+    background-image: url("https://via.placeholder.com/100x300");
+}
+
