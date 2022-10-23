@@ -1,22 +1,4 @@
 
-
-.iconBtn {
-    width: 55px;
-    height: 55px;
-    border-radius: 30px;
-    background-color: #D707F1;
-    border: none
-}
-
-.iconBtn:hover {
-    background-color: #9305A7;
-    cursor: pointer;
-}
-
-.faIcon {
-    width: 45px
-}
-
 .pageTitle {
     color: #8DF3E8;
     font-size: 60px;
