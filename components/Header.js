@@ -1,12 +1,12 @@
 import headerStyles from "./Header.module.css"
+import defaultStyles from "../pages/stylesheet/global.module.css"
 import Image from "next/image";
 import logo from "resources/assets/Thunderboost_Logo_Nav.jpg"
 import {NavLink, Offcanvas} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass, faCartShopping, faUser, faCaretDown, faBars, faHome, faClose} from "@fortawesome/free-solid-svg-icons"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import NavbarOffcanvas from "react-bootstrap/NavbarOffcanvas";
 
 
 
@@ -14,7 +14,15 @@ export default function Header({session}) {
 
     const [showShopBy, setShowShopBy] = useState(false)
     const [showNavOffcanvas, setShowNavOffcanvas] = useState(false)
+    const [showUserDialog, setShowUserDialog] = useState(false)
+    const [user, setUser] = useState({})
     const router = useRouter()
+
+    useEffect(() => {
+        if (session.user) {
+            setUser(session.user)
+        }
+    }, [])
 
     const handleShowSubNavShopBy = () => {
         if (showShopBy) {
@@ -22,6 +30,20 @@ export default function Header({session}) {
         } else {
             setShowShopBy(true)
         }
+    }
+
+    const handleShowUserDialog = () => {
+        if (showUserDialog) {
+            setShowUserDialog(false)
+        } else {
+            setShowUserDialog(true)
+        }
+    }
+
+    const handleLogout = () => {
+        session.logout()
+        handleShowUserDialog()
+        router.push("/")
     }
 
     const handleShowNavOffcanvas = () => setShowNavOffcanvas(true)
@@ -33,6 +55,7 @@ export default function Header({session}) {
 
     const navigateToProfile = () => {
         if (session.user) {
+            handleShowUserDialog()
             router.push("/profile")
         } else {
             navigateToLogin()
@@ -69,7 +92,7 @@ export default function Header({session}) {
                         <button className={headerStyles.iconBtn}>
                             <FontAwesomeIcon className={headerStyles.faIcon} icon={faCartShopping} color={"white"} size={"2x"}/>
                         </button>
-                        <button className={headerStyles.iconBtn} onClick={navigateToProfile}>
+                        <button className={headerStyles.iconBtn} onClick={session.user ? handleShowUserDialog : navigateToLogin}>
                             <FontAwesomeIcon icon={faUser} className={headerStyles.faIcon} color={"white"} size={"2x"}/>
                         </button>
                     </div>
@@ -98,6 +121,13 @@ export default function Header({session}) {
                 <NavLink href="#" className={headerStyles.navLink}>What is Thunderboost</NavLink>
                 <NavLink href="#" className={headerStyles.navLink}>About</NavLink>
             </Offcanvas>
+            <div className={showUserDialog ? headerStyles.profileDialog : headerStyles.hideProfileDialog}>
+                <p>Logged in as: <b>{user.username}</b></p>
+                <div className={headerStyles.btnGroupUserDialog}>
+                    <button className={defaultStyles.buttonFilled} onClick={navigateToProfile}>Your Profile</button>
+                    <button className={defaultStyles.buttonFilled} onClick={handleLogout}>Logout</button>
+                </div>
+            </div>
         </>
 
 
