@@ -148,6 +148,42 @@
     gap: 10px
 }
 
+.navSearchBar {
+    background: #14318C;
+    height: auto;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    color: white;
+    padding: 5px 10px 15px;
+    display: grid;
+    grid-template-columns: 100px auto 50px 50px
+}
+
+.navSearchBar > p {
+    margin: auto;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.hideNavSearchBar {
+    display: none
+}
+
+.navSearchField {
+    background: transparent;
+    border: none;
+    border-bottom: solid 2px #FFFFFF;
+    width: auto;
+    padding: 10px;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+.navSearchField:focus {
+    outline: none;
+    border-bottom: solid 2px #FFFFFF;
+}
+
 @media (max-width: 436px) {
     .iconBtnGroupInOffcanvas {
         position: absolute;
