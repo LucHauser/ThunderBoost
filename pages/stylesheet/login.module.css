@@ -1,65 +1,73 @@
 .loginPage {
     display: grid;
-    padding-top: 60px;
+    padding: 30px 0;
 }
 
 .formsContainer {
-    justify-self: center;
-    display: flex;
-    flex-flow: row;
-    align-items: flex-start;
-    gap: 16px
+    display: none;
 }
 
-.formContainer {
-    width: 536px;
-    gap: 20px;
-    border: solid #8DF3E8 2px;
-    border-radius: 6px;
-    padding: 60px;
-}
-
-.formContainer > button {
-    margin-top: 10px
-}
-
-.userBenefitsContainer {
-    background-color: #14318C;
+.tabList {
     width: 100%;
-    padding: 15px;
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 20px;
-    list-style-type: none;
-    margin-bottom: 30px;
-    display: grid;
-    grid-gap: 15px
-}
-
-.userBenefitsContainer > li > svg {
-    margin-right: 25px;
-}
-
-.formGroupTerms {
-    display: grid;
-    grid-template-columns: 25px auto;
-    align-items: center;
-    grid-gap: 20px
-}
-
-.errorText {
     height: 50px;
-    background-color: #9305A7;
-    color: white;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    color: #FFFFFF;
     font-family: Arial, sans-serif;
-    margin-bottom: 20px;
     font-size: 20px;
+    font-weight: bold;
+    list-style-type: none;
+}
+
+.tabListElement {
+    background: transparent;
+    height: 50px;
+    text-align: center;
+    padding: 15px 0
+}
+
+.tabListElementActive {
+    border: solid #FFFFFF 2px;
+    border-bottom: transparent;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.tabListNotActiveLeft {
+    border-bottom: solid 2px #FFFFFF;
+    border-left: 2px solid #060525;
+    border-top: 2px solid #060525;
+}
+
+.tabListNotActiveRight {
+    border-bottom: solid 2px #FFFFFF;
+    border-right: 2px solid #060525;
+    border-top: 2px solid #060525;
+}
+
+.formTabPage {
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-weight: bold;
 }
 
-.faExclamation {
-    margin-right: 10px;
+@media (max-width: 1164px) {
+    .loginPage {
+        padding: 60px 30px
+    }
+}
+
+@media (min-width: 1164px) {
+
+    .formsContainer {
+        display: flex;
+        justify-self: center;
+        align-items: flex-start;
+        flex-flow: row;
+        gap: 16px
+    }
+
+    .responsiveForms {
+        display: none
+    }
 }

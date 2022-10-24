@@ -36,6 +36,7 @@
 }
 
 .formInputField {
+    width: auto;
     height: 50px;
     background: transparent;
     border: solid white 2px;
@@ -103,5 +104,9 @@
     color: white;
     font-family: Arial, sans-serif;
     font-size: 20px
+
+}
+
+@media (min-width: 850px) {
 
 }
