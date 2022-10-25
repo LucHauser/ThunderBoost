@@ -1,12 +1,16 @@
 {
-  "technologies": [
+  "role": [
     {
       "id": 1,
-      "name": "reactjs"
+      "name": "ADMIN"
     },
     {
       "id": 2,
-      "name": "nextjs"
+      "name": "MANAGER"
+    },
+    {
+      "id": 3,
+      "name": "CUSTOMER"
     }
   ],
   "users": [
@@ -18,6 +22,7 @@
       "since": "2022-10-19",
       "password": "$2a$10$YkFbz7nkfUtM64tKLMfPme2IOwuBEVCWXcGv75NP6BEdeV94eQ/TG",
       "username": "Adam Admin",
+      "roleId": 1,
       "id": 1
     },
     {
@@ -28,7 +33,19 @@
       "lastName": "Wittwer",
       "username": "nilxxi",
       "since": "21-9-2022",
+      "roldId": 2,
       "id": 2
+    },
+    {
+      "email": "test@test.ch",
+      "password": "$2a$10$Ea2Jxjj14o0TLaaqSJMQEOZzHUCKZIpwk5voYe0KEJAvOHgPf4peu",
+      "title": "Ms",
+      "firstName": "Test",
+      "lastName": "Test",
+      "username": "test",
+      "since": "25-9-2022",
+      "roleId": 3,
+      "id": 3
     }
   ]
 }

@@ -71,6 +71,7 @@ export default function RegisterForm({session}) {
         repeatPassword: "",
     }
 
+    const DEFAULT_USER_ROLE = 3
 
     const [registerModel, setRegisterModel] = useState(defaultRegisterModel)
 
@@ -114,6 +115,7 @@ export default function RegisterForm({session}) {
                 registerModel.email,
                 registerModel.username,
                 now,
+                DEFAULT_USER_ROLE,
                 registerModel.password)
             await session.login(response)
         } catch (e) {

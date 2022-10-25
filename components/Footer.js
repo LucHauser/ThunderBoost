@@ -6,11 +6,11 @@ export default function Footer() {
 
     return (
         <div className={footerStyle.footer}>
-            <NavLink href="#">About Thunderboost</NavLink>
-            <NavLink href={"#"}>Payment and Shipment</NavLink>
             <p>{new Date().getFullYear()} Thunderboost</p>
-            <NavLink href={"#"}>Impressum</NavLink>
-            <NavLink href={"#"}>Privacy Policy</NavLink>
+            <NavLink className={footerStyle.footerLink} href="#">About Thunderboost</NavLink>
+            <NavLink className={footerStyle.footerLink} href={"#"}>Payment and Shipment</NavLink>
+            <NavLink className={footerStyle.footerLink} href={"#"}>Impressum</NavLink>
+            <NavLink className={footerStyle.footerLink} href={"#"}>Privacy Policy</NavLink>
         </div>
     )
 }

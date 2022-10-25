@@ -1,10 +1,10 @@
 
 .pageTitle {
     color: #8DF3E8;
-    font-size: 60px;
+    font-size: 30px;
     font-family: Arial, sans-serif;
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 
 .pageSubtitle {
@@ -108,5 +108,8 @@
 }
 
 @media (min-width: 850px) {
-
+    .pageTitle {
+        font-size: 60px;
+        margin-bottom: 60px;
+    }
 }

@@ -2,8 +2,10 @@
     width: 100%;
     gap: 20px;
     border: solid #8DF3E8 2px;
-    border-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
     padding: 60px;
+    border-top: none
 }
 
 .formContainer > button {
@@ -62,6 +64,8 @@
 
     .formContainer {
         width: 536px;
+        border-top: solid 2px #8DF3E8;
+        border-radius: 6px;
     }
 }
 
