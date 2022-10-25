@@ -1,0 +1,14 @@
+.adminWrapper {
+    padding: 30px
+}
+
+.adminPageTitle {
+    font-family: Arial, sans-serif;
+    font-size: 40px;
+    color: #8DF3E8;
+}
+
+.faRightToBracket {
+    transform: scale(-1, 1);
+    margin-right: 10px
+}
