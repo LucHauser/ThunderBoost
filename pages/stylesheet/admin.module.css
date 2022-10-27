@@ -18,3 +18,27 @@
     transform: scale(-1, 1);
     margin-right: 10px
 }
+
+.tabBar {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    background: #14318C;
+    list-style-type: none;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    justify-content: space-between;
+    color: #FFFFFF;
+}
+
+.tab {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab:hover {
+    background: #D707F1;
+}

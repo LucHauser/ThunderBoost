@@ -18,14 +18,19 @@ export default function BaseDataVariety(session) {
         loadVarieties()
     }, [])
 
+
+    // https://stackoverflow.com/questions/69470041/react-adding-search-to-a-table-correct-way for Filter Column
     return (
         <div>
-            <Table>
-                <tr>
-                    <th>Id</th>
-                    <th>Designation</th>
-                    <th>Description</th>
-                </tr>
+            <Table responsive>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Designation</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {
                     varieties.map((variety, index) => {
                         return (
@@ -38,6 +43,8 @@ export default function BaseDataVariety(session) {
                         )
                     })
                 }
+                </tbody>
+
             </Table>
         </div>
     )

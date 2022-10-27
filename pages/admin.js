@@ -1,4 +1,3 @@
-import {handleShowHeader} from "./_app";
 import defaultStyles from "./stylesheet/global.module.css"
 import adminStyles from "./stylesheet/admin.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -6,20 +5,20 @@ import {faRightToBracket} from "@fortawesome/free-solid-svg-icons";
 import {useRedirectToLogin} from "@lib/session";
 import {useRouter} from "next/router";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
-import {TabPane} from "react-bootstrap";
-import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
+import BaseDataVariety from "@components/BaseDataVariety";
 
-export default function AdminPage ({session}) {
+export default function AdminPage () {
 
-    useRedirectToLogin(session)
-    handleShowHeader()
+    const tabContents = ["Product Management", "Special Offers-Management", "User and Privileges", "Statistics"]
 
     const router = useRouter()
 
-
     const leaveAdminPortal = () => {
         router.push("/profile")
-        handleShowHeader()
+    }
+
+    const handleSwitchTab = () => {
+
     }
 
     return (
@@ -28,14 +27,18 @@ export default function AdminPage ({session}) {
                 <FontAwesomeIcon icon={faRightToBracket} size={"1x"} className={adminStyles.faRightToBracket}/>Leave Admin-Portal to Shop</button>
             <h1 className={adminStyles.adminPageTitle}>Administration-Portal</h1>
             <Tabs>
-                <TabList>
-                    <Tab>Product-Management</Tab>
-                    <Tab>Special Offers-Management</Tab>
-                    <Tab>User & Privileges</Tab>
-                    <Tab>Statistics and </Tab>
+                <TabList className={adminStyles.tabBar}>
+                    {
+                        tabContents.map((tab, index) => {
+                            return (
+                                // eslint-disable-next-line react/jsx-key
+                                <Tab key={index} className={adminStyles.tab}>{tab}</Tab>
+                            )
+                    })
+                }
                 </TabList>
                 <TabPanel>
-
+                    <BaseDataVariety/>
                 </TabPanel>
                 <TabPanel>
 
