@@ -1,11 +1,17 @@
 .adminWrapper {
-    padding: 30px
+    padding: 30px;
+    display: grid;
+    grid-template-rows: 75px auto auto
 }
 
 .adminPageTitle {
     font-family: Arial, sans-serif;
     font-size: 40px;
     color: #8DF3E8;
+}
+
+.leaveBtn {
+    width: 400px;
 }
 
 .faRightToBracket {

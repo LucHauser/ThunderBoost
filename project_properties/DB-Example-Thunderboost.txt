@@ -33,9 +33,9 @@ Data for Product Feedback
 Data For Chart
 
 - Id
-- Name
+- ProductId
 - UserID
-- Products []
+- Quantity
 
 Data for Last Purcase
 
@@ -43,3 +43,10 @@ Data for Last Purcase
 - Date
 - UserId
 - Products []
+
+baseDataVariety
+
+- Id
+- Name
+
+baseDataServings

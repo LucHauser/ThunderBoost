@@ -47,5 +47,17 @@
       "roleId": 3,
       "id": 3
     }
+  ],
+  "baseDataVariety": [
+    {
+      "name": "Strawberry",
+      "description": "My fav Fruit:)",
+      "id": 1
+    },
+    {
+      "name": "Test",
+      "description": "Test",
+      "id": 2
+    }
   ]
 }
