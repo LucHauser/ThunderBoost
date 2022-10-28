@@ -1,0 +1,43 @@
+.wrapper {
+    display: grid;
+    gap: 15px
+}
+
+.title {
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    color: #8DF3E8;
+}
+
+.information {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+.filterInput {
+    width: 50%;
+    height: 40px;
+    background: none;
+    border: none;
+    border-bottom: solid 2px #FFFFFF;
+    margin-top: 10px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    margin-right: 10px;
+}
+
+.filterInput:focus {
+    outline: none;
+}
+
+.tableAction {
+    display: flex;
+    justify-content: right;
+}
+
+.editBtn {
+    background: transparent;
+}

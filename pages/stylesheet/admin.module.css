@@ -1,7 +1,7 @@
 .adminWrapper {
     padding: 30px;
     display: grid;
-    grid-template-rows: 75px auto auto
+    gap: 15px
 }
 
 .adminPageTitle {
@@ -23,12 +23,13 @@
     width: 100%;
     height: 50px;
     display: flex;
-    background: #14318C;
+    background: #060525;
     list-style-type: none;
     font-family: Arial, sans-serif;
     font-size: 20px;
     justify-content: space-between;
     color: #FFFFFF;
+    border-bottom: solid 2px #FFFFFF;
 }
 
 .tab {
@@ -37,8 +38,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    outline: none
+}
+
+.selectedTab {
+    background: #14318C;
 }
 
 .tab:hover {
-    background: #D707F1;
+    cursor: pointer;
+}
+
+.tabPanel {
+    padding: 15px 0;
 }
