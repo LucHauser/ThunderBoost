@@ -91,6 +91,11 @@
     font-size: 20px;
 }
 
+.buttonTransparent {
+    background: transparent;
+    color: #8DF3E8;
+}
+
 .buttonFilled:hover {
     cursor: pointer;
 }

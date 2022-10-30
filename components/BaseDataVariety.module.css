@@ -38,6 +38,38 @@
     justify-content: right;
 }
 
+.addBtn {
+    height: 40px;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+}
+
 .editBtn {
     background: transparent;
+    border: none
+}
+
+.editBtn:focus, .addBtn:focus {
+    outline: none;
+}
+
+.editBtn:hover, .addBtn:hover {
+    cursor: pointer;
+}
+
+.formModal {
+    width: 600px;
+    padding: 10px;
+    position: absolute;
+    z-index: 9999;
+    top: 10px;
+    left: 50%;
+    margin-left: -300px;
+    background: #060525;
+    border: solid 2px #8DF3E8;
+    border-radius: 6px
 }

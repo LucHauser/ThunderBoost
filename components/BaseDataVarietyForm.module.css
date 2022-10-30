@@ -2,3 +2,12 @@
     width: auto;
     display: grid;
 }
+
+.actionButton {
+
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 10px
+}

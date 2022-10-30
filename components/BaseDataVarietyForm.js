@@ -4,7 +4,7 @@ import defaultStyles from "../pages/stylesheet/global.module.css"
 import baseDataVarietyStyles from "./BaseDataVarietyForm.module.css"
 import {createBaseDataVariety, updateBaseDataVariety} from "@lib/api"
 
-export default function BaseDataVarietyForm({session, varietyToEdit, onCanvasCreated, onVarietyCreated, onVarietyEdited}) {
+export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCreated, onVarietyEdited, toggleModal}) {
 
     function validateVarietyModel(variety) {
 
@@ -73,6 +73,7 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onCanvasCre
             } catch (e) {
                 console.log(e)
             }
+            toggleModal()
         } else {
             try {
                 const newVariety = await createBaseDataVariety(variety, session.accessToken)
@@ -81,6 +82,7 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onCanvasCre
             } catch (e) {
                 console.log(e)
             }
+            toggleModal()
         }
     }
 
@@ -99,10 +101,14 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onCanvasCre
                     <Form.Control className={defaultStyles.formInputField} type={"text"} name="description" onChange={handleChange} value={variety.description} placeholder={"Description of Variety"}/>
                     { errors.description && <p>{errors.description}</p> }
                 </Form.Group>
-                {variety.id ?
-                    <button className={`${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonFilled}`} type={"submit"}>Save changes</button>
-                    : <button className={`${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonFilled}`} type={"submit"}>Save variety</button>
-                }
+                <div className={baseDataVarietyStyles.buttonGroup}>
+                    {variety.id ?
+                        <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save changes</button>
+                        : <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save variety</button>
+                    }
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`} onClick={toggleModal}>Cancel</button>
+                </div>
+
             </Form>
         </div>
     )

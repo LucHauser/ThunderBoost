@@ -1,21 +1,16 @@
-import defaultStyles from "./stylesheet/global.module.css"
 import adminStyles from "./stylesheet/admin.module.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faRightToBracket} from "@fortawesome/free-solid-svg-icons";
-import {useRedirectToLogin} from "@lib/session";
 import {useRouter} from "next/router";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import BaseDataVariety from "@components/BaseDataVariety";
 import {useState} from "react";
-import {TabPane} from "react-bootstrap";
 
-export default function AdminPage () {
+export default function AdminPage ({session}) {
+
+    const router = useRouter()
 
     const tabContents = ["Product Management", "Highlights", "User and Privileges", "Statistics", "Base Data Variety"]
 
     const [activeTab, setActiveTab] = useState(tabContents[0])
-
-    const router = useRouter()
 
     const leaveAdminPortal = () => {
         router.push("/profile")
