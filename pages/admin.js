@@ -2,6 +2,7 @@ import adminStyles from "./stylesheet/admin.module.css"
 import {useRouter} from "next/router";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import BaseDataVariety from "@components/BaseDataVariety";
+import ProductForm from "@components/ProductForm";
 import {useState} from "react";
 
 export default function AdminPage ({session}) {
@@ -30,8 +31,8 @@ export default function AdminPage ({session}) {
                     })
                 }
                 </TabList>
-                <TabPanel>
-
+                <TabPanel className={adminStyles.tabPanel}>
+                    <ProductForm/>
                 </TabPanel>
                 <TabPanel>
 
