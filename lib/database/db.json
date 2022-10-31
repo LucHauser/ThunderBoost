@@ -53,6 +53,11 @@
       "name": "Strawberry",
       "description": "My fav Fruit:)",
       "id": 1
+    },
+    {
+      "name": "Orange",
+      "description": "Orange",
+      "id": 2
     }
   ]
 }

@@ -55,3 +55,8 @@
 .markdownSwitchButton:focus {
     outline: none
 }
+
+.multiSelectDropdown {
+    background: #060525 !important;
+    color: #FFFFFF;
+}
