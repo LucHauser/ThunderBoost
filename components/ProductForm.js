@@ -73,7 +73,10 @@ export default function ProductForm({session, onProductCreated}) {
             errors.stockAmount = "Stock amount bust be greater than 0"
             isValid = false
         }
-
+        if (product.releaseDate === "") {
+            errors.releaseDate = "Release Date must be set"
+            isValid = false
+        }
         return {errors, isValid}
     }
 
@@ -176,6 +179,23 @@ export default function ProductForm({session, onProductCreated}) {
             // console.log(selectedVarieties)
         }
         setSelectedVarieties(selectedValuesOnly)
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setLoadProduct(true)
+        setErrors(defaultStyles)
+        const result = validateProductModel(productModel)
+        if (!result.isValid) {
+            setErrors(result.errors)
+            setLoadProduct(false)
+            return
+        }
+        try {
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     return (

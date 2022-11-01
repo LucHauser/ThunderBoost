@@ -1,17 +1,9 @@
 {
-  "role": [
-    {
-      "id": 1,
-      "name": "ADMIN"
-    },
-    {
-      "id": 2,
-      "name": "MANAGER"
-    },
-    {
-      "id": 3,
-      "name": "CUSTOMER"
-    }
+  "products": [
+
+  ],
+  "productHasVarieties": [
+
   ],
   "users": [
     {
@@ -46,6 +38,20 @@
       "since": "25-9-2022",
       "roleId": 3,
       "id": 3
+    }
+  ],
+  "role": [
+    {
+      "id": 1,
+      "name": "ADMIN"
+    },
+    {
+      "id": 2,
+      "name": "MANAGER"
+    },
+    {
+      "id": 3,
+      "name": "CUSTOMER"
     }
   ],
   "baseDataVariety": [

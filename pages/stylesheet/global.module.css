@@ -1,8 +1,18 @@
+/* Imports */
+@font-face {
+    font-family: "HKModular-Bold";
+    src: url("https://font-public.canva.com/YAD5jdnkFxc/0/HKModular-Bold.983580fd602872378cf332fc1.85bb75c5cbd14f2827b114e5b050205d.woff2") format("woff");
+    font-weight: bold;
+}
+
+/* TODO fix ttf, converter from https://onlinefontconverter.com/ */
+
+
 
 .pageTitle {
     color: #8DF3E8;
     font-size: 30px;
-    font-family: Arial, sans-serif;
+    font-family: HKModular-Bold, sans-serif;
     text-align: center;
     margin-bottom: 30px;
 }
