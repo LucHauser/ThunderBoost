@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import {faFilePen, faFileLines} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {getAllBaseDataVariety} from "@lib/api";
+import {selectStyles} from "@components/stylesUtils";
 
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -20,7 +21,7 @@ export default function ProductForm({session, onProductCreated}) {
 
     const usages = ["Gaming", "Office", "Students & Pupils"]
 
-    function validateProductModel() {
+    function validateProductModel(product) {
         const errors = {
             name: "",
             price: null,
@@ -32,7 +33,46 @@ export default function ProductForm({session, onProductCreated}) {
 
         let isValid = true
 
-        // TODO Validating Inputs
+        if (product.name.trim().length === 0) {
+            errors.name = "Name is required"
+            isValid = false
+        }
+        if (product.name.length > 50) {
+            errors.name = "Max. 50 Character enabled"
+            isValid = false
+        }
+        if (product.price === null) {
+            errors.price = "Price is required"
+            isValid = false
+        }
+        if (!product.price > 0) {
+            errors.price = "Price must be greater than 0"
+            isValid = false
+        }
+        if (product.servings === null) {
+            errors.servings = "Servings is required"
+            isValid = false
+        }
+        if (!product.servings > 0) {
+            errors.servings = "Servings must be greater than 0"
+            isValid = false
+        }
+        if (product.description.trim().length === 0) {
+            errors.description = "Description is required"
+            isValid = false
+        }
+        if (product.description.length > 255) {
+            errors.description = "Max. 255 Characters enabled"
+            isValid = false
+        }
+        if (product.stockAmount === null) {
+            errors.stockAmount = "Stock amount is required"
+            isValid = false
+        }
+        if (!product.stockAmount > 0) {
+            errors.stockAmount = "Stock amount bust be greater than 0"
+            isValid = false
+        }
 
         return {errors, isValid}
     }
@@ -105,37 +145,91 @@ export default function ProductForm({session, onProductCreated}) {
         })
     }
 
-
-    const handleChange = (e) => {
+    const onProductChange = (e) => {
         const target = e.target
-        const name = e.name
+        const name = target.name
         const value = target.value
         setProductModel({
             ...productModel,
             [name]: value
         })
+        console.log(productModel)
+    }
+
+    const onDescriptionChange = (e) => {
+        setMarkdownReview(e.target.value)
+        setProductModel({
+            ...productModel,
+            description: e.target.value
+        })
+    }
+
+    const handleSelectVarieties = (item) => {
+        let selectedValuesOnly = []
+        if (item.length > 0) {
+            // console.log("List is not empty")
+            for (let i = 0; i < item.length; i++) {
+                selectedValuesOnly.push(item[i].value)
+            }
+            selectedValuesOnly = selectedValuesOnly.sort()
+            setSelectedVarieties(selectedValuesOnly)
+            // console.log(selectedVarieties)
+        }
+        setSelectedVarieties(selectedValuesOnly)
     }
 
     return (
-        <div className={productFormStyles.wrapper}>
-            <Form>
+        <div className={productFormStyles.component}>
+            <Form className={productFormStyles.formWrapper}>
                 <h2 className={defaultStyles.formTitle}>Create new product</h2>
-                <div className={defaultStyles.formSeparatorLine}/>
-                <Form.Group className={defaultStyles.formGroup}>
+                <div className={`${defaultStyles.formSeparatorLine} ${productFormStyles.formSeparatorLine}`}/>
+                <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputName}`}>
                     <Form.Label className={defaultStyles.formLabel}>Name</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type="text" name="name" onChange={handleChange} placeholder={"What's the name of this Product"}/>
+                    <Form.Control
+                        className={defaultStyles.formInputField}
+                        type="text"
+                        name="name"
+                        onChange={onProductChange}
+                        placeholder={"What's the name of this Product"}
+                    />
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Price</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type="number" name="price" onChange={handleChange} placeholder={"How much costs this product"}/>
+                    <Form.Control
+                        className={defaultStyles.formInputField}
+                        type="number"
+                        step="0.01"
+                        name="price"
+                        onChange={onProductChange}
+                        placeholder={"How much costs this product"}
+                    />
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Servings</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type="number" name="servings" onChange={handleChange} placeholder={"How many portions are here"}/>
+                    <Form.Control
+                        className={defaultStyles.formInputField}
+                        type="number"
+                        name="servings"
+                        onChange={onProductChange}
+                        placeholder={"How many portions are here"}
+                    />
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Stock Amount</Form.Label>
+                    <Form.Control
+                        className={defaultStyles.formInputField}
+                        type="number"
+                        name="stockAmount"
+                        onChange={onProductChange}
+                        placeholder={"Amount of Products in Stock"}
+                    />
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Usage</Form.Label>
-                    <Form.Select className={defaultStyles.formInputField} onChange={handleChange} name="usage">
+                    <Form.Select
+                        className={defaultStyles.formInputField}
+                        onChange={onProductChange}
+                        name="usage">
                         <option disabled>Choose</option>
                         {
                             usages.map(usage => {
@@ -146,47 +240,113 @@ export default function ProductForm({session, onProductCreated}) {
                         }
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className={defaultStyles.formGroup}>
+                <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputDescription}`}>
                     <Tabs>
                         <div className={productFormStyles.labelSwitchFlex}>
                             <Form.Label className={`${defaultStyles.formLabel} ${productFormStyles.labelDescription}`}>Description</Form.Label>
                             <TabList className={productFormStyles.markdownSwitcher}>
-                                <Tab className={productFormStyles.markdownSwitchButton} onClick={() => setMarkdownMode(false)} title={"View in Editor-Mode"}>
-                                    <FontAwesomeIcon icon={faFilePen} size={"1x"} color={!markdownMode ? "#8DF3E8" : "#FFFFFF"}/>
+                                <Tab
+                                    className={productFormStyles.markdownSwitchButton}
+                                    onClick={() => setMarkdownMode(false)}
+                                    title={"View in Editor-Mode"}>
+                                    <FontAwesomeIcon
+                                        icon={faFilePen}
+                                        size={"1x"}
+                                        color={!markdownMode ? "#8DF3E8" : "#FFFFFF"}
+                                    />
                                 </Tab>
-                                <Tab className={productFormStyles.markdownSwitchButton} onClick={() => setMarkdownMode(true)} title={"View in View-Mode"}>
-                                    <FontAwesomeIcon icon={faFileLines} size={"1x"} color={markdownMode ? "#8DF3E8" : "#FFFFFF"}/>
+                                <Tab
+                                    className={productFormStyles.markdownSwitchButton}
+                                    onClick={() => setMarkdownMode(true)}
+                                    title={"View in View-Mode"}>
+                                    <FontAwesomeIcon
+                                        icon={faFileLines}
+                                        size={"1x"}
+                                        color={markdownMode ? "#8DF3E8" : "#FFFFFF"}
+                                    />
                                 </Tab>
                             </TabList>
                         </div>
                         <TabPanel>
-                            <textarea className={`${defaultStyles.formInputField} ${productFormStyles.textareaMarkdown}`} value={markdownReview} onChange={(e) => setMarkdownReview(e.target.value)} placeholder="Enter your description, Markdown is supported"/>
+                            <textarea
+                                className={`${defaultStyles.formInputField} ${productFormStyles.textareaMarkdown}`}
+                                value={markdownReview}
+                                onChange={onDescriptionChange}
+                                placeholder="Enter your description, Markdown is supported"
+                            />
                         </TabPanel>
                         <TabPanel>
                             {/* eslint-disable-next-line react/no-children-prop */}
-                            <ReactMarkdown className={`${productFormStyles.markdownReview}`} children={markdownReview}/>
+                            <ReactMarkdown
+                                className={`${productFormStyles.markdownReview}`}
+                                /* eslint-disable-next-line react/no-children-prop */
+                                children={markdownReview}
+                                skipHtml={false}
+                            />
                         </TabPanel>
                     </Tabs>
                 </Form.Group>
-                <Form.Group className={defaultStyles.formGroup}>
+                <Form.Group className={`${defaultStyles.formGroup}`}>
                     <Form.Label className={defaultStyles.formLabel}>Product Image</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type="file" accept=".jpg, .png" name="img" onChange={onFileInputChange} ref={fileInput}/>
+                    <Form.Control
+                        className={defaultStyles.formInputField}
+                        type="file"
+                        accept=".jpg, .png"
+                        name="img"
+                        onChange={onFileInputChange}
+                        ref={fileInput}
+                    />
                 </Form.Group>
-                <FormGroup className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Varieties</Form.Label>
-                    <Select isMulti options={varieties.map(variety => {
-                        return {label: variety.name, value: variety.id, title: variety.description}
-                    })
-                    } isSearchable={true} className={productFormStyles.multiSelectDropdown} theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 0,
-                        background: "#060525",
-                        colors: {
-                            primary: '#FFFFFF'
+                <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputReleaseDate}`}>
+                    <Form.Label className={defaultStyles.formLabel}>Release Date</Form.Label>
+                    <Form.Control
+                        className={`${defaultStyles.formInputField}`}
+                        type="date"
+                        name="releaseDate"
+                        onChange={onProductChange}
+                        placeholder="Product sale date"
+                    />
+                </Form.Group>
+                <FormGroup className={`${defaultStyles.formGroup} ${productFormStyles.multiSelectVariety}`}>
+                    <Form.Label className={defaultStyles.formLabel}>Varieties
+                        <i className={defaultStyles.formLabelNotice}>! Multiple selectable</i>
+                    </Form.Label>
+                    <Select
+                        isMulti
+                        options={varieties.map(variety => {
+                            return {label: variety.name, value: variety.id}
+                            })
                         }
-                    })}/>
+                        onChange={handleSelectVarieties}
+                        escapeClearsValue={handleSelectVarieties}
+                        isSearchable={true}
+                        menuPlacement={"top"}
+                        className={productFormStyles.multiSelectDropdown}
+                        placeholder={"Select Varieties in this Booster"}
+                        styles={selectStyles}
+                        theme={(theme) => ({
+                            ...theme,
+                            borderRadius: 6,
+                            background: "#060525",
+                            height: 50,
+                            colors: {
+                                primary: '#FFFFFF'
+                            }
+                        })}
+                        noOptionsMessage={() =>
+                            <div className={productFormStyles.multiSelectNotFound}>
+                                <p>Missing Variety?</p>
+                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Create new Variety</button>
+                            </div>
+                        }
+                    />
                 </FormGroup>
-                
+                <i className={productFormStyles.formNotice}>* Required field</i>
+                <div className={productFormStyles.btnGroup}>
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Submit</button>
+                    <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.defaultTransparentButton}`}>Cancel</button>
+                </div>
+
             </Form>
         </div>
     )

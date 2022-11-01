@@ -1,4 +1,4 @@
-.wrapper {
+.component {
     border: solid 2px #8DF3E8;
     border-radius: 6px;
     padding: 15px
@@ -59,4 +59,40 @@
 .multiSelectDropdown {
     background: #060525 !important;
     color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    font-size: 20px
+}
+
+.multiSelectNotFound {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.formNotice {
+    font-family: Arial, sans-serif;
+    color: #FFFFFF;
+}
+
+.btnGroup {
+    display: flex;
+    gap: 15px;
+    justify-content: end;
+}
+
+@media (min-width: 1000px) {
+    .formWrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(8, auto);
+        column-gap: 15px;
+    }
+
+    .formWrapper > h2, .formSeparatorLine, .inputName, .inputDescription, .multiSelectVariety, .btnGroup {
+        grid-column: 1 / span 2
+    }
+
+    .inputReleaseDate {
+        grid-column: 1 / 1;
+    }
 }

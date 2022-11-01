@@ -51,6 +51,15 @@
     background-color: #060525;
 }
 
+.formInputField[type=date] {
+    font-family: Arial, sans-serif;
+}
+
+.formInputField[type=date]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+
+}
+
 .formInputField:focus {
     outline: none
 }
@@ -69,6 +78,10 @@
     color: white;
     font-family: Arial, sans-serif;
     font-size: 20px;
+}
+
+.formLabelNotice {
+    font-size: 10px;
 }
 
 .formLabel > a {
@@ -94,6 +107,16 @@
 .buttonTransparent {
     background: transparent;
     color: #8DF3E8;
+}
+
+.defaultTransparentButton {
+    width: auto;
+    border: solid #FFFFFF 2px;
+    border-radius: 6px;
+    padding: 0 15px;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
 }
 
 .buttonFilled:hover {
