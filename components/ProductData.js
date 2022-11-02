@@ -1,6 +1,7 @@
 import ProductForm from "@components/ProductForm";
 import {Modal} from "react-bootstrap";
 import {useState} from "react";
+import productDataStyles from "./ProductData.module.css"
 
 export default function ProductData(session) {
 
@@ -9,7 +10,7 @@ export default function ProductData(session) {
     return (
         <div>
             <button onClick={() => setShowProductFormDialog(true)}>Create Product</button>
-            <Modal show={showProductFormDialog}>
+            <Modal show={showProductFormDialog} className={productDataStyles.dialogProductForm}>
                 <ProductForm session={session} toggleModal={() => setShowProductFormDialog(false)}/>
             </Modal>
 

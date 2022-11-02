@@ -4,6 +4,7 @@ import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import BaseDataVariety from "@components/BaseDataVariety";
 import ProductForm from "@components/ProductForm";
 import {useState} from "react";
+import ProductData from "@components/ProductData";
 
 export default function AdminPage ({session}) {
 
@@ -32,7 +33,7 @@ export default function AdminPage ({session}) {
                 }
                 </TabList>
                 <TabPanel className={adminStyles.tabPanel}>
-                    <ProductForm/>
+                    <ProductData session={session}/>
                 </TabPanel>
                 <TabPanel>
 
