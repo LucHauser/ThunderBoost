@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {Form, FormGroup, FormLabel} from "react-bootstrap";
+import {Form, FormGroup} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import productFormStyles from "./ProductForm.module.css"
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
@@ -7,8 +7,9 @@ import Select from "react-select";
 import ReactMarkdown from "react-markdown";
 import {faFilePen, faFileLines} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getAllBaseDataVariety} from "@lib/api";
+import {addConnectProductWithVariety, getAllBaseDataVariety} from "@lib/api";
 import {selectStyles} from "@components/stylesUtils";
+import {createProduct, updateProduct} from "@lib/api";
 
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -17,7 +18,7 @@ const toBase64 = file => new Promise((resolve, reject) => {
     reader.onerror = error => reject(error)
 })
 
-export default function ProductForm({session, onProductCreated}) {
+export default function ProductForm({session, onProductCreated, toggleModal}) {
 
     const usages = ["Gaming", "Office", "Students & Pupils"]
 
@@ -89,10 +90,11 @@ export default function ProductForm({session, onProductCreated}) {
         stockAmount: null,
         img: "",
         releaseDate: "",
-        active: false
+        active: true
     }
 
     const [productModel, setProductModel] = useState(defaultProductModel)
+    const [product, setProduct] = useState({})
     const [errors, setErrors] = useState(null)
     const [loadProduct, setLoadProduct] = useState(false)
     const [varieties, setVarieties] = useState([])
@@ -100,6 +102,7 @@ export default function ProductForm({session, onProductCreated}) {
     const [markdownMode, setMarkdownMode] = useState(false)
 
     const [selectedVarieties, setSelectedVarieties] = useState([])
+    const [addConnectProductToVariety, setAddConnectProductToVariety] = useState({})
 
     const [imagePath, setImagePath] = useState("")
     const [base64Image, setBase64Image] = useState("")
@@ -192,10 +195,21 @@ export default function ProductForm({session, onProductCreated}) {
             return
         }
         try {
-
+            const newProduct = await createProduct(productModel, session.accessToken)
+            setProduct(newProduct)
+            onProductCreated(newProduct)
         } catch (e) {
             console.log(e)
         }
+        for (let i = 0; selectedVarieties.length; i++) {
+            setAddConnectProductToVariety({productId: product.id, varietyId: selectedVarieties[i]})
+            try {
+                await addConnectProductWithVariety(addConnectProductToVariety)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        toggleModal()
     }
 
     return (
@@ -370,6 +384,4 @@ export default function ProductForm({session, onProductCreated}) {
             </Form>
         </div>
     )
-
-
 }
