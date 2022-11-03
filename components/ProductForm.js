@@ -5,7 +5,7 @@ import productFormStyles from "./ProductForm.module.css"
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import Select from "react-select";
 import ReactMarkdown from "react-markdown";
-import {faFilePen, faFileLines} from "@fortawesome/free-solid-svg-icons";
+import {faFilePen, faFileLines, faCircleInfo} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {addConnectProductWithVariety, getAllBaseDataVariety} from "@lib/api";
 import {selectStyles} from "@components/stylesUtils";
@@ -22,14 +22,16 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
 
     const usages = ["Gaming", "Office", "Students & Pupils"]
 
-    function validateProductModel(product) {
+    function validateProductModel(product, selectedVarieties) {
         const errors = {
             name: "",
             price: null,
             servings: null,
             description: "",
             stockAmount: null,
+            usage: "",
             releaseDate: "",
+            varieties: "",
         }
 
         let isValid = true
@@ -74,8 +76,16 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             errors.stockAmount = "Stock amount bust be greater than 0"
             isValid = false
         }
+        if (product.usage === "") {
+            errors.usage = "Please select Usage"
+            isValid = false
+        }
         if (product.releaseDate === "") {
             errors.releaseDate = "Release Date must be set"
+            isValid = false
+        }
+        if (!selectedVarieties > 0) {
+            errors.varieties = "Please choose one Variety or more"
             isValid = false
         }
         return {errors, isValid}
@@ -95,7 +105,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
 
     const [productModel, setProductModel] = useState(defaultProductModel)
     const [product, setProduct] = useState({})
-    const [errors, setErrors] = useState(null)
+    const [errors, setErrors] = useState({})
     const [loadProduct, setLoadProduct] = useState(false)
     const [varieties, setVarieties] = useState([])
     const [markdownReview, setMarkdownReview] = useState("")
@@ -188,7 +198,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
         e.preventDefault()
         setLoadProduct(true)
         setErrors(defaultStyles)
-        const result = validateProductModel(productModel)
+        const result = validateProductModel(productModel, selectedVarieties)
         if (!result.isValid) {
             setErrors(result.errors)
             setLoadProduct(false)
@@ -214,7 +224,8 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
 
     return (
         <div className={productFormStyles.component}>
-            <Form className={productFormStyles.formWrapper}>
+            <Form className={productFormStyles.formWrapper}
+                onSubmit={handleSubmit}>
                 <h2 className={defaultStyles.formTitle}>Create new product</h2>
                 <div className={`${defaultStyles.formSeparatorLine} ${productFormStyles.formSeparatorLine}`}/>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputName}`}>
@@ -226,6 +237,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         onChange={onProductChange}
                         placeholder={"What's the name of this Product"}
                     />
+                    {errors.name && <p>{errors.name}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Price</Form.Label>
@@ -237,6 +249,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         onChange={onProductChange}
                         placeholder={"How much costs this product"}
                     />
+                    {errors.price && <p>{errors.price}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Servings</Form.Label>
@@ -247,6 +260,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         onChange={onProductChange}
                         placeholder={"How many portions are here"}
                     />
+                    {errors.servings && <p>{errors.servings}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Stock Amount</Form.Label>
@@ -257,6 +271,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         onChange={onProductChange}
                         placeholder={"Amount of Products in Stock"}
                     />
+                    {errors.stockAmount && <p>{errors.stockAmount}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Usage</Form.Label>
@@ -273,11 +288,18 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                             })
                         }
                     </Form.Select>
+                    {errors.usage && <p>{errors.usage}</p>}
                 </Form.Group>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputDescription}`}>
                     <Tabs>
                         <div className={productFormStyles.labelSwitchFlex}>
-                            <Form.Label className={`${defaultStyles.formLabel} ${productFormStyles.labelDescription}`}>Description</Form.Label>
+                            <Form.Label className={`${defaultStyles.formLabel} ${productFormStyles.labelDescription}`}>Description
+                                <FontAwesomeIcon
+                                    icon={faCircleInfo}
+                                    size={"1x"}
+                                    color={"white"}
+                                    title={"Info: Use optional Markdown Syntax to write a clear description, you can switch to Markdown to see the review"}/>
+                            </Form.Label>
                             <TabList className={productFormStyles.markdownSwitcher}>
                                 <Tab
                                     className={productFormStyles.markdownSwitchButton}
@@ -319,6 +341,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                             />
                         </TabPanel>
                     </Tabs>
+                    {errors.description && <p>{errors.description}</p>}
                 </Form.Group>
                 <Form.Group className={`${defaultStyles.formGroup}`}>
                     <Form.Label className={defaultStyles.formLabel}>Product Image</Form.Label>
@@ -340,6 +363,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         onChange={onProductChange}
                         placeholder="Product sale date"
                     />
+                    {errors.releaseDate && <p>{errors.releaseDate}</p>}
                 </Form.Group>
                 <FormGroup className={`${defaultStyles.formGroup} ${productFormStyles.multiSelectVariety}`}>
                     <Form.Label className={defaultStyles.formLabel}>Varieties
@@ -374,10 +398,12 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                             </div>
                         }
                     />
+                    {errors.varieties && <p>{errors.varieties}</p>}
                 </FormGroup>
                 <i className={productFormStyles.formNotice}>* Required field</i>
                 <div className={productFormStyles.btnGroup}>
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Submit</button>
+                    <button
+                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Submit</button>
                     <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.defaultTransparentButton}`}>Cancel</button>
                 </div>
 
