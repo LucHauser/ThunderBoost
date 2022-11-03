@@ -32,6 +32,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             usage: "",
             releaseDate: "",
             varieties: "",
+            img: ""
         }
 
         let isValid = true
@@ -84,6 +85,10 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             errors.releaseDate = "Release Date must be set"
             isValid = false
         }
+        /* if (product.img === "") {
+            errors.img = "Image is required"
+            isValid = false
+        } */
         if (!selectedVarieties > 0) {
             errors.varieties = "Please choose one Variety or more"
             isValid = false
@@ -151,14 +156,20 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
     }, [])
 
     const onFileInputChange = async (e) => {
-        const file = fileInput.current.file[0]
+        console.log(e)
+        console.log(fileInput.current.files[0])
+        const file = fileInput.current.files[0]
         if (!file) return
         const base64 = await toBase64(file)
         setBase64Image(base64)
+        // console.log("HERE")
+        // console.log(base64Image)
         setProductModel({
             ...productModel,
             img: base64Image
         })
+        // console.log("HERE")
+        // console.log(productModel.img)
     }
 
     const onProductChange = (e) => {
@@ -211,7 +222,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
         } catch (e) {
             console.log(e)
         }
-        for (let i = 0; selectedVarieties.length; i++) {
+        for (let i = 0; i < selectedVarieties.length; i++) {
             setAddConnectProductToVariety({productId: product.id, varietyId: selectedVarieties[i]})
             try {
                 await addConnectProductWithVariety(addConnectProductToVariety)
@@ -247,7 +258,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         step="0.01"
                         name="price"
                         onChange={onProductChange}
-                        placeholder={"How much costs this product"}
+                        placeholder={"How much does this product cost"}
                     />
                     {errors.price && <p>{errors.price}</p>}
                 </Form.Group>
@@ -353,6 +364,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         onChange={onFileInputChange}
                         ref={fileInput}
                     />
+                    {errors.img && <p>{errors.img}</p>}
                 </Form.Group>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputReleaseDate}`}>
                     <Form.Label className={defaultStyles.formLabel}>Release Date</Form.Label>
@@ -404,7 +416,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                 <div className={productFormStyles.btnGroup}>
                     <button
                         className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Submit</button>
-                    <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.defaultTransparentButton}`}>Cancel</button>
+                    <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.defaultTransparentButton}`} onClick={toggleModal}>Cancel</button>
                 </div>
 
             </Form>

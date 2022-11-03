@@ -5,10 +5,19 @@ import BaseDataVariety from "@components/BaseDataVariety";
 import ProductForm from "@components/ProductForm";
 import {useState} from "react";
 import ProductData from "@components/ProductData";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 
 export default function AdminPage ({session}) {
 
     const router = useRouter()
+
+    if (session.user) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useRedirectBlockAdmin(session)
+    } else {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useRedirectToLogin(session)
+    }
 
     const tabContents = ["Product Management", "Highlights", "User and Privileges", "Statistics", "Base Data Variety"]
 
@@ -27,7 +36,10 @@ export default function AdminPage ({session}) {
                         tabContents.map((tab, index) => {
                             return (
                                 // eslint-disable-next-line react/jsx-key
-                                <Tab key={index} className={`${tab === activeTab ? adminStyles.selectedTab : null} ${adminStyles.tab}`} onClick={() => setActiveTab(tab)}>{tab}</Tab>
+                                <Tab
+                                    key={index}
+                                    className={`${tab === activeTab ? adminStyles.selectedTab : null} ${adminStyles.tab}`}
+                                    onClick={() => setActiveTab(tab)}>{tab}</Tab>
                             )
                     })
                 }
