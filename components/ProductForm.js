@@ -180,7 +180,6 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             ...productModel,
             [name]: value
         })
-        console.log(productModel)
     }
 
     const onDescriptionChange = (e) => {
@@ -217,15 +216,14 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
         }
         try {
             const newProduct = await createProduct(productModel, session.accessToken)
+            console.log(newProduct)
             setProduct(newProduct)
-            onProductCreated(newProduct)
         } catch (e) {
             console.log(e)
         }
         for (let i = 0; i < selectedVarieties.length; i++) {
-            setAddConnectProductToVariety({productId: product.id, varietyId: selectedVarieties[i]})
             try {
-                await addConnectProductWithVariety(addConnectProductToVariety)
+                await addConnectProductWithVariety(product.id, selectedVarieties[i], session.accessToken)
             } catch (e) {
                 console.log(e)
             }
@@ -234,7 +232,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
     }
 
     return (
-        <div className={productFormStyles.component}>
+        <div>
             <Form className={productFormStyles.formWrapper}
                 onSubmit={handleSubmit}>
                 <h2 className={defaultStyles.formTitle}>Create new product</h2>

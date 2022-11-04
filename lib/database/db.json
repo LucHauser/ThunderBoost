@@ -64,6 +64,66 @@
       "name": "Orange",
       "description": "Orange",
       "id": 2
+    },
+    {
+      "name": "Banana",
+      "description": "Banana",
+      "id": 3
+    },
+    {
+      "name": "Smirnoff Ice",
+      "description": "Smirnoff Vodka (4% Vol)",
+      "id": 4
+    },
+    {
+      "name": "Apple",
+      "description": "",
+      "id": 5
+    },
+    {
+      "name": "Kiwi",
+      "description": "",
+      "id": 6
+    },
+    {
+      "name": "Strawberry Milkshake",
+      "description": "",
+      "id": 7
+    },
+    {
+      "name": "Chocolate",
+      "description": "Chailler Chocolate",
+      "id": 8
+    },
+    {
+      "name": "Papaya",
+      "description": "",
+      "id": 9
+    },
+    {
+      "name": "Cola",
+      "description": "Coca Cola Pepsi",
+      "id": 10
+    },
+    {
+      "name": "Cherry",
+      "description": "",
+      "id": 11
+    },
+    {
+      "name": "Raspberry",
+      "description": "",
+      "id": 12
+    },
+    {
+      "name": "Lemon",
+      "description": "",
+      "id": 13
+    },
+    {
+      "name": "Peach",
+      "description": "",
+      "id": 14
     }
   ]
 }

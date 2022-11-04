@@ -99,7 +99,6 @@ export default function BaseDataVariety(session) {
                     }} onVarietyCreated={(variety) => {
                         setVarieties([...varieties, variety])
                         setFilterVariety("")
-                        router.reload()
                     }}/>
             </Modal>
 
