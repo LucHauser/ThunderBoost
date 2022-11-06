@@ -1,9 +1,39 @@
 {
-  "products": [
-
+  "product": [
+    {
+      "name": "Test",
+      "price": "5",
+      "servings": "5",
+      "usage": "Office",
+      "description": "fffdasfa",
+      "stockAmount": "4",
+      "img": "",
+      "releaseDate": "2022-11-10",
+      "active": true,
+      "id": 1
+    }
   ],
   "productHasVarieties": [
-
+    {
+      "productId": 1,
+      "baseDataVarietyId": 1,
+      "id": 1
+    },
+    {
+      "productId": 1,
+      "baseDataVarietyId": 2,
+      "id": 2
+    },
+    {
+      "productId": 1,
+      "baseDataVarietyId": 3,
+      "id": 3
+    },
+    {
+      "productId": 1,
+      "baseDataVarietyId": 9,
+      "id": 4
+    }
   ],
   "users": [
     {

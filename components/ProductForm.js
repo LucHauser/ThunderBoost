@@ -116,6 +116,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
     const [markdownReview, setMarkdownReview] = useState("")
     const [markdownMode, setMarkdownMode] = useState(false)
 
+    const [generatedProductId, setGeneratedProductId] = useState("")
     const [selectedVarieties, setSelectedVarieties] = useState([])
     const [addConnectProductToVariety, setAddConnectProductToVariety] = useState({})
 
@@ -216,17 +217,16 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
         }
         try {
             const newProduct = await createProduct(productModel, session.accessToken)
-            console.log(newProduct)
+            const productId = newProduct.id
+            // console.log(newProduct.id + " = " + productId)
+
+            for (let i = 0; i < selectedVarieties.length; i++) {
+                console.log()
+                await addConnectProductWithVariety(productId, selectedVarieties[i], session.accessToken)
+            }
             setProduct(newProduct)
         } catch (e) {
             console.log(e)
-        }
-        for (let i = 0; i < selectedVarieties.length; i++) {
-            try {
-                await addConnectProductWithVariety(product.id, selectedVarieties[i], session.accessToken)
-            } catch (e) {
-                console.log(e)
-            }
         }
         toggleModal()
     }
