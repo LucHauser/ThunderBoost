@@ -1,4 +1,106 @@
+.wrapper {
+    display: grid;
+    gap: 15px;
+    font-family: Arial, sans-serif;
+    color: #FFFFFF;
+}
 
+.title {
+
+    font-size: 30px;
+    color: #8DF3E8;
+}
+
+.information {
+    font-size: 20px;
+}
+
+.accordionTblActions {
+    background: #14318C;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px
+}
+
+.accordionTblActions > .filterGroup {
+    display: flex;
+    gap: 30px
+}
+
+.filterInput {
+    height: 40px;
+    background: none;
+    border: none;
+    border-bottom: solid 2px #FFFFFF;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    margin-right: 10px;
+}
+
+.dropDownFilter {
+    background: transparent;
+    width: 100px;
+    height: 40px;
+    outline: none;
+    border: none;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    appearance: none;
+}
+
+.dropDownFilter > option {
+    background: #060525;
+}
+
+.filterInput:focus {
+    outline: none
+}
+
+.addBtn {
+    height: 40px;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+}
+
+.accordionContainer {
+    width: 100%;
+}
+
+.accordionItem {
+    font-size: 20px;
+    border-bottom: #FFFFFF solid 2px;
+}
+
+.accordionHeader {
+    height: 50px;
+    background: #14318C;
+    width: 100%;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.accordionPanel {
+    padding: 10px 0;
+}
+
+.accordionPanel > div {
+    display: grid;
+    grid-template-columns: 350px auto 200px;
+}
+
+.productInformation {
+    display: grid
+}
 
 .dialogProductForm {
     width: 80%;

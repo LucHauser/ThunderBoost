@@ -11,6 +11,18 @@
       "releaseDate": "2022-11-10",
       "active": true,
       "id": 1
+    },
+    {
+      "name": "ffdfdf",
+      "price": "5",
+      "servings": "5",
+      "usage": "Students & Pupils",
+      "description": "helloioio",
+      "stockAmount": "6",
+      "img": "",
+      "releaseDate": "2022-11-17",
+      "active": true,
+      "id": 2
     }
   ],
   "productHasVarieties": [
@@ -33,6 +45,21 @@
       "productId": 1,
       "baseDataVarietyId": 9,
       "id": 4
+    },
+    {
+      "productId": 2,
+      "baseDataVarietyId": 12,
+      "id": 5
+    },
+    {
+      "productId": 2,
+      "baseDataVarietyId": 2,
+      "id": 6
+    },
+    {
+      "productId": 2,
+      "baseDataVarietyId": 7,
+      "id": 7
     }
   ],
   "users": [
