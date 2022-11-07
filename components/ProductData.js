@@ -2,7 +2,7 @@ import ProductForm from "@components/ProductForm";
 import {Form, Modal, SplitButton, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import productDataStyles from "./ProductData.module.css"
-import {getAllProducts, getAllProductsInclusiveConnectVariety} from "@lib/api";
+import {getAllBaseDataVariety, getAllProducts, getAllProductsInclusiveConnectVariety, login} from "@lib/api";
 import {
     faPlus,
     faXmark,
@@ -19,8 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Accordion, AccordionItem, AccordionItemHeading,AccordionItemButton, AccordionItemPanel} from "react-accessible-accordion";
-import DropdownItem from "react-bootstrap/DropdownItem";
-import VarietyList from "@components/VarietyList";
+import ReactMarkdown from "react-markdown";
 
 export default function ProductData(session) {
 
@@ -29,6 +28,7 @@ export default function ProductData(session) {
 
     const [showProductFormDialog, setShowProductFormDialog] = useState(false)
     const [products, setProducts] = useState([])
+    const [varieties, setVarieties] = useState([])
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
     const [filterActiveProduct, setFilterActiveProduct] = useState(selectFilterActivableOptions[0])
@@ -47,7 +47,36 @@ export default function ProductData(session) {
         loadProducts()
     }, [])
 
+    useEffect(() => {
+        const loadVarieties = async () => {
+            try {
+                const varieties = await getAllBaseDataVariety()
+                setVarieties(varieties)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        loadVarieties()
+    }, [])
+
+    const getNameByVarietyId = (id) => {
+        for (let i = 0; i < varieties.length; i++) {
+            if (id === varieties[i].id) {
+                return varieties[i].name
+            }
+        }
+    }
+
+    const getDescriptionByVarietyId = (id) => {
+        for (let i = 0; i < varieties.length; i++) {
+            if (id === varieties[i].id) {
+                return varieties[i].description
+            }
+        }
+    }
+
     return (
+
         <div className={productDataStyles.wrapper}>
             <h3 className={productDataStyles.title}>Product Management</h3>
             <p className={productDataStyles.information}>Management of products in the Thunderboost-Shop. Create Product, edit products, activate or disable show product or edit stock-amount</p>
@@ -117,15 +146,57 @@ export default function ProductData(session) {
                                             <img src={"https://via.placeholder.com/300"}/>
                                             <div className={productDataStyles.productInformation}>
                                                 <h4>Information</h4>
-                                                <ul>
-                                                    <p>Name: {product.name}</p>
-                                                    <p>Usage: {product.usage}</p>
-                                                    <p>Servings: {product.servings}</p>
-                                                    <p>Price: {Number.parseFloat(product.price).toFixed(2)} $</p>
-                                                    <p>Stock Amount: {product.stockAmount}</p>
-                                                    <p>Release Date: {product.releaseDate}</p>
-                                                </ul>
-                                                <VarietyList productHasVarieties={product?.productHasVarieties}/>
+                                                <table className={productDataStyles.productSpecs}>
+                                                    <tr>
+                                                        <td>Name</td>
+                                                        <td>{product.name}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Usage</td>
+                                                        <td>{product.usage}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Servings</td>
+                                                        <td>{product.servings}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Price</td>
+                                                        <td>{product.price}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Stock amount</td>
+                                                        <td>{product.stockAmount}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Release Date</td>
+                                                        <td>{product.releaseDate}</td>
+                                                    </tr>
+                                                </table>
+                                                <div className={productDataStyles.varietyList}>
+                                                    <p>Varieties: </p>
+                                                    {product.productHasVarieties.map(connect => {
+                                                        return (
+                                                            <p
+                                                                className={productDataStyles.varietyName}
+                                                                key={connect.id}
+                                                                title={!getDescriptionByVarietyId(connect.baseDataVarietyId) === "" ?
+                                                                    getNameByVarietyId(connect.baseDataVarietyId) :
+                                                                    getDescriptionByVarietyId(connect.baseDataVarietyId)}
+                                                            >
+                                                                {getNameByVarietyId(connect.baseDataVarietyId)}
+                                                            </p>
+                                                        )
+                                                    })}
+                                                </div>
+                                                <h4 style={{
+                                                    margin: "15px 0",
+                                                    width: "100%",
+                                                    borderBottom: "solid 2px #FFFFFF",
+                                                    paddingBottom: 5}}>
+                                                    Description
+                                                </h4>
+                                                {/* eslint-disable-next-line react/no-children-prop */}
+                                                <ReactMarkdown children={product.description}/>
                                             </div>
                                             <div>
                                                 <h4>Action</h4>
@@ -144,7 +215,6 @@ export default function ProductData(session) {
                     })
                 }
             </Accordion>
-
             <Modal show={showProductFormDialog} className={productDataStyles.dialogProductForm}>
                 <ProductForm session={session}
                      toggleModal={() => setShowProductFormDialog(false)}

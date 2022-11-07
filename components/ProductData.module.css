@@ -76,7 +76,7 @@
 
 .accordionItem {
     font-size: 20px;
-    border-bottom: #FFFFFF solid 2px;
+    margin-bottom: 4px;
 }
 
 .accordionHeader {
@@ -90,7 +90,7 @@
 }
 
 .accordionPanel {
-    padding: 10px 0;
+    padding: 10px 0 30px;
 }
 
 .accordionPanel > div {
@@ -98,8 +98,26 @@
     grid-template-columns: 350px auto 200px;
 }
 
-.productInformation {
-    display: grid
+.productSpecs {
+    margin-top: 15px
+}
+
+.productSpecs > tr > td {
+    width: 200px
+}
+
+.varietyList {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 15px
+}
+
+.varietyName {
+    background: #8DF3E8;
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 .dialogProductForm {
@@ -112,7 +130,9 @@
     background: #060525;
     position: absolute;
     z-index: 9999;
-    top: 0
+    top: 50%;
+    left: 50%;
+    margin: -250px 0 0 -40%;
 }
 
 .dialogProductForm::-webkit-scrollbar {

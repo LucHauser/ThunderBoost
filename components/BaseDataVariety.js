@@ -87,7 +87,8 @@ export default function BaseDataVariety(session) {
 
             </Table>
 
-            <Modal show={showForm} className={baseDataVarietyStyles.formModal} animation={true}>
+            <div style={{width: "100%", height: "100%", background: showForm ? "rgba(0, 0, 0, 0.5)": null}}>
+                <Modal show={showForm} className={baseDataVarietyStyles.formModal} animation={true}>
                     <BaseDataVarietyForm session={session} varietyToEdit={varietyToEdit} toggleModal={() => setShowForm(false)} onVarietyEdited={(variety) => {
                         setVarieties(_varieties => _varieties.map(v => {
                             if (v.id === variety.id) {
@@ -100,7 +101,9 @@ export default function BaseDataVariety(session) {
                         setVarieties([...varieties, variety])
                         setFilterVariety("")
                     }}/>
-            </Modal>
+                </Modal>
+            </div>
+
 
         </div>
     )
