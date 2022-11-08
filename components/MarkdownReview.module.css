@@ -1,0 +1,56 @@
+.elements {
+    display: grid;
+    gap: 2px;
+}
+
+.elements h1 {
+    font-size: 40px;
+}
+
+.elements h2 {
+    font-size: 30px;
+}
+
+.elements h3 {
+    font-size: 25px;
+}
+
+.elements h4 {
+    font-size: 22px;
+}
+
+.elements h5, .elements h6 {
+    font-size: 20px;
+}
+
+.elements p {
+    font-size: 20px;
+}
+
+.elements ul, .elements ol {
+    margin-left: 22px;
+    font-size: 20px;
+}
+
+.elements pre, .elements code {
+    font-size: 20px;
+}
+
+.elements table {
+    width: fit-content;
+    border-collapse: collapse;
+    border: solid 1px #FFFFFF;
+    border-radius: 3px;
+}
+
+.elements thead {
+    border-bottom: solid 2px #FFFFFF;
+}
+
+.elements table th {
+    text-align: left;
+}
+
+.elements th, .elements td {
+    padding: 6px
+}

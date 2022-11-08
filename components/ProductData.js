@@ -2,8 +2,11 @@ import ProductForm from "@components/ProductForm";
 import {Form, Modal, SplitButton, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import productDataStyles from "./ProductData.module.css"
+import defaultStyles from "../pages/stylesheet/global.module.css"
 import {getAllBaseDataVariety, getAllProducts, getAllProductsInclusiveConnectVariety, login} from "@lib/api";
 import {
+    faChevronDown,
+    faChevronUp,
     faPlus,
     faXmark,
     faFilter,
@@ -14,8 +17,8 @@ import {
     faDollar,
     faSpoon,
     faUsers,
-    faTags,
-    faMinus
+    faRocket,
+    faTags, faPencil, faTrash, faLock, faLockOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Accordion, AccordionItem, AccordionItemHeading,AccordionItemButton, AccordionItemPanel} from "react-accessible-accordion";
@@ -121,7 +124,7 @@ export default function ProductData(session) {
                     />Create Product
                 </button>
             </div>
-            <p>Number of products: {numberOfProducts}</p>
+            <p style={{fontSize: 20}}>Number of products: {numberOfProducts}</p>
             <Accordion className={productDataStyles.accordionContainer}>
                 {
                     products.map(product => {
@@ -131,14 +134,27 @@ export default function ProductData(session) {
                                     <AccordionItemHeading style={{width: "100%"}}>
                                         <AccordionItemButton className={productDataStyles.accordionHeader}>
                                             <p>{product.name}</p>
-                                            <p>Status:&nbsp;
-                                                <FontAwesomeIcon
-                                                    icon={faCircle}
-                                                    size={"1x"}
-                                                    color={product.active ? "#6aa84f" : "#cc0000"}
-                                                    title={product.active ? "Activ - Visible in shop" : "Not activ - Not visible in shop"} style={{cursor: "help"}}
-                                                />
-                                            </p>
+                                            <div style={{display: "flex", gap: 15}}>
+                                                <p>Stock Amount:&nbsp;
+                                                    <FontAwesomeIcon
+                                                        icon={faCircle}
+                                                        size={"1x"}
+                                                        color={product.stockAmount === 0 ? "#cc0000" : (product.stockAmount > 5 ? "#6aa84f" : "#ccaa00")}
+                                                        title={`Stock Amount: ${product.stockAmount}`}
+                                                        style={{cursor: "help"}}
+                                                    />
+                                                </p>
+                                                <p>Status:&nbsp;
+                                                    <FontAwesomeIcon
+                                                        icon={faCircle}
+                                                        size={"1x"}
+                                                        color={product.active ? "#6aa84f" : "#cc0000"}
+                                                        title={product.active ? "Activ - Visible in shop" : "Not activ - Not visible in shop"}
+                                                        style={{cursor: "help"}}
+                                                    />
+                                                </p>
+
+                                            </div>
                                         </AccordionItemButton>
                                     </AccordionItemHeading>
                                     <AccordionItemPanel className={productDataStyles.accordionPanel}>
@@ -148,46 +164,56 @@ export default function ProductData(session) {
                                                 <h4>Information</h4>
                                                 <table className={productDataStyles.productSpecs}>
                                                     <tr>
+                                                        <td><FontAwesomeIcon icon={faFont}/></td>
                                                         <td>Name</td>
                                                         <td>{product.name}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td><FontAwesomeIcon icon={faUsers}/></td>
                                                         <td>Usage</td>
                                                         <td>{product.usage}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td><FontAwesomeIcon icon={faSpoon}/></td>
                                                         <td>Servings</td>
-                                                        <td>{product.servings}</td>
+                                                        <td>{product.servings} portions</td>
                                                     </tr>
                                                     <tr>
+                                                        <td><FontAwesomeIcon icon={faDollar}/></td>
                                                         <td>Price</td>
-                                                        <td>{product.price}</td>
+                                                        <td>{parseFloat(product.price).toFixed(2)} $</td>
                                                     </tr>
                                                     <tr>
+                                                        <td><FontAwesomeIcon icon={faWarehouse}/></td>
                                                         <td>Stock amount</td>
-                                                        <td>{product.stockAmount}</td>
+                                                        <td>{product.stockAmount} pieces</td>
                                                     </tr>
                                                     <tr>
+                                                        <td><FontAwesomeIcon icon={faRocket}/></td>
                                                         <td>Release Date</td>
                                                         <td>{product.releaseDate}</td>
                                                     </tr>
+                                                    <tr>
+                                                        <td><FontAwesomeIcon icon={faTags}/></td>
+                                                        <td>Varieties</td>
+                                                        <td><div className={productDataStyles.varietyList}>
+                                                            {product.productHasVarieties.map(connect => {
+                                                                return (
+                                                                    <p
+                                                                        className={productDataStyles.varietyName}
+                                                                        key={connect.id}
+                                                                        title={getDescriptionByVarietyId(connect.baseDataVarietyId) === "" ?
+                                                                            getNameByVarietyId(connect.baseDataVarietyId) :
+                                                                            getDescriptionByVarietyId(connect.baseDataVarietyId)}
+                                                                    >
+                                                                        {getNameByVarietyId(connect.baseDataVarietyId)}
+                                                                    </p>
+                                                                )
+                                                            })}
+                                                        </div></td>
+                                                    </tr>
                                                 </table>
-                                                <div className={productDataStyles.varietyList}>
-                                                    <p>Varieties: </p>
-                                                    {product.productHasVarieties.map(connect => {
-                                                        return (
-                                                            <p
-                                                                className={productDataStyles.varietyName}
-                                                                key={connect.id}
-                                                                title={!getDescriptionByVarietyId(connect.baseDataVarietyId) === "" ?
-                                                                    getNameByVarietyId(connect.baseDataVarietyId) :
-                                                                    getDescriptionByVarietyId(connect.baseDataVarietyId)}
-                                                            >
-                                                                {getNameByVarietyId(connect.baseDataVarietyId)}
-                                                            </p>
-                                                        )
-                                                    })}
-                                                </div>
+
                                                 <h4 style={{
                                                     margin: "15px 0",
                                                     width: "100%",
@@ -198,12 +224,14 @@ export default function ProductData(session) {
                                                 {/* eslint-disable-next-line react/no-children-prop */}
                                                 <ReactMarkdown children={product.description}/>
                                             </div>
-                                            <div>
-                                                <h4>Action</h4>
-                                                <button>Edit product</button>
-                                                <button>Edit stock quantity</button>
-                                                <button>{product.active ? "Deactivate product": "Activate product"}</button>
-                                                <button>Delete</button>
+                                            <div className={productDataStyles.productCrudBtnGroup}>
+                                                <h4>Edit & Delete</h4>
+                                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faPencil}/> Edit product</button>
+                                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faWarehouse}/> Edit stock quantity</button>
+                                                <div>
+                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonRed: defaultStyles.buttonGreen}`}>{product.active ? <><FontAwesomeIcon icon={faLock}/></> : <><FontAwesomeIcon icon={faLockOpen}/></> }</button>
+                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}><FontAwesomeIcon icon={faTrash}/>Delete</button>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -215,7 +243,7 @@ export default function ProductData(session) {
                     })
                 }
             </Accordion>
-            <Modal show={showProductFormDialog} className={productDataStyles.dialogProductForm}>
+            <Modal show={showProductFormDialog} className={productDataStyles.dialogProductForm} onHide={() => setShowProductFormDialog(false)}>
                 <ProductForm session={session}
                      toggleModal={() => setShowProductFormDialog(false)}
                      onProductCreated={(product) => {

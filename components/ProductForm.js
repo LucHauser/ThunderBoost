@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {Form, FormGroup} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import productFormStyles from "./ProductForm.module.css"
+import markdownElements from "./MarkdownReview.module.css"
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import Select from "react-select";
 import ReactMarkdown from "react-markdown";
@@ -10,6 +11,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {addConnectProductWithVariety, getAllBaseDataVariety} from "@lib/api";
 import {selectStyles} from "@components/stylesUtils";
 import {createProduct, updateProduct} from "@lib/api";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -343,10 +346,10 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         <TabPanel>
                             {/* eslint-disable-next-line react/no-children-prop */}
                             <ReactMarkdown
-                                className={`${productFormStyles.markdownReview}`}
+                                className={`${productFormStyles.markdownReview} ${markdownElements.elements}`}
                                 /* eslint-disable-next-line react/no-children-prop */
                                 children={markdownReview}
-                                skipHtml={false}
+                                rehypePlugins={[rehypeRaw, remarkGfm]}
                             />
                         </TabPanel>
                     </Tabs>

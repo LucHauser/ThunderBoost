@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import BaseDataVariety from "@components/BaseDataVariety";
 import ProductForm from "@components/ProductForm";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ProductData from "@components/ProductData";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 
@@ -22,6 +22,10 @@ export default function AdminPage ({session}) {
     const tabContents = ["Product Management", "Highlights", "User and Privileges", "Statistics", "Base Data Variety"]
 
     const [activeTab, setActiveTab] = useState(tabContents[0])
+
+    useEffect(() => {
+        document.title = "Thunderboost - Administration-Portal"
+    })
 
     const leaveAdminPortal = () => {
         router.push("/profile")

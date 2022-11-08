@@ -114,6 +114,23 @@
     font-size: 20px;
 }
 
+.buttonSm {
+    height: 30px;
+    font-size: 15px;
+}
+
+.buttonRed {
+    background: #cc0000;
+    border-color: #cc0000;
+    color: #FFFFFF;
+}
+
+.buttonGreen {
+    background: #6aa84f;
+    border-color: #6aa84f;
+    color: #FFFFFF;
+}
+
 .buttonTransparent {
     background: transparent;
     color: #8DF3E8;
