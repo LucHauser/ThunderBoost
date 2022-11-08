@@ -9,7 +9,7 @@
 }
 
 .markdownReview {
-    height: auto;
+    min-height: 300px;
     background: transparent;
     border: solid 2px #FFFFFF;
     font-family: Arial, sans-serif;

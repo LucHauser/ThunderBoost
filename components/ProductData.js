@@ -3,7 +3,14 @@ import {Form, Modal, SplitButton, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import productDataStyles from "./ProductData.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
-import {getAllBaseDataVariety, getAllProducts, getAllProductsInclusiveConnectVariety, login} from "@lib/api";
+import markdownElements from "./MarkdownReview.module.css"
+import {
+    getAllBaseDataVariety,
+    getAllProducts,
+    getAllProductsInclusiveConnectVariety,
+    getProductById,
+    login, updateProduct
+} from "@lib/api";
 import {
     faChevronDown,
     faChevronUp,
@@ -23,6 +30,8 @@ import {
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Accordion, AccordionItem, AccordionItemHeading,AccordionItemButton, AccordionItemPanel} from "react-accessible-accordion";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 export default function ProductData(session) {
 
@@ -31,6 +40,7 @@ export default function ProductData(session) {
 
     const [showProductFormDialog, setShowProductFormDialog] = useState(false)
     const [products, setProducts] = useState([])
+    const [product, setProduct] = useState({})
     const [varieties, setVarieties] = useState([])
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
@@ -76,6 +86,44 @@ export default function ProductData(session) {
                 return varieties[i].description
             }
         }
+    }
+
+    const handleProductActivation = async (id) => {
+        try {
+            const productToEdit = await getProductById(id)
+            setProduct(productToEdit)
+        } catch (e) {
+            console.log(e)
+        }
+        console.log("Product By Id")
+        console.log(product)
+        if (product.active) {
+            setProduct({
+                ...product,
+                active: false
+            })
+        } else {
+            setProduct({
+                ...product,
+                active: true
+            })
+        }
+        try {
+            const updatedProduct = await updateProduct(product, session.accessToken)
+            setProducts(products => {
+                return products.map(p => {
+                    if (p.id === updatedProduct.id) {
+                        return {...p, ...updatedProduct}
+                    } else {
+                        return p
+                    }
+                })
+            })
+        } catch (e) {
+            console.log(e)
+        }
+
+
     }
 
     return (
@@ -221,15 +269,26 @@ export default function ProductData(session) {
                                                     paddingBottom: 5}}>
                                                     Description
                                                 </h4>
-                                                {/* eslint-disable-next-line react/no-children-prop */}
-                                                <ReactMarkdown children={product.description}/>
+                                                <ReactMarkdown
+                                                    /* eslint-disable-next-line react/no-children-prop */
+                                                    children={product.description}
+                                                    rehypePlugins={[rehypeRaw, remarkGfm]}
+                                                    className={markdownElements.elements}
+                                                />
                                             </div>
                                             <div className={productDataStyles.productCrudBtnGroup}>
                                                 <h4>Edit & Delete</h4>
                                                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faPencil}/> Edit product</button>
                                                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faWarehouse}/> Edit stock quantity</button>
                                                 <div>
-                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonRed: defaultStyles.buttonGreen}`}>{product.active ? <><FontAwesomeIcon icon={faLock}/></> : <><FontAwesomeIcon icon={faLockOpen}/></> }</button>
+                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonRed: defaultStyles.buttonGreen}`}
+                                                        onClick={() => handleProductActivation(product.id)}>
+                                                        {
+                                                            product.active ?
+                                                                <><FontAwesomeIcon icon={faLock}/></>
+                                                                : <><FontAwesomeIcon icon={faLockOpen}/></>
+                                                        }
+                                                    </button>
                                                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}><FontAwesomeIcon icon={faTrash}/>Delete</button>
                                                 </div>
                                             </div>
