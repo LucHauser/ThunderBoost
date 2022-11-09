@@ -40,7 +40,7 @@ export default function ProductData(session) {
 
     const [showProductFormDialog, setShowProductFormDialog] = useState(false)
     const [products, setProducts] = useState([])
-    const [product, setProduct] = useState({})
+    // const [product, setProduct] = useState({})
     const [varieties, setVarieties] = useState([])
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
@@ -88,27 +88,13 @@ export default function ProductData(session) {
         }
     }
 
-    const handleProductActivation = async (id) => {
-        try {
-            const productToEdit = await getProductById(id)
-            setProduct(productToEdit)
-        } catch (e) {
-            console.log(e)
-        }
-        console.log("Product By Id")
+    const handleProductActivation = async (product) => {
+        //delete product.productHasVarieties
+        const connection = product.productHasVarieties
+        delete product.productHasVarieties
+        product.active = !product.active;
         console.log(product)
-        if (product.active) {
-            setProduct({
-                ...product,
-                active: false
-            })
-        } else {
-            setProduct({
-                ...product,
-                active: true
-            })
-        }
-        try {
+        /*try {
             const updatedProduct = await updateProduct(product, session.accessToken)
             setProducts(products => {
                 return products.map(p => {
@@ -121,7 +107,7 @@ export default function ProductData(session) {
             })
         } catch (e) {
             console.log(e)
-        }
+        }*/
 
 
     }
@@ -282,7 +268,7 @@ export default function ProductData(session) {
                                                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faWarehouse}/> Edit stock quantity</button>
                                                 <div>
                                                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonRed: defaultStyles.buttonGreen}`}
-                                                        onClick={() => handleProductActivation(product.id)}>
+                                                        onClick={() => handleProductActivation(product)}>
                                                         {
                                                             product.active ?
                                                                 <><FontAwesomeIcon icon={faLock}/></>

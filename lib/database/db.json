@@ -23,6 +23,18 @@
       "releaseDate": "2022-11-17",
       "active": true,
       "id": 2
+    },
+    {
+      "name": "Thunderboost Smirnoff Peach Shot",
+      "price": "50.55",
+      "servings": "20",
+      "usage": "Gaming",
+      "description": "## Smirnoff Peach Shot\nis a limited edition with cooperation with Smirnoff.\n\nAlcohol of this is the the same like Smirnoff Beach\n\n**Not for teenager under 18+!<br/>5% Vol**",
+      "stockAmount": "6",
+      "img": "",
+      "releaseDate": "2022-11-11",
+      "active": true,
+      "id": 3
     }
   ],
   "productHasVarieties": [
@@ -60,6 +72,16 @@
       "productId": 2,
       "baseDataVarietyId": 7,
       "id": 7
+    },
+    {
+      "productId": 3,
+      "baseDataVarietyId": 14,
+      "id": 8
+    },
+    {
+      "productId": 3,
+      "baseDataVarietyId": 4,
+      "id": 9
     }
   ],
   "users": [
@@ -181,6 +203,11 @@
       "name": "Peach",
       "description": "",
       "id": 14
+    },
+    {
+      "name": "Ingwer",
+      "description": "",
+      "id": 15
     }
   ]
 }
