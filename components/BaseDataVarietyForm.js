@@ -106,7 +106,10 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
                         <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save changes</button>
                         : <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save variety</button>
                     }
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`} onClick={toggleModal}>Cancel</button>
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`} onClick={() => {
+                        setVariety(defaultVarietyModel)
+                        toggleModal()
+                    }}>Cancel</button>
                 </div>
 
             </Form>

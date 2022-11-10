@@ -13,6 +13,7 @@ import {selectStyles} from "@components/stylesUtils";
 import {createProduct, updateProduct} from "@lib/api";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
 
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -118,6 +119,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
     const [varieties, setVarieties] = useState([])
     const [markdownReview, setMarkdownReview] = useState("")
     const [markdownMode, setMarkdownMode] = useState(false)
+    const [showVarietyForm, setShowVarietyForm] = useState(false)
 
     const [generatedProductId, setGeneratedProductId] = useState("")
     const [selectedVarieties, setSelectedVarieties] = useState([])
@@ -232,6 +234,10 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             console.log(e)
         }
         toggleModal()
+    }
+
+    const handleShowVarietyForm = () => {
+        setShowVarietyForm(true)
     }
 
     return (
@@ -406,8 +412,16 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         })}
                         noOptionsMessage={() =>
                             <div className={productFormStyles.multiSelectNotFound}>
-                                <p>Missing Variety?</p>
-                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Create new Variety</button>
+                                <div className={!showVarietyForm ? productFormStyles.hideThis: null}>
+                                    <BaseDataVarietyForm
+                                        toggleModal={() => setShowVarietyForm(false)}
+                                        onVarietyCreated={(variety) => setVarieties([...varieties, variety])}/>
+                                </div>
+                                <div className={showVarietyForm ? productFormStyles.hideThis : null}>
+                                    <p>Missing Variety?</p>
+                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} onClick={() => setShowVarietyForm(true)}>Create new Variety</button>
+                                </div>
+
                             </div>
                         }
                     />

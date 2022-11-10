@@ -91,4 +91,8 @@
     .inputReleaseDate {
         grid-column: 1 / 1;
     }
+
+    .hideThis {
+        display: none;
+    }
 }

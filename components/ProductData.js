@@ -94,8 +94,9 @@ export default function ProductData(session) {
         delete product.productHasVarieties
         product.active = !product.active;
         console.log(product)
-        /*try {
+        try {
             const updatedProduct = await updateProduct(product, session.accessToken)
+            updatedProduct.productHasVarieties = connection
             setProducts(products => {
                 return products.map(p => {
                     if (p.id === updatedProduct.id) {
@@ -107,8 +108,7 @@ export default function ProductData(session) {
             })
         } catch (e) {
             console.log(e)
-        }*/
-
+        }
 
     }
 
