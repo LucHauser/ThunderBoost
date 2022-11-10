@@ -4,7 +4,7 @@ import defaultStyles from "../pages/stylesheet/global.module.css"
 import baseDataVarietyStyles from "./BaseDataVarietyForm.module.css"
 import {createBaseDataVariety, updateBaseDataVariety} from "@lib/api"
 
-export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCreated, onVarietyEdited, toggleModal}) {
+export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCreated, onVarietyEdited, toggleModal, toggleSubform}) {
 
     function validateVarietyModel(variety) {
 
@@ -106,10 +106,10 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
                         <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save changes</button>
                         : <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save variety</button>
                     }
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`} onClick={() => {
-                        setVariety(defaultVarietyModel)
-                        toggleModal()
-                    }}>Cancel</button>
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`}
+                            onClick={toggleModal}>
+                        Cancel
+                    </button>
                 </div>
 
             </Form>
