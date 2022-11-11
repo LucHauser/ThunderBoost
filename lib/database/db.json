@@ -9,7 +9,7 @@
       "stockAmount": "4",
       "img": "",
       "releaseDate": "2022-11-10",
-      "active": false,
+      "active": true,
       "id": 1
     },
     {
@@ -21,7 +21,7 @@
       "stockAmount": "6",
       "img": "",
       "releaseDate": "2022-11-17",
-      "active": false,
+      "active": true,
       "id": 2
     },
     {

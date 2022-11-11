@@ -1,4 +1,5 @@
 import ProductForm from "@components/ProductForm";
+import QuantityCountSwitch from "@components/ProductQuantitySwitch";
 import {Form, Modal, SplitButton, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import productDataStyles from "./ProductData.module.css"
@@ -39,13 +40,15 @@ export default function ProductData(session) {
     const selectFilterStockAmountOptions = ["all", "available", "empty"]
 
     const [showProductFormDialog, setShowProductFormDialog] = useState(false)
+    const [showProductQuantityKrementing, setShowProductQuantityKrementing] = useState(false)
     const [products, setProducts] = useState([])
-    // const [product, setProduct] = useState({})
+    const [productToEdit, setProductToEdit] = useState({})
     const [varieties, setVarieties] = useState([])
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
     const [filterActiveProduct, setFilterActiveProduct] = useState(selectFilterActivableOptions[0])
     const [filterStockAmount, setFilterStockAmount] = useState(selectFilterStockAmountOptions[0])
+    const [openedItem, setOpenedItem] = useState(0)
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -71,6 +74,15 @@ export default function ProductData(session) {
         }
         loadVarieties()
     }, [])
+
+    const switchItem = (id) =>  {
+        console.log(id)
+        setOpenedItem(id)
+    }
+
+    const getFocusedItem = () => {
+        return openedItem
+    }
 
     const getNameByVarietyId = (id) => {
         for (let i = 0; i < varieties.length; i++) {
@@ -109,7 +121,11 @@ export default function ProductData(session) {
         } catch (e) {
             console.log(e)
         }
+    }
 
+    const handleProductQuantityKrement = (product) => {
+        setProductToEdit(product)
+        setShowProductQuantityKrementing(true)
     }
 
     return (
@@ -164,7 +180,7 @@ export default function ProductData(session) {
                     products.map(product => {
                         return (
                             <>
-                                <AccordionItem className={productDataStyles.accordionItem} eventKey={product.id}>
+                                <AccordionItem className={productDataStyles.accordionItem} eventKey={product.id} onClick={() => switchItem(product.id)}>
                                     <AccordionItemHeading style={{width: "100%"}}>
                                         <AccordionItemButton className={productDataStyles.accordionHeader}>
                                             <p>{product.name}</p>
@@ -187,6 +203,19 @@ export default function ProductData(session) {
                                                         style={{cursor: "help"}}
                                                     />
                                                 </p>
+                                                <div>
+                                                    {product.id === openedItem ?
+                                                        <FontAwesomeIcon
+                                                            icon={faChevronUp}
+                                                            color={"white"}
+                                                        /> :
+                                                        <FontAwesomeIcon
+                                                            icon={faChevronDown}
+                                                            color={"white"}
+                                                        />
+                                                    }
+                                                </div>
+
 
                                             </div>
                                         </AccordionItemButton>
@@ -266,13 +295,17 @@ export default function ProductData(session) {
                                                 <h4>Edit & Delete</h4>
                                                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faPencil}/> Edit product</button>
                                                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faWarehouse}/> Edit stock quantity</button>
+                                                {
+                                                    getFocusedItem() === product.id && showProductQuantityKrementing ?
+                                                        <QuantityCountSwitch product={productToEdit}/> : null
+                                                }
                                                 <div>
-                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonRed: defaultStyles.buttonGreen}`}
+                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}
                                                         onClick={() => handleProductActivation(product)}>
                                                         {
                                                             product.active ?
-                                                                <><FontAwesomeIcon icon={faLock}/></>
-                                                                : <><FontAwesomeIcon icon={faLockOpen}/></>
+                                                                <><FontAwesomeIcon icon={faLockOpen}/></>
+                                                                : <><FontAwesomeIcon icon={faLock}/></>
                                                         }
                                                     </button>
                                                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}><FontAwesomeIcon icon={faTrash}/>Delete</button>

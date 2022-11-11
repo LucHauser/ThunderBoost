@@ -93,12 +93,12 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
                 <div className={defaultStyles.formSeparatorLine}/>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Designation</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type={"text"} name="name" onChange={handleChange} value={variety.name} placeholder={"Designation of Variety"}/>
+                    <Form.Control className={defaultStyles.formInputField} type={"text"} name="name" onChange={handleChange} value={variety.name} placeholder={"Designation of Variety"} disabled={false}/>
                     { errors.name && <p>{errors.name}</p> }
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Description</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type={"text"} name="description" onChange={handleChange} value={variety.description} placeholder={"Description of Variety"}/>
+                    <Form.Control className={defaultStyles.formInputField} type={"text"} name="description" onChange={handleChange} value={variety.description} placeholder={"Description of Variety"} disabled={false}/>
                     { errors.description && <p>{errors.description}</p> }
                 </Form.Group>
                 <div className={baseDataVarietyStyles.buttonGroup}>
@@ -106,7 +106,7 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
                         <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save changes</button>
                         : <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save variety</button>
                     }
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`}
+                    <button type={"button"} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`}
                             onClick={toggleModal}>
                         Cancel
                     </button>
