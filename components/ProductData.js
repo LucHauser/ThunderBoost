@@ -42,7 +42,7 @@ export default function ProductData(session) {
     const [showProductFormDialog, setShowProductFormDialog] = useState(false)
     const [showProductQuantityKrementing, setShowProductQuantityKrementing] = useState(false)
     const [products, setProducts] = useState([])
-    const [productToEdit, setProductToEdit] = useState({})
+    const [productToEdit, setProductToEdit] = useState(null)
     const [varieties, setVarieties] = useState([])
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
@@ -76,7 +76,6 @@ export default function ProductData(session) {
     }, [])
 
     const switchItem = (id) =>  {
-        console.log(id)
         setOpenedItem(id)
     }
 
@@ -121,11 +120,6 @@ export default function ProductData(session) {
         } catch (e) {
             console.log(e)
         }
-    }
-
-    const handleProductQuantityKrement = (product) => {
-        setProductToEdit(product)
-        setShowProductQuantityKrementing(true)
     }
 
     return (
@@ -179,143 +173,147 @@ export default function ProductData(session) {
                 {
                     products.map(product => {
                         return (
-                            <>
-                                <AccordionItem className={productDataStyles.accordionItem} eventKey={product.id} onClick={() => switchItem(product.id)}>
-                                    <AccordionItemHeading style={{width: "100%"}}>
-                                        <AccordionItemButton className={productDataStyles.accordionHeader}>
-                                            <p>{product.name}</p>
-                                            <div style={{display: "flex", gap: 15}}>
-                                                <p>Stock Amount:&nbsp;
-                                                    <FontAwesomeIcon
-                                                        icon={faCircle}
-                                                        size={"1x"}
-                                                        color={product.stockAmount === 0 ? "#cc0000" : (product.stockAmount > 5 ? "#6aa84f" : "#ccaa00")}
-                                                        title={`Stock Amount: ${product.stockAmount}`}
-                                                        style={{cursor: "help"}}
-                                                    />
-                                                </p>
-                                                <p>Status:&nbsp;
-                                                    <FontAwesomeIcon
-                                                        icon={faCircle}
-                                                        size={"1x"}
-                                                        color={product.active ? "#6aa84f" : "#cc0000"}
-                                                        title={product.active ? "Activ - Visible in shop" : "Not activ - Not visible in shop"}
-                                                        style={{cursor: "help"}}
-                                                    />
-                                                </p>
-                                                <div>
-                                                    {product.id === openedItem ?
-                                                        <FontAwesomeIcon
-                                                            icon={faChevronUp}
-                                                            color={"white"}
-                                                        /> :
-                                                        <FontAwesomeIcon
-                                                            icon={faChevronDown}
-                                                            color={"white"}
-                                                        />
-                                                    }
-                                                </div>
-
-
-                                            </div>
-                                        </AccordionItemButton>
-                                    </AccordionItemHeading>
-                                    <AccordionItemPanel className={productDataStyles.accordionPanel}>
-                                        <div>
-                                            <img src={"https://via.placeholder.com/300"}/>
-                                            <div className={productDataStyles.productInformation}>
-                                                <h4>Information</h4>
-                                                <table className={productDataStyles.productSpecs}>
-                                                    <tr>
-                                                        <td><FontAwesomeIcon icon={faFont}/></td>
-                                                        <td>Name</td>
-                                                        <td>{product.name}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><FontAwesomeIcon icon={faUsers}/></td>
-                                                        <td>Usage</td>
-                                                        <td>{product.usage}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><FontAwesomeIcon icon={faSpoon}/></td>
-                                                        <td>Servings</td>
-                                                        <td>{product.servings} portions</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><FontAwesomeIcon icon={faDollar}/></td>
-                                                        <td>Price</td>
-                                                        <td>{parseFloat(product.price).toFixed(2)} $</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><FontAwesomeIcon icon={faWarehouse}/></td>
-                                                        <td>Stock amount</td>
-                                                        <td>{product.stockAmount} pieces</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><FontAwesomeIcon icon={faRocket}/></td>
-                                                        <td>Release Date</td>
-                                                        <td>{product.releaseDate}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><FontAwesomeIcon icon={faTags}/></td>
-                                                        <td>Varieties</td>
-                                                        <td><div className={productDataStyles.varietyList}>
-                                                            {product.productHasVarieties.map(connect => {
-                                                                return (
-                                                                    <p
-                                                                        className={productDataStyles.varietyName}
-                                                                        key={connect.id}
-                                                                        title={getDescriptionByVarietyId(connect.baseDataVarietyId) === "" ?
-                                                                            getNameByVarietyId(connect.baseDataVarietyId) :
-                                                                            getDescriptionByVarietyId(connect.baseDataVarietyId)}
-                                                                    >
-                                                                        {getNameByVarietyId(connect.baseDataVarietyId)}
-                                                                    </p>
-                                                                )
-                                                            })}
-                                                        </div></td>
-                                                    </tr>
-                                                </table>
-
-                                                <h4 style={{
-                                                    margin: "15px 0",
-                                                    width: "100%",
-                                                    borderBottom: "solid 2px #FFFFFF",
-                                                    paddingBottom: 5}}>
-                                                    Description
-                                                </h4>
-                                                <ReactMarkdown
-                                                    /* eslint-disable-next-line react/no-children-prop */
-                                                    children={product.description}
-                                                    rehypePlugins={[rehypeRaw, remarkGfm]}
-                                                    className={markdownElements.elements}
+                            <AccordionItem key={product.id} className={productDataStyles.accordionItem} eventKey={product.id} onClick={() => switchItem(product.id)}>
+                                <AccordionItemHeading style={{width: "100%"}}>
+                                    <AccordionItemButton className={productDataStyles.accordionHeader}>
+                                        <p>{product.name}</p>
+                                        <div style={{display: "flex", gap: 15}}>
+                                            <p>Stock Amount:&nbsp;
+                                                <FontAwesomeIcon
+                                                    icon={faCircle}
+                                                    size={"1x"}
+                                                    color={product.stockAmount === 0 ? "#cc0000" : (product.stockAmount > 5 ? "#6aa84f" : "#ccaa00")}
+                                                    title={`Stock Amount: ${product.stockAmount}`}
+                                                    style={{cursor: "help"}}
                                                 />
-                                            </div>
-                                            <div className={productDataStyles.productCrudBtnGroup}>
-                                                <h4>Edit & Delete</h4>
-                                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faPencil}/> Edit product</button>
-                                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faWarehouse}/> Edit stock quantity</button>
-                                                {
-                                                    getFocusedItem() === product.id && showProductQuantityKrementing ?
-                                                        <QuantityCountSwitch product={productToEdit}/> : null
+                                            </p>
+                                            <p>Status:&nbsp;
+                                                <FontAwesomeIcon
+                                                    icon={faCircle}
+                                                    size={"1x"}
+                                                    color={product.active ? "#6aa84f" : "#cc0000"}
+                                                    title={product.active ? "Activ - Visible in shop" : "Not activ - Not visible in shop"}
+                                                    style={{cursor: "help"}}
+                                                />
+                                            </p>
+                                            <div>
+                                                {product.id === openedItem ?
+                                                    <FontAwesomeIcon
+                                                        icon={faChevronUp}
+                                                        color={"white"}
+                                                    /> :
+                                                    <FontAwesomeIcon
+                                                        icon={faChevronDown}
+                                                        color={"white"}
+                                                    />
                                                 }
-                                                <div>
-                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}
-                                                        onClick={() => handleProductActivation(product)}>
-                                                        {
-                                                            product.active ?
-                                                                <><FontAwesomeIcon icon={faLockOpen}/></>
-                                                                : <><FontAwesomeIcon icon={faLock}/></>
-                                                        }
-                                                    </button>
-                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}><FontAwesomeIcon icon={faTrash}/>Delete</button>
-                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </AccordionItemButton>
+                                </AccordionItemHeading>
+                                <AccordionItemPanel className={productDataStyles.accordionPanel}>
+                                    <div>
+                                        <img src={"https://via.placeholder.com/300"}/>
+                                        <div className={productDataStyles.productInformation}>
+                                            <h4>Information</h4>
+                                            <table className={productDataStyles.productSpecs}>
+                                                <tr>
+                                                    <td><FontAwesomeIcon icon={faFont}/></td>
+                                                    <td>Name</td>
+                                                    <td>{product.name}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><FontAwesomeIcon icon={faUsers}/></td>
+                                                    <td>Usage</td>
+                                                    <td>{product.usage}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><FontAwesomeIcon icon={faSpoon}/></td>
+                                                    <td>Servings</td>
+                                                    <td>{product.servings} portions</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><FontAwesomeIcon icon={faDollar}/></td>
+                                                    <td>Price</td>
+                                                    <td>{parseFloat(product.price).toFixed(2)} $</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><FontAwesomeIcon icon={faWarehouse}/></td>
+                                                    <td>Stock amount</td>
+                                                    <td>{product.stockAmount} pieces</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><FontAwesomeIcon icon={faRocket}/></td>
+                                                    <td>Release Date</td>
+                                                    <td>{product.releaseDate}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><FontAwesomeIcon icon={faTags}/></td>
+                                                    <td>Varieties</td>
+                                                    <td><div className={productDataStyles.varietyList}>
+                                                        {product.productHasVarieties.map(connect => {
+                                                            return (
+                                                                <p
+                                                                    className={productDataStyles.varietyName}
+                                                                    key={connect.id}
+                                                                    title={getDescriptionByVarietyId(connect.baseDataVarietyId) === "" ?
+                                                                        getNameByVarietyId(connect.baseDataVarietyId) :
+                                                                        getDescriptionByVarietyId(connect.baseDataVarietyId)}
+                                                                >
+                                                                    {getNameByVarietyId(connect.baseDataVarietyId)}
+                                                                </p>
+                                                            )
+                                                        })}
+                                                    </div></td>
+                                                </tr>
+                                            </table>
+
+                                            <h4 style={{
+                                                margin: "15px 0",
+                                                width: "100%",
+                                                borderBottom: "solid 2px #FFFFFF",
+                                                paddingBottom: 5}}>
+                                                Description
+                                            </h4>
+                                            <ReactMarkdown
+                                                /* eslint-disable-next-line react/no-children-prop */
+                                                children={product.description}
+                                                rehypePlugins={[rehypeRaw, remarkGfm]}
+                                                className={markdownElements.elements}
+                                            />
+                                        </div>
+                                        <div className={productDataStyles.productCrudBtnGroup}>
+                                            <h4>Edit & Delete</h4>
+                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}><FontAwesomeIcon icon={faPencil}/> Edit product</button>
+                                            <button
+                                                className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
+                                                onClick={() => {
+                                                    setProductToEdit(product)
+                                                    console.log(productToEdit)
+                                                    setShowProductQuantityKrementing(true)
+                                                }}
+                                            >
+                                                <FontAwesomeIcon icon={faWarehouse}
+                                                /> Edit stock quantity
+                                            </button>
+                                            <div>
+                                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}
+                                                    onClick={() => handleProductActivation(product)}>
+                                                    {
+                                                        product.active ?
+                                                            <><FontAwesomeIcon icon={faLockOpen}/></>
+                                                            : <><FontAwesomeIcon icon={faLock}/></>
+                                                    }
+                                                </button>
+                                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}><FontAwesomeIcon icon={faTrash}/>Delete</button>
                                             </div>
                                         </div>
+                                    </div>
 
-                                    </AccordionItemPanel>
-                                </AccordionItem>
-                            </>
+                                </AccordionItemPanel>
+                            </AccordionItem>
 
                         )
                     })
@@ -328,6 +326,10 @@ export default function ProductData(session) {
                          setProducts([...products, product])
                          setFilterProduct("")
                 }}/>
+            </Modal>
+
+            <Modal show={showProductQuantityKrementing}>
+                <QuantityCountSwitch product={productToEdit} toggleModal={() => setShowProductQuantityKrementing(false)}/>
             </Modal>
 
         </div>
