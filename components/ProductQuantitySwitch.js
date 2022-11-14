@@ -9,11 +9,12 @@ export default function QuantityCountSwitch(product, toggleModal, onEditedProduc
     useEffect(() => {
         if (product) {
             setProductToEdit(product)
+            console.log(productToEdit)
         }
     }, [productToEdit])
 
     useEffect(() => {
-        if (productToEdit?.stockAmount) {
+        if (productToEdit.stockAmount) {
             setQuantity(productToEdit.stockAmount)
         }
     }, [quantity])
@@ -28,7 +29,7 @@ export default function QuantityCountSwitch(product, toggleModal, onEditedProduc
             </Form>
             <div>
                 <button>Change</button>
-                <button>Cancel</button>
+                <button onClick={() => toggleModal()}>Cancel</button>
             </div>
         </div>
     )

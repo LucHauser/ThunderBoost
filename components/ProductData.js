@@ -291,7 +291,6 @@ export default function ProductData(session) {
                                                 className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
                                                 onClick={() => {
                                                     setProductToEdit(product)
-                                                    console.log(productToEdit)
                                                     setShowProductQuantityKrementing(true)
                                                 }}
                                             >
