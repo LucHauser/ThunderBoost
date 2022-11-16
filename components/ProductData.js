@@ -7,10 +7,8 @@ import defaultStyles from "../pages/stylesheet/global.module.css"
 import markdownElements from "./MarkdownReview.module.css"
 import {
     getAllBaseDataVariety,
-    getAllProducts,
     getAllProductsInclusiveConnectVariety,
-    getProductById,
-    login, updateProduct
+    updateProduct
 } from "@lib/api";
 import {
     faChevronDown,
@@ -33,6 +31,7 @@ import {Accordion, AccordionItem, AccordionItemHeading,AccordionItemButton, Acco
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import {useRouter} from "next/router";
 
 export default function ProductData(session) {
 
@@ -42,13 +41,15 @@ export default function ProductData(session) {
     const [showProductFormDialog, setShowProductFormDialog] = useState(false)
     const [showProductQuantityKrementing, setShowProductQuantityKrementing] = useState(false)
     const [products, setProducts] = useState([])
-    const [productToEdit, setProductToEdit] = useState(null)
+    const [productToEdit, setProductToEdit] = useState({})
     const [varieties, setVarieties] = useState([])
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
     const [filterActiveProduct, setFilterActiveProduct] = useState(selectFilterActivableOptions[0])
     const [filterStockAmount, setFilterStockAmount] = useState(selectFilterStockAmountOptions[0])
     const [openedItem, setOpenedItem] = useState(0)
+
+    const router = useRouter()
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -118,7 +119,8 @@ export default function ProductData(session) {
                 })
             })
         } catch (e) {
-            console.log(e)
+            //console.log(e)
+            router.reload()
         }
     }
 
@@ -171,9 +173,9 @@ export default function ProductData(session) {
             <p style={{fontSize: 20}}>Number of products: {numberOfProducts}</p>
             <Accordion className={productDataStyles.accordionContainer}>
                 {
-                    products.map(product => {
+                    products.map((product, index) => {
                         return (
-                            <AccordionItem key={product.id} className={productDataStyles.accordionItem} eventKey={product.id} onClick={() => switchItem(product.id)}>
+                            <AccordionItem key={index} className={productDataStyles.accordionItem} eventKey={product.id} onClick={() => switchItem(product.id)}>
                                 <AccordionItemHeading style={{width: "100%"}}>
                                     <AccordionItemButton className={productDataStyles.accordionHeader}>
                                         <p>{product.name}</p>
@@ -290,7 +292,8 @@ export default function ProductData(session) {
                                             <button
                                                 className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
                                                 onClick={() => {
-                                                    setProductToEdit(product)
+                                                    setProductToEdit(this)
+                                                    console.log(productToEdit)
                                                     setShowProductQuantityKrementing(true)
                                                 }}
                                             >
@@ -328,7 +331,7 @@ export default function ProductData(session) {
             </Modal>
 
             <Modal show={showProductQuantityKrementing}>
-                <QuantityCountSwitch product={productToEdit} toggleModal={() => setShowProductQuantityKrementing(false)}/>
+                <QuantityCountSwitch productToEdit={productToEdit} toggleModal={() => setShowProductQuantityKrementing(false)}/>
             </Modal>
 
         </div>

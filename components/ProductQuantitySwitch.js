@@ -1,34 +1,56 @@
 import {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
 
-export default function QuantityCountSwitch(product, toggleModal, onEditedProduct) {
+export default function QuantityCountSwitch(productForEdit, toggleModal, onEditedProduct) {
 
-    const [productToEdit, setProductToEdit] = useState(product)
+    const [product, setProduct] = useState({})
     const [quantity, setQuantity] = useState(0)
 
     useEffect(() => {
-        if (product) {
-            setProductToEdit(product)
-            console.log(productToEdit)
+        if (productForEdit) {
+            setProduct(productForEdit)
         }
-    }, [productToEdit])
+    }, [productForEdit])
 
     useEffect(() => {
-        if (productToEdit.stockAmount) {
-            setQuantity(productToEdit.stockAmount)
+        if (product.stockAmount) {
+            setQuantity(parseInt(product.stockAmount))
         }
-    }, [quantity])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [parseInt(productForEdit.stockAmount)])
+
+    function increment() {
+        setQuantity(function (prevCount) {
+            return (prevCount += 1)
+        })
+    }
+
+    function decrement() {
+        setQuantity(function (prevCount) {
+            if (prevCount > 0) {
+                return (prevCount -= 0)
+            } else {
+                return (prevCount = 0)
+            }
+        })
+    }
+
+    const handleUpdateQuantity = async (quantity) => {
+
+    }
 
     return (
         <div>
-            <Form>
+            <div>
+                <button onClick={decrement}>-</button>
                 <Form.Group>
                     <Form.Label>Product Quantity</Form.Label>
-                    <Form.Control type={"number"} onChange={(e) => setQuantity(e.target.value)} value={quantity}/>
+                    <Form.Control type={"number"} onChange={e => setQuantity(e.target.valueAsNumber)} value={quantity}/>
                 </Form.Group>
-            </Form>
+                <button onClick={increment}>+</button>
+            </div>
             <div>
-                <button>Change</button>
+                <button onClick={handleUpdateQuantity}>Change</button>
                 <button onClick={() => toggleModal()}>Cancel</button>
             </div>
         </div>
