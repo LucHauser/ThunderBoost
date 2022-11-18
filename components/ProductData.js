@@ -6,6 +6,7 @@ import productDataStyles from "./ProductData.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import markdownElements from "./MarkdownReview.module.css"
 import {
+    deleteConnectionsByProductId, deleteProduct,
     getAllBaseDataVariety,
     getAllProductsInclusiveConnectVariety,
     updateProduct
@@ -122,6 +123,12 @@ export default function ProductData(session) {
             //console.log(e)
             router.reload()
         }
+    }
+
+    const handleDeleteProduct = async (productId) => {
+        await deleteProduct(productId, session.accessToken)
+        await deleteConnectionsByProductId(productId, session.accessToken)
+        setProducts((prevProducts) => prevProducts.filter(p => p.id !== productId))
     }
 
     return (
@@ -292,7 +299,7 @@ export default function ProductData(session) {
                                             <button
                                                 className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
                                                 onClick={() => {
-                                                    setProductToEdit(this)
+                                                    setProductToEdit(product)
                                                     console.log(productToEdit)
                                                     setShowProductQuantityKrementing(true)
                                                 }}
@@ -309,7 +316,11 @@ export default function ProductData(session) {
                                                             : <><FontAwesomeIcon icon={faLock}/></>
                                                     }
                                                 </button>
-                                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}><FontAwesomeIcon icon={faTrash}/>Delete</button>
+                                                <button
+                                                    className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}
+                                                    onClick={() => handleDeleteProduct(product.id)}>
+                                                    <FontAwesomeIcon icon={faTrash}/>Delete
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
