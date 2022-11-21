@@ -5,12 +5,7 @@ import {useEffect, useState} from "react";
 import productDataStyles from "./ProductData.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import markdownElements from "./MarkdownReview.module.css"
-import {
-    deleteConnectionsByProductId, deleteProduct,
-    getAllBaseDataVariety,
-    getAllProductsInclusiveConnectVariety,
-    updateProduct
-} from "@lib/api";
+import {deleteProduct, getAllProducts, updateProduct} from "@lib/api";
 import {
     faChevronDown,
     faChevronUp,
@@ -43,7 +38,6 @@ export default function ProductData(session) {
     const [showProductQuantityKrementing, setShowProductQuantityKrementing] = useState(false)
     const [products, setProducts] = useState([])
     const [productToEdit, setProductToEdit] = useState({})
-    const [varieties, setVarieties] = useState([])
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
     const [filterActiveProduct, setFilterActiveProduct] = useState(selectFilterActivableOptions[0])
@@ -55,7 +49,7 @@ export default function ProductData(session) {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const products = await getAllProductsInclusiveConnectVariety()
+                const products = await getAllProducts()
                 setProducts(products)
                 setNumberOfProducts(products.length)
             } catch (e) {
@@ -63,18 +57,6 @@ export default function ProductData(session) {
             }
         }
         loadProducts()
-    }, [])
-
-    useEffect(() => {
-        const loadVarieties = async () => {
-            try {
-                const varieties = await getAllBaseDataVariety()
-                setVarieties(varieties)
-            } catch (e) {
-                console.log(e)
-            }
-        }
-        loadVarieties()
     }, [])
 
     const switchItem = (id) =>  {
@@ -85,31 +67,12 @@ export default function ProductData(session) {
         return openedItem
     }
 
-    const getNameByVarietyId = (id) => {
-        for (let i = 0; i < varieties.length; i++) {
-            if (id === varieties[i].id) {
-                return varieties[i].name
-            }
-        }
-    }
-
-    const getDescriptionByVarietyId = (id) => {
-        for (let i = 0; i < varieties.length; i++) {
-            if (id === varieties[i].id) {
-                return varieties[i].description
-            }
-        }
-    }
-
     const handleProductActivation = async (product) => {
         //delete product.productHasVarieties
-        const connection = product.productHasVarieties
-        delete product.productHasVarieties
         product.active = !product.active;
         console.log(product)
         try {
             const updatedProduct = await updateProduct(product, session.accessToken)
-            updatedProduct.productHasVarieties = connection
             setProducts(products => {
                 return products.map(p => {
                     if (p.id === updatedProduct.id) {
@@ -120,15 +83,15 @@ export default function ProductData(session) {
                 })
             })
         } catch (e) {
-            //console.log(e)
-            router.reload()
+            console.log(e)
         }
     }
 
+
     const handleDeleteProduct = async (productId) => {
         await deleteProduct(productId, session.accessToken)
-        await deleteConnectionsByProductId(productId, session.accessToken)
         setProducts((prevProducts) => prevProducts.filter(p => p.id !== productId))
+        setNumberOfProducts(products.length)
     }
 
     return (
@@ -180,7 +143,10 @@ export default function ProductData(session) {
             <p style={{fontSize: 20}}>Number of products: {numberOfProducts}</p>
             <Accordion className={productDataStyles.accordionContainer}>
                 {
-                    products.map((product, index) => {
+                    products.filter(
+                        product => product.name.toString().toLowerCase().includes(filterProduct) ||
+                        !product.active === true)
+                    .map((product, index) => {
                         return (
                             <AccordionItem key={index} className={productDataStyles.accordionItem} eventKey={product.id} onClick={() => switchItem(product.id)}>
                                 <AccordionItemHeading style={{width: "100%"}}>
@@ -261,21 +227,16 @@ export default function ProductData(session) {
                                                 <tr>
                                                     <td><FontAwesomeIcon icon={faTags}/></td>
                                                     <td>Varieties</td>
-                                                    <td><div className={productDataStyles.varietyList}>
-                                                        {product.productHasVarieties.map(connect => {
-                                                            return (
-                                                                <p
-                                                                    className={productDataStyles.varietyName}
-                                                                    key={connect.id}
-                                                                    title={getDescriptionByVarietyId(connect.baseDataVarietyId) === "" ?
-                                                                        getNameByVarietyId(connect.baseDataVarietyId) :
-                                                                        getDescriptionByVarietyId(connect.baseDataVarietyId)}
-                                                                >
-                                                                    {getNameByVarietyId(connect.baseDataVarietyId)}
-                                                                </p>
-                                                            )
-                                                        })}
-                                                    </div></td>
+                                                    <td>
+                                                        <div className={productDataStyles.varietyList}>
+                                                            {product.varieties.map(v => {
+                                                                return (
+                                                                    // eslint-disable-next-line react/jsx-key
+                                                                    <p className={productDataStyles.varietyName}>{v}</p>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             </table>
 
@@ -338,6 +299,7 @@ export default function ProductData(session) {
                      onProductCreated={(product) => {
                          setProducts([...products, product])
                          setFilterProduct("")
+                         setNumberOfProducts(products.length)
                 }}/>
             </Modal>
 

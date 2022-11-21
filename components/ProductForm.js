@@ -35,7 +35,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             stockAmount: null,
             usage: "",
             releaseDate: "",
-            varieties: "",
+            varieties: null,
             img: ""
         }
 
@@ -109,6 +109,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
         stockAmount: null,
         img: "",
         releaseDate: "",
+        varieties: null,
         active: true
     }
 
@@ -205,9 +206,14 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             }
             selectedValuesOnly = selectedValuesOnly.sort()
             setSelectedVarieties(selectedValuesOnly)
-            // console.log(selectedVarieties)
         }
         setSelectedVarieties(selectedValuesOnly)
+        setProductModel({
+            ...productModel,
+            varieties: selectedVarieties
+            }
+        )
+        console.log(productModel)
     }
 
     const handleSubmit = async (e) => {
@@ -222,14 +228,8 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
         }
         try {
             const newProduct = await createProduct(productModel, session.accessToken)
-            const productId = newProduct.id
-            // console.log(newProduct.id + " = " + productId)
-
-            for (let i = 0; i < selectedVarieties.length; i++) {
-                console.log()
-                await addConnectProductWithVariety(productId, selectedVarieties[i], session.accessToken)
-            }
             setProduct(newProduct)
+            onProductCreated(newProduct)
         } catch (e) {
             console.log(e)
         }
@@ -391,7 +391,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                     <Select
                         isMulti
                         options={varieties.map(variety => {
-                            return {label: variety.name, value: variety.id}
+                            return {label: variety.name, value: variety.name}
                             })
                         }
                         onChange={handleSelectVarieties}

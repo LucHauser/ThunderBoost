@@ -6,6 +6,8 @@ import ProductForm from "@components/ProductForm";
 import {useEffect, useState} from "react";
 import ProductData from "@components/ProductData";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import HighlightManagement from "@components/HighlightManagement";
+import HighlightForm from "@components/HightlightForm";
 
 export default function AdminPage ({session}) {
 
@@ -51,8 +53,8 @@ export default function AdminPage ({session}) {
                 <TabPanel className={adminStyles.tabPanel}>
                     <ProductData session={session}/>
                 </TabPanel>
-                <TabPanel>
-
+                <TabPanel className={adminStyles.tabPanel}>
+                    <HighlightForm/>
                 </TabPanel>
                 <TabPanel>
 

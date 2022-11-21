@@ -1,6 +1,38 @@
 {
-  "product": [],
-  "productHasVarieties": [],
+  "product": [
+    {
+      "name": "fdfd",
+      "price": "5",
+      "servings": "5",
+      "usage": "Gaming",
+      "description": "fdgffdgfdgfdsgfds",
+      "stockAmount": "5",
+      "img": "",
+      "releaseDate": "2022-11-22",
+      "varieties": [
+        "Chocolate",
+        "Kiwi"
+      ],
+      "active": true,
+      "id": 4
+    },
+    {
+      "name": "fdfdf",
+      "price": "5",
+      "servings": "5",
+      "usage": "Office",
+      "description": "gfdgfdgf",
+      "stockAmount": "2",
+      "img": "",
+      "releaseDate": "2022-11-21",
+      "varieties": [
+        "Chocolate",
+        "Papaya"
+      ],
+      "active": true,
+      "id": 5
+    }
+  ],
   "users": [
     {
       "email": "admin@admin.ch",
