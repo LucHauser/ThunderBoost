@@ -61,17 +61,22 @@
     background-color: #060525;
 }
 
-.formInputField[type=date] {
+.formInputField[type=date], .formInputField[type=datetime-local] {
     font-family: Arial, sans-serif;
 }
 
-.formInputField[type=date]::-webkit-calendar-picker-indicator {
+.formInputField[type=date]::-webkit-calendar-picker-indicator,
+.formInputField[type=datetime-local]::-webkit-calendar-picker-indicator {
     filter: invert(1);
-
 }
 
 .formInputField:focus {
     outline: none
+}
+
+.formColorPicker {
+    width: 80px;
+    padding: 0 2px;
 }
 
 .formCheckbox {

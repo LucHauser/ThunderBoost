@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import ProductData from "@components/ProductData";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import HighlightManagement from "@components/HighlightManagement";
-import HighlightForm from "@components/HightlightForm";
+import HighlightForm from "@components/HighlightForm";
 
 export default function AdminPage ({session}) {
 

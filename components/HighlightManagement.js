@@ -1,4 +1,4 @@
-import {HighlightForm} from "./HightlightForm"
+import {HighlightForm} from "./HighlightForm"
 
 export default function HighlightManagement(session) {
     return (

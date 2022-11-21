@@ -1,5 +1,6 @@
 import {Form} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
+import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
 import {getAllProducts} from "@lib/api";
 
@@ -109,7 +110,56 @@ export default function HighlightForm(session) {
                     <Form.Label className={defaultStyles.formLabel}>Title</Form.Label>
                     <Form.Control className={defaultStyles.formInputField} name="title" onChange={onModelChange} placeholder="Give your Highlight a title"/>
                 </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label>Title Color</Form.Label>
+                    <Form.Control type="color" onChange={onModelChange} name="titleColor" className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}/>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Text</Form.Label>
+                    <textarea
+                        className={`${defaultStyles.formInputField} ${highlightFormStyles.textAreaField}`}
+                        onChange={onTextChange}
+                        value={markdownReview}
+                        placeholder={"Tell something about this Highlight"}
+                    />
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Text Color</Form.Label>
+                    <Form.Control name="textColor" type="color" onChange={onModelChange} className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}/>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Start Date</Form.Label>
+                    <Form.Control type="datetime-local" onChange={onModelChange} placeholder={"Start date to show highlight"} name="dateFrom" className={defaultStyles.formInputField}/>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>End Time</Form.Label>
+                    <Form.Control className={defaultStyles.formInputField} type="datetime-local" name="dateUntil" onChange={onModelChange} placeholder="End date for highlight end"/>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Sale Discount</Form.Label>
+
+                </Form.Group>
             </Form>
         </div>
     )
+
+    /*
+    * eventType: "",
+        productId: null,
+        title: "",
+        titlePos: "",
+        titleColor: "",
+        text: "",
+        textPos: "",
+        textColor: "",
+        dateFrom: "",
+        dateUntil: "",
+        saleDiscount: null,
+        PrimaryBackgroundColor: "",
+        SecondaryBackgroundColor: "",
+        backgroundImgUrl: "",
+        gradientStyle: "",
+        showButtonToProduct: false,
+        rgbTitleAnimation: false,
+        rgbBackground: false,*/
 }

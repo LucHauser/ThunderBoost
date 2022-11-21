@@ -1,0 +1,6 @@
+.textAreaField {
+    height: 300px;
+    width: 100%;
+    resize: none;
+    font-family: Arial, sans-serif;
+}
