@@ -1,6 +1,7 @@
 import {Form} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import {useEffect, useState} from "react";
+import {getAllProducts} from "@lib/api";
 
 export default function HighlightForm(session) {
 
@@ -39,6 +40,18 @@ export default function HighlightForm(session) {
     const [markdownReview, setMarkdownReview] = useState("")
     const [products, setProducts] = useState([])
 
+    useEffect(() => {
+        const loadProducts = async () => {
+            try {
+                const products = await getAllProducts()
+                setProducts(products)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        loadProducts()
+    }, [])
+
     const onModelChange = (e) => {
         const target = e.target
         const name = target.name
@@ -60,11 +73,12 @@ export default function HighlightForm(session) {
     return (
         <div>
             <Form>
-                <h2>Plan a new Highlight</h2>
+                <h2 className={defaultStyles.formTitle}>Plan a new Highlight</h2>
                 <div className={`${defaultStyles.formSeparatorLine}`}/>
-                <Form.Group>
-                    <Form.Label>Choose Event Type</Form.Label>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Choose Event Type</Form.Label>
                     <Form.Select
+                        className={defaultStyles.formInputField}
                         name="eventType"
                         onChange={onModelChange}>
                         <option>Choose Type</option>
@@ -74,6 +88,26 @@ export default function HighlightForm(session) {
                             )
                         })}
                     </Form.Select>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Choose Product</Form.Label>
+                    <Form.Select
+                        className={defaultStyles.formInputField}
+                        name="product"
+                        onChange={onModelChange}>
+                        <option>Select Product</option>
+                        {
+                            products.map((product, index) => {
+                                return (
+                                    <option key={index} value={product.id}>{product.name}</option>
+                                )
+                            })
+                        }
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Title</Form.Label>
+                    <Form.Control className={defaultStyles.formInputField} name="title" onChange={onModelChange} placeholder="Give your Highlight a title"/>
                 </Form.Group>
             </Form>
         </div>
