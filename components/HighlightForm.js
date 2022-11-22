@@ -14,6 +14,16 @@ export default function HighlightForm(session) {
         {text: "Bestseller", value: 4}
     ]
 
+    const gradientBgOptions = [
+        {text: "Top to bottom", value: 0},
+        {text: "Left to right", value: 1},
+        {text: "Top left to bottom right", value: 2},
+        {text: "Top right to bottom left", value: 3},
+        {text: "Rgb left to right", value: 4},
+        {text: "Transparent to right", value: 5},
+        {text: "Radial circle", value: 6},
+    ]
+
     const defaultModel = {
         eventType: "",
         productId: null,
@@ -26,8 +36,8 @@ export default function HighlightForm(session) {
         dateFrom: "",
         dateUntil: "",
         saleDiscount: null,
-        PrimaryBackgroundColor: "",
-        SecondaryBackgroundColor: "",
+        primaryBackgroundColor: "",
+        secondaryBackgroundColor: "",
         backgroundImgUrl: "",
         gradientStyle: "",
         showButtonToProduct: false,
@@ -136,10 +146,21 @@ export default function HighlightForm(session) {
                     <Form.Control className={defaultStyles.formInputField} type="datetime-local" name="dateUntil" onChange={onModelChange} placeholder="End date for highlight end"/>
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Sale Discount</Form.Label>
-
+                    <Form.Label className={defaultStyles.formLabel}>Primary Background</Form.Label>
+                    <Form.Control className={defaultStyles.formInputField} name="primaryBackgroundColor" onChange={onModelChange} type="color"/>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Secondary Background</Form.Label>
+                    <Form.Control className={defaultStyles.formInputField} name="secondaryBackgroundColor" type="color" onChange={onModelChange}/>
+                </Form.Group>
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Gradient Style</Form.Label>
+                    <Form.Select>
+                        <option>Choose</option>
+                    </Form.Select>
                 </Form.Group>
             </Form>
+            <div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>
         </div>
     )
 
