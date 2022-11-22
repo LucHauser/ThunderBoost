@@ -1,4 +1,3 @@
-
 // Style configuration for react-select Multi-dropdown
 
 export const selectStyles = {

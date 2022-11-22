@@ -56,6 +56,11 @@
     font-size: 20px;
 }
 
+.formInputFieldSmall {
+    height: 30px;
+    padding: 5px
+}
+
 .formInputField > option {
     color: #FFFFFF;
     background-color: #060525;
