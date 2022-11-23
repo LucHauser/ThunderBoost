@@ -36,6 +36,7 @@ export default function HighlightForm(session) {
         {text: "Rgb left to right", value: 4},
         {text: "Transparent to right", value: 5},
         {text: "Radial circle", value: 6},
+        {text: "RGB", value: 7}
     ]
 
 
@@ -65,7 +66,6 @@ export default function HighlightForm(session) {
         hideUntilDate: false,
         hideProductPrice: false,
         rgbTitleAnimation: false,
-        rgbBackground: false,
         runningCountdown: false
     }
 
@@ -90,18 +90,23 @@ export default function HighlightForm(session) {
     const onModelChange = (e) => {
         const target = e.target
         const name = target.name
-        let value = target.value
-        if (typeof value == 'boolean') {
-            value = !value
-        }
+        const value = target.value
         setModel({
             ...model,
             [name]: value
         })
+        // console.log(model)
     }
 
-    const onChecksChanges = (e) => {
-
+    const onModelCheckboxChange = (e) => {
+        const target = e.target
+        const name = target.name
+        const checked = target.checked
+        setModel({
+            ...model,
+            [name]: checked
+        })
+        console.log(model)
     }
 
     const onTextChange = (e) => {
@@ -112,9 +117,16 @@ export default function HighlightForm(session) {
         })
     }
 
+    const handleSubmit = async () => {
+
+    }
+
     return (
         <div>
-            <Form>
+            <div>
+
+            </div>
+            <Form onSubmit={handleSubmit}>
                 <h2 className={defaultStyles.formTitle}>Plan a new Highlight</h2>
                 <div className={`${defaultStyles.formSeparatorLine}`}/>
 
@@ -139,7 +151,7 @@ export default function HighlightForm(session) {
                     <Form.Label className={defaultStyles.formLabel}>Choose Product</Form.Label>
                     <Form.Select
                         className={defaultStyles.formInputField}
-                        name="product"
+                        name="productId"
                         onChange={onModelChange}>
                         <option>Select Product</option>
                         {
@@ -147,8 +159,8 @@ export default function HighlightForm(session) {
                                 return (
                                     <option
                                         key={index}
-                                        value={product.id}>
-                                        {product.name}
+                                        value={parseInt(product.id)}>
+                                        {product.name}{product.id}
                                     </option>
                                 )
                             })
@@ -208,14 +220,14 @@ export default function HighlightForm(session) {
                     <Form.Control
                         className={defaultStyles.formCheckbox}
                         name="showTitleShadow"
-                        onChange={onModelChange}
+                        onChange={onModelCheckboxChange}
                         type="checkbox"
                     />
                 </Form.Group>
 
                 {/*titleShadowColor*/}
                 <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Text shadow color</Form.Label>
+                    <Form.Label className={defaultStyles.formLabel}>Title shadow color</Form.Label>
                     <Form.Control
                         className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}
                         type="color"
@@ -225,7 +237,7 @@ export default function HighlightForm(session) {
 
                 {/*titleShadowStyle*/}
                 <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Text shadow style</Form.Label>
+                    <Form.Label className={defaultStyles.formLabel}>Title shadow style</Form.Label>
                     <Form.Select
                         className={defaultStyles.formInputField}
                         name="titleShadowStyle"
@@ -246,6 +258,7 @@ export default function HighlightForm(session) {
                         onChange={onTextChange}
                         value={markdownReview}
                         placeholder={"Tell something about this Highlight"}
+                        name="text"
                     />
                 </Form.Group>
 
@@ -313,17 +326,6 @@ export default function HighlightForm(session) {
                     </Form.Select>
                 </Form.Group>
 
-                {/*gradientStyle*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label>Hide Navigate Button before Release</Form.Label>
-                    <Form.Control
-                        type="checkbox"
-                        className={defaultStyles.formCheckbox}
-                        name="showButtonToProduct"
-                        onChange={onModelChange}
-                    />
-                </Form.Group>
-
                 {/*backgroundImgURL*/}
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Background Image by URL</Form.Label>
@@ -333,6 +335,66 @@ export default function HighlightForm(session) {
                         onChange={onModelChange}
                     />
                 </Form.Group>
+
+                {/*ButtonToProductText*/}
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Button Text</Form.Label>
+                    <Form.Control
+                    className={defaultStyles.formInputField}
+                    name="buttonToProductText"
+                    onChange={onModelChange}/>
+                </Form.Group>
+
+                {/*hideButtonToProduct*/}
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Hide button to product</Form.Label>
+                    <Form.Control
+                    className={defaultStyles.formCheckbox}
+                    type="checkbox"
+                    name="hideButtonToProduct"
+                    onChange={onModelCheckboxChange}/>
+                </Form.Group>
+
+                {/*hideUntilDate*/}
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Hide date Until</Form.Label>
+                    <Form.Control
+                        className={defaultStyles.formCheckbox}
+                        type="checkbox"
+                        name="hideUntilDate"
+                        onChange={onModelCheckboxChange}/>
+                </Form.Group>
+
+                {/*hideProductPrice*/}
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Hide product Price</Form.Label>
+                    <Form.Control
+                        className={defaultStyles.formCheckbox}
+                        type="checkbox"
+                        name="hideProductPrice"
+                        onChange={onModelCheckboxChange}/>
+                </Form.Group>
+
+                {/*rgbTitleAnimation*/}
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Animate RGB at title</Form.Label>
+                    <Form.Control
+                        className={defaultStyles.formCheckbox}
+                        type="checkbox"
+                        name="rgbTitleAnimation"
+                        onChange={onModelCheckboxChange}/>
+                </Form.Group>
+
+                {/*runningCountdown*/}
+                <Form.Group className={defaultStyles.formGroup}>
+                    <Form.Label className={defaultStyles.formLabel}>Countdown To End</Form.Label>
+                    <Form.Control
+                        className={defaultStyles.formCheckbox}
+                        type="checkbox"
+                        name="runningCountdown"
+                        onChange={onModelCheckboxChange}/>
+                </Form.Group>
+
             </Form>
             <div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>
         </div>
