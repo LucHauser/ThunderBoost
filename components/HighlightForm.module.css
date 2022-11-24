@@ -2,16 +2,29 @@
     width: 100%;
     display: grid;
     grid-template-columns: auto 400px;
-    grid-template-rows: 600px 75px;
+    grid-template-rows: auto 550px 75px;
     gap: 20px;
 }
 
+.highlightEditorTitle {
+    grid-row: 1 / 1;
+    grid-column: 1 / span 2
+}
+
 .highlightPreview {
+    grid-row: 2 / 2;
+    grid-column: 1 / 1;
     padding: 30px
 }
 
 .highlightEditorForm {
     width: 400px;
+    height: 550px;
+    grid-row: 2 / 2;
+    grid-column: 2 / 2;
+    border: solid 2px #8DF3E8;
+    border-radius: 5px;
+    padding: 15px
 }
 
 .highlightEditorFormInputs::-webkit-scrollbar {
@@ -20,12 +33,12 @@
 
 .highlightEditorFormInputs {
     overflow: scroll;
-    height: 500px;
+    height: 525px;
 }
 
 .preferencePanel {
     background: #14318C;
-    grid-row: 2 / 2;
+    grid-row: 3 / 3;
     grid-column: 1 / span 2;
     display: flex;
     align-items: center;
@@ -36,8 +49,17 @@
 }
 
 .textAreaField {
-    height: 300px;
+    min-height: 150px;
     width: 100%;
     resize: none;
     font-family: Arial, sans-serif;
+    color: #FFFFFF;
+    font-size: 15px;
+    background: transparent;
+    border: solid 2px white;
+    border-radius: 4px;
+    padding: 5px
+}
+.textAreaField:focus {
+    outline: none
 }

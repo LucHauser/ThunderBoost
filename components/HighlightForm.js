@@ -15,6 +15,16 @@ export default function HighlightForm(session) {
         {text: "Bestseller", value: 4}
     ]
 
+    const fontFamilyOptions = [
+        {text: "Default", value: "Arial, sans-serif"},
+        {text: "HK-Modular", value: "HK-Modular"},
+        {text: "Consolas", value: "Consolas, sans-serif"},
+        {text: "Chiller", value: "Chiller, sans-serif"},
+        {text: "Blase Runner Movie Font", value: "\"Blade Runner Movie Font\", sans-serif"},
+        {text: "Trendy", value: "TRENDY, sans-serif"},
+        {text: "Broadway", value: "Broadway, sans-serif"},
+    ]
+
     const titleShadowStyleOptions = [
         {text: "Bottom right", value: "2px 2px"},
         {text: "Bottom left", value: "-2px 2px"},
@@ -39,24 +49,22 @@ export default function HighlightForm(session) {
         {text: "Rgb right to left", value: 6},
     ]
 
-
-
     const defaultModel = {
         eventType: "",
         productId: null,
         dateFrom: "",
         dateUntil: "",
         title: "",
-        titleColor: "",
+        titleFontFamily: "Arial, sans-serif",
+        titleColor: "#FFFFFF",
         showTitleShadow: false,
         titleShadowColor: "",
         titleShadowStyle: "",
         text: "",
-        textColor: "",
-        saleDiscount: null,
-        backgroundStyle: "",
-        primaryBackgroundColor: "",
-        secondaryBackgroundColor: "",
+        textColor: "#FFFFFF",
+        backgroundStyle: "0",
+        primaryBackgroundColor: "#3b3b3b",
+        secondaryBackgroundColor: "#3b3b3b",
         gradientStyle: "",
         backgroundImgUrl: "",
         buttonToProductText: "",
@@ -72,8 +80,8 @@ export default function HighlightForm(session) {
     const [model, setModel] = useState(defaultModel)
     const [errors, setErrors] = useState({})
     const [loadHighlight, setLoadHighlight] = useState(false)
-    const [markdownReview, setMarkdownReview] = useState("")
     const [products, setProducts] = useState([])
+    const [productForPresentation, setProductForPresentation] = useState(null)
     const [editorBackground, setEditorBackground] = useState("#FFFFFF")
     const [disableEditorBackground, setDisableEditorBackground] = useState(false)
 
@@ -81,6 +89,7 @@ export default function HighlightForm(session) {
         const loadProducts = async () => {
             try {
                 const products = await getAllProducts()
+                console.log(products)
                 setProducts(products)
             } catch (e) {
                 console.log(e)
@@ -99,6 +108,17 @@ export default function HighlightForm(session) {
         })
     }
 
+    const onChoosingProduct = (e) => {
+        const name = e.target.name
+        const value = e.target.value
+        setModel({
+            ...model,
+            [name]: products[value].id
+        })
+        console.log(model.productId)
+        setProductForPresentation(products[value])
+    }
+
     const onModelCheckboxChange = (e) => {
         const target = e.target
         const name = target.name
@@ -109,32 +129,28 @@ export default function HighlightForm(session) {
         })
     }
 
-    const onTextChange = (e) => {
-        setMarkdownReview(e.target.value)
-        setModel({
-            ...model,
-            text: e.target.value
-        })
-    }
-
     const handleSubmit = async () => {
 
     }
 
     return (
         <div className={highlightFormStyles.highlightEditor}>
-            <div className={highlightFormStyles.highlightPreview} style={{background: disableEditorBackground ? editorBackground : "transparent"}}>
-                <HighlightView prop={model}/>
-            </div>
-            <Form onSubmit={handleSubmit} className={highlightFormStyles.highlightEditorForm}>
+            <div className={highlightFormStyles.highlightEditorTitle}>
                 <h2 className={defaultStyles.formTitle}>Plan a new Highlight</h2>
                 <div className={`${defaultStyles.formSeparatorLine}`}/>
+            </div>
+            <div className={highlightFormStyles.highlightPreview} style={{background: disableEditorBackground ? editorBackground : "transparent"}}>
+                <HighlightView prop={model} presentingProduct={productForPresentation} editViewMode={true}/>
+            </div>
+            <Form onSubmit={handleSubmit} className={highlightFormStyles.highlightEditorForm}>
                 <div className={highlightFormStyles.highlightEditorFormInputs}>
+                    <h2 className={defaultStyles.formSubtitle}>Planning and product selection</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
                     {/*eventType*/}
-                    <Form.Group className={`${defaultStyles.formGroup}`}>
-                        <Form.Label className={defaultStyles.formLabel}>Choose Event Type</Form.Label>
+                    <Form.Group className={`${defaultStyles.formGroupSmall}`}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Choose Event Type</Form.Label>
                         <Form.Select
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             name="eventType"
                             onChange={onModelChange}>
                             <option>Choose Type</option>
@@ -147,44 +163,45 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*productID*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Choose Product</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Choose Product</Form.Label>
                         <Form.Select
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             name="productId"
-                            onChange={onModelChange}>
+                            onChange={onChoosingProduct}>
                             <option>Select Product</option>
                             {
                                 products.map((product, index) => {
                                     return (
                                         <option
                                             key={index}
-                                            value={parseInt(product.id)}>
-                                            {product.name}{product.id}
+                                            value={index}>
+                                            {product.name}
                                         </option>
                                     )
                                 })
                             }
                         </Form.Select>
+                        {/*<p>{`product choosed: ${productForPresentation.id} ${model.productId}`}</p>*/}
                     </Form.Group>
 
                     {/*dateFrom*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Start Date</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Start Date</Form.Label>
                         <Form.Control
                             type="datetime-local"
                             onChange={onModelChange}
                             placeholder={"Start date to show highlight"}
                             name="dateFrom"
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                         />
                     </Form.Group>
 
                     {/*dateUntil*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>End Time</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>End Time</Form.Label>
                         <Form.Control
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             type="datetime-local"
                             name="dateUntil"
                             onChange={onModelChange}
@@ -192,20 +209,35 @@ export default function HighlightForm(session) {
                         />
                     </Form.Group>
 
+                    <h2 className={defaultStyles.formSubtitle}>Title area</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
+
                     {/*title*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Title</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Title</Form.Label>
                         <Form.Control
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             name="title"
                             onChange={onModelChange}
                             placeholder="Give your Highlight a title"
                         />
                     </Form.Group>
 
+                    {/*titleFontFamily*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Font-family title</Form.Label>
+                        <Form.Select className={defaultStyles.formInputFieldSmall} name="titleFontFamily" onChange={onModelChange}>
+                            {fontFamilyOptions.map((font, index) => {
+                                return (
+                                    <option key={index} value={font.value} style={{fontFamily: font.value}}>{font.text}</option>
+                                )
+                            })}
+                        </Form.Select>
+                    </Form.Group>
+
                     {/*titleColor*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Title Color</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Title Color</Form.Label>
                         <Form.Control
                             type="color"
                             onChange={onModelChange}
@@ -215,8 +247,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*showTitleShadow*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Title Shadow</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Title Shadow</Form.Label>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             name="showTitleShadow"
@@ -226,8 +258,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*titleShadowColor*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Title shadow color</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Title shadow color</Form.Label>
                         <Form.Control
                             className={`${defaultStyles.formColorPicker}`}
                             type="color"
@@ -236,10 +268,10 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*titleShadowStyle*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Title shadow style</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Title shadow style</Form.Label>
                         <Form.Select
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             name="titleShadowStyle"
                             onChange={onModelChange}>
                             {titleShadowStyleOptions.map((opt, index) => {
@@ -250,21 +282,23 @@ export default function HighlightForm(session) {
                         </Form.Select>
                     </Form.Group>
 
+                    <h2 className={defaultStyles.formSubtitle}>Text area</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
+
                     {/*text*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Text</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Text</Form.Label>
                         <textarea
-                            className={`${defaultStyles.formInputField} ${highlightFormStyles.textAreaField}`}
-                            onChange={onTextChange}
-                            value={markdownReview}
+                            className={`${highlightFormStyles.textAreaField}`}
+                            onChange={onModelChange}
                             placeholder={"Tell something about this Highlight"}
                             name="text"
                         />
                     </Form.Group>
 
                     {/*textColor*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Text Color</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Text Color</Form.Label>
                         <Form.Control
                             name="textColor"
                             type="color"
@@ -273,11 +307,14 @@ export default function HighlightForm(session) {
                         />
                     </Form.Group>
 
+                    <h2 className={defaultStyles.formSubtitle}>Highlighting Backgrounding</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
+
                     {/*Background Style*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Backgrund Style</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Backgrund Style</Form.Label>
                         <Form.Select
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             name="backgroundStyle"
                             onChange={onModelChange}>
                             {backgroundStyleOptions.map((opt, index) => {
@@ -289,8 +326,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*primaryBackgroundColor*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Primary Background</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Primary Background</Form.Label>
                         <Form.Control
                             className={`${defaultStyles.formColorPicker}`}
                             name="primaryBackgroundColor"
@@ -300,8 +337,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*secondaryBackgroundColor*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Secondary Background</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Secondary Background</Form.Label>
                         <Form.Control
                             className={`${defaultStyles.formColorPicker}`}
                             name="secondaryBackgroundColor"
@@ -311,12 +348,12 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*gradientStyle*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Gradient Style</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Gradient Style</Form.Label>
                         <Form.Select
                             name="gradientStyle"
                             onChange={onModelChange}
-                            className={defaultStyles.formInputField}>
+                            className={defaultStyles.formInputFieldSmall}>
                             <option>Choose</option>
                             {gradientBgOptions.map((opt, index) => {
                                 return (
@@ -327,27 +364,33 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*backgroundImgURL*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Background Image by URL</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Background Image by URL</Form.Label>
                         <Form.Control
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             name="backgroundImgUrl"
                             onChange={onModelChange}
                         />
                     </Form.Group>
 
+                    <h2 className={defaultStyles.formSubtitle}>Buttons area</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
+
                     {/*ButtonToProductText*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Button Text</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Button Text</Form.Label>
                         <Form.Control
-                            className={defaultStyles.formInputField}
+                            className={defaultStyles.formInputFieldSmall}
                             name="buttonToProductText"
                             onChange={onModelChange}/>
                     </Form.Group>
 
+                    <h2 className={defaultStyles.formSubtitle}>Preferences</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
+
                     {/*hideButtonToProduct*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Hide button to product</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Hide button to product</Form.Label>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             type="checkbox"
@@ -356,8 +399,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*hideUntilDate*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Hide date Until</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Hide date Until</Form.Label>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             type="checkbox"
@@ -366,8 +409,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*hideProductPrice*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Hide product Price</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Hide product Price</Form.Label>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             type="checkbox"
@@ -376,8 +419,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*rgbTitleAnimation*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Animate RGB at title</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Animate RGB at title</Form.Label>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             type="checkbox"
@@ -386,8 +429,8 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*runningCountdown*/}
-                    <Form.Group className={defaultStyles.formGroup}>
-                        <Form.Label className={defaultStyles.formLabel}>Countdown To End</Form.Label>
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             type="checkbox"
@@ -410,7 +453,7 @@ export default function HighlightForm(session) {
                 <p>Disable Editor Preview Background</p>
                 <input type="checkbox" className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(!e.target.checked)}/>
                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Save Highlight</button>
-                <p>{model.gradientStyle}</p>
+                <p className={defaultStyles.test}>Helllo World</p>
             </div>
             {/*<div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>*/}
         </div>

@@ -1,6 +1,7 @@
 import highlightViewStyles from "./HighlightView.module.css"
+import defaultStyles from "../pages/stylesheet/global.module.css"
 
-export default function HighlightView({prop}) {
+export default function HighlightView({prop, presentingProduct, editViewMode}) {
 
     function backgroundingBySettings(styleOption, gradientOption, primaryColor, secondaryColor) {
         let val = ``
@@ -46,10 +47,12 @@ export default function HighlightView({prop}) {
         }
         >
             <div>
-                <img src={"https://via.placeholder.com/400"}/>
+                <img src={"https://via.placeholder.com/300"}/>
             </div>
             <div>
-                <h1>{prop.title === "" ? "Enter a title" : prop.title}</h1>
+                <h1 style={{color: prop.titleColor, fontFamily: prop.titleFontFamily !== "HK-Modular" ? prop.titleFontFamily : null}} className={prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null}>{prop.title === "" ? "Enter a title..." : prop.title}</h1>
+                {presentingProduct?.price && <p>{presentingProduct.price}</p>}
+                <p style={{color: prop.textColor}}>{prop.text === "" ? "Write a text..." : prop.text}</p>
             </div>
             <div className={highlightViewStyles.footerArea}>
 

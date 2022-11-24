@@ -5,6 +5,11 @@
     font-weight: bold;
 }
 
+.getHKModular {
+    font-family: HKModular-Bold, sans-serif;
+    font-size: 30px;;
+}
+
 /* TODO fix ttf, converter from https://onlinefontconverter.com/ */
 
 
@@ -31,6 +36,12 @@
     margin-bottom: 20px;
 }
 
+.formGroupSmall {
+    display: grid;
+    grid-gap: 5px;
+    margin-bottom: 10px
+}
+
 .formTitle {
     color: white;
     font-size: 30px;
@@ -38,11 +49,24 @@
     margin-bottom: 20px
 }
 
+.formSubtitle {
+    font-size: 20px;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    margin-bottom: 5px;
+}
+
 .formSeparatorLine {
     width: auto;
-    height: 2px;
-    background-color: #8DF3E8;
     margin-bottom: 30px;
+    background-color: #8DF3E8;
+    height: 2px;
+}
+
+.formSubtitleSeparatorLine {
+    width: auto;
+    margin-bottom: 10px;
+    border-bottom: solid 2px #FFFFFF;
 }
 
 .formInputField {
@@ -58,24 +82,35 @@
 
 .formInputFieldSmall {
     height: 30px;
-    padding: 5px
+    width: auto;
+    padding: 5px;
+    background: transparent;
+    border: solid 2px white;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #FFFFFF;
 }
 
-.formInputField > option {
+.formInputField > option, .formInputFieldSmall > option {
     color: #FFFFFF;
     background-color: #060525;
 }
 
-.formInputField[type=date], .formInputField[type=datetime-local] {
+.formInputField[type=date],
+.formInputField[type=datetime-local],
+.formInputFieldSmall[type=date],
+.formInputFieldSmall[type=datetime-local]{
     font-family: Arial, sans-serif;
 }
 
 .formInputField[type=date]::-webkit-calendar-picker-indicator,
-.formInputField[type=datetime-local]::-webkit-calendar-picker-indicator {
+.formInputField[type=datetime-local]::-webkit-calendar-picker-indicator,
+.formInputFieldSmall[type=date]::-webkit-calendar-picker-indicator,
+.formInputFieldSmall[type=datetime-local]::-webkit-calendar-picker-indicator{
     filter: invert(1);
 }
 
-.formInputField:focus {
+.formInputField:focus, .formInputFieldSmall:focus {
     outline: none
 }
 
@@ -109,6 +144,12 @@
     color: white;
     font-family: Arial, sans-serif;
     font-size: 20px;
+}
+
+.formLabelSmall {
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 15px
 }
 
 .formLabelNotice {
@@ -218,4 +259,8 @@
         font-size: 60px;
         margin-bottom: 60px;
     }
+}
+
+.test {
+    font-family: Broadway, sans-serif;
 }
