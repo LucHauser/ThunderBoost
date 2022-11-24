@@ -80,8 +80,19 @@
 }
 
 .formColorPicker {
-    width: 80px;
-    padding: 0 2px;
+    width: 30px;
+    height: 34px;
+    background-color: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    outline: none;
+    border: none
+}
+
+.formColorPicker::-webkit-color-swatch {
+    border-radius: 5px;
+    border: none
 }
 
 .formCheckbox {
@@ -196,6 +207,10 @@
 
 .tableBody > tr > td {
     height: 50px;
+}
+
+.hideElement {
+    display: none
 }
 
 @media (min-width: 850px) {

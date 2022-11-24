@@ -3,6 +3,7 @@ import defaultStyles from "../pages/stylesheet/global.module.css"
 import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
 import {getAllProducts} from "@lib/api";
+import HighlightView from "@components/HighlightView";
 
 export default function HighlightForm(session) {
 
@@ -31,12 +32,11 @@ export default function HighlightForm(session) {
     const gradientBgOptions = [
         {text: "Top to bottom", value: 0},
         {text: "Left to right", value: 1},
-        {text: "Top left to bottom right", value: 2},
-        {text: "Top right to bottom left", value: 3},
-        {text: "Rgb left to right", value: 4},
-        {text: "Transparent to right", value: 5},
-        {text: "Radial circle", value: 6},
-        {text: "RGB", value: 7}
+        {text: "Right to left", value: 2},
+        {text: "Top left to bottom right", value: 3},
+        {text: "Top right to bottom left", value: 4},
+        {text: "Rgb left to right", value: 5},
+        {text: "Rgb right to left", value: 6},
     ]
 
 
@@ -74,6 +74,8 @@ export default function HighlightForm(session) {
     const [loadHighlight, setLoadHighlight] = useState(false)
     const [markdownReview, setMarkdownReview] = useState("")
     const [products, setProducts] = useState([])
+    const [editorBackground, setEditorBackground] = useState("#FFFFFF")
+    const [disableEditorBackground, setDisableEditorBackground] = useState(false)
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -95,7 +97,6 @@ export default function HighlightForm(session) {
             ...model,
             [name]: value
         })
-        // console.log(model)
     }
 
     const onModelCheckboxChange = (e) => {
@@ -106,7 +107,6 @@ export default function HighlightForm(session) {
             ...model,
             [name]: checked
         })
-        console.log(model)
     }
 
     const onTextChange = (e) => {
@@ -122,281 +122,297 @@ export default function HighlightForm(session) {
     }
 
     return (
-        <div>
-            <div>
-
+        <div className={highlightFormStyles.highlightEditor}>
+            <div className={highlightFormStyles.highlightPreview} style={{background: disableEditorBackground ? editorBackground : "transparent"}}>
+                <HighlightView prop={model}/>
             </div>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} className={highlightFormStyles.highlightEditorForm}>
                 <h2 className={defaultStyles.formTitle}>Plan a new Highlight</h2>
                 <div className={`${defaultStyles.formSeparatorLine}`}/>
-
-                {/*eventType*/}
-                <Form.Group className={`${defaultStyles.formGroup}`}>
-                    <Form.Label className={defaultStyles.formLabel}>Choose Event Type</Form.Label>
-                    <Form.Select
-                        className={defaultStyles.formInputField}
-                        name="eventType"
-                        onChange={onModelChange}>
-                        <option>Choose Type</option>
-                        {eventTypeOptions.map(option => {
-                            return (
-                                <option key={option.value} value={option.value}>{option.text}</option>
-                            )
-                        })}
-                    </Form.Select>
-                </Form.Group>
-
-                {/*productID*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Choose Product</Form.Label>
-                    <Form.Select
-                        className={defaultStyles.formInputField}
-                        name="productId"
-                        onChange={onModelChange}>
-                        <option>Select Product</option>
-                        {
-                            products.map((product, index) => {
+                <div className={highlightFormStyles.highlightEditorFormInputs}>
+                    {/*eventType*/}
+                    <Form.Group className={`${defaultStyles.formGroup}`}>
+                        <Form.Label className={defaultStyles.formLabel}>Choose Event Type</Form.Label>
+                        <Form.Select
+                            className={defaultStyles.formInputField}
+                            name="eventType"
+                            onChange={onModelChange}>
+                            <option>Choose Type</option>
+                            {eventTypeOptions.map(option => {
                                 return (
-                                    <option
-                                        key={index}
-                                        value={parseInt(product.id)}>
-                                        {product.name}{product.id}
-                                    </option>
+                                    <option key={option.value} value={option.value}>{option.text}</option>
                                 )
-                            })
-                        }
-                    </Form.Select>
-                </Form.Group>
+                            })}
+                        </Form.Select>
+                    </Form.Group>
 
-                {/*dateFrom*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Start Date</Form.Label>
-                    <Form.Control
-                        type="datetime-local"
-                        onChange={onModelChange}
-                        placeholder={"Start date to show highlight"}
-                        name="dateFrom"
-                        className={defaultStyles.formInputField}
-                    />
-                </Form.Group>
+                    {/*productID*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Choose Product</Form.Label>
+                        <Form.Select
+                            className={defaultStyles.formInputField}
+                            name="productId"
+                            onChange={onModelChange}>
+                            <option>Select Product</option>
+                            {
+                                products.map((product, index) => {
+                                    return (
+                                        <option
+                                            key={index}
+                                            value={parseInt(product.id)}>
+                                            {product.name}{product.id}
+                                        </option>
+                                    )
+                                })
+                            }
+                        </Form.Select>
+                    </Form.Group>
 
-                {/*dateUntil*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>End Time</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formInputField}
-                        type="datetime-local"
-                        name="dateUntil"
-                        onChange={onModelChange}
-                        placeholder="End date for highlight end"
-                    />
-                </Form.Group>
+                    {/*dateFrom*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Start Date</Form.Label>
+                        <Form.Control
+                            type="datetime-local"
+                            onChange={onModelChange}
+                            placeholder={"Start date to show highlight"}
+                            name="dateFrom"
+                            className={defaultStyles.formInputField}
+                        />
+                    </Form.Group>
 
-                {/*title*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Title</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formInputField}
-                        name="title"
-                        onChange={onModelChange}
-                        placeholder="Give your Highlight a title"
-                    />
-                </Form.Group>
+                    {/*dateUntil*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>End Time</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formInputField}
+                            type="datetime-local"
+                            name="dateUntil"
+                            onChange={onModelChange}
+                            placeholder="End date for highlight end"
+                        />
+                    </Form.Group>
 
-                {/*titleColor*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Title Color</Form.Label>
-                    <Form.Control
-                        type="color"
-                        onChange={onModelChange}
-                        name="titleColor"
-                        className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}
-                    />
-                </Form.Group>
+                    {/*title*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Title</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formInputField}
+                            name="title"
+                            onChange={onModelChange}
+                            placeholder="Give your Highlight a title"
+                        />
+                    </Form.Group>
 
-                {/*showTitleShadow*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Title Shadow</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formCheckbox}
-                        name="showTitleShadow"
-                        onChange={onModelCheckboxChange}
-                        type="checkbox"
-                    />
-                </Form.Group>
+                    {/*titleColor*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Title Color</Form.Label>
+                        <Form.Control
+                            type="color"
+                            onChange={onModelChange}
+                            name="titleColor"
+                            className={`${defaultStyles.formColorPicker}`}
+                        />
+                    </Form.Group>
 
-                {/*titleShadowColor*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Title shadow color</Form.Label>
-                    <Form.Control
-                        className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}
-                        type="color"
-                        name="titleShadowColor"
-                        onChange={onModelChange}/>
-                </Form.Group>
+                    {/*showTitleShadow*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Title Shadow</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formCheckbox}
+                            name="showTitleShadow"
+                            onChange={onModelCheckboxChange}
+                            type="checkbox"
+                        />
+                    </Form.Group>
 
-                {/*titleShadowStyle*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Title shadow style</Form.Label>
-                    <Form.Select
-                        className={defaultStyles.formInputField}
-                        name="titleShadowStyle"
-                        onChange={onModelChange}>
-                        {titleShadowStyleOptions.map((opt, index) => {
-                            return (
-                                <option key={index} value={opt.value}>{opt.text}</option>
-                            )
-                        })}
-                    </Form.Select>
-                </Form.Group>
+                    {/*titleShadowColor*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Title shadow color</Form.Label>
+                        <Form.Control
+                            className={`${defaultStyles.formColorPicker}`}
+                            type="color"
+                            name="titleShadowColor"
+                            onChange={onModelChange}/>
+                    </Form.Group>
 
-                {/*text*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Text</Form.Label>
-                    <textarea
-                        className={`${defaultStyles.formInputField} ${highlightFormStyles.textAreaField}`}
-                        onChange={onTextChange}
-                        value={markdownReview}
-                        placeholder={"Tell something about this Highlight"}
-                        name="text"
-                    />
-                </Form.Group>
+                    {/*titleShadowStyle*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Title shadow style</Form.Label>
+                        <Form.Select
+                            className={defaultStyles.formInputField}
+                            name="titleShadowStyle"
+                            onChange={onModelChange}>
+                            {titleShadowStyleOptions.map((opt, index) => {
+                                return (
+                                    <option key={index} value={opt.value}>{opt.text}</option>
+                                )
+                            })}
+                        </Form.Select>
+                    </Form.Group>
 
-                {/*textColor*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Text Color</Form.Label>
-                    <Form.Control
-                        name="textColor"
-                        type="color"
-                        onChange={onModelChange}
-                        className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}
-                    />
-                </Form.Group>
+                    {/*text*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Text</Form.Label>
+                        <textarea
+                            className={`${defaultStyles.formInputField} ${highlightFormStyles.textAreaField}`}
+                            onChange={onTextChange}
+                            value={markdownReview}
+                            placeholder={"Tell something about this Highlight"}
+                            name="text"
+                        />
+                    </Form.Group>
 
-                {/*Background Style*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Backgrund Style</Form.Label>
-                    <Form.Select
-                        className={defaultStyles.formInputField}
-                        name="backgroundStyle"
-                        onChange={onModelChange}>
-                        {backgroundStyleOptions.map((opt, index) => {
-                            return (
-                                <option key={index} value={opt.value}>{opt.text}</option>
-                            )
-                        })}
-                    </Form.Select>
-                </Form.Group>
+                    {/*textColor*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Text Color</Form.Label>
+                        <Form.Control
+                            name="textColor"
+                            type="color"
+                            onChange={onModelChange}
+                            className={`${defaultStyles.formColorPicker}`}
+                        />
+                    </Form.Group>
 
-                {/*primaryBackgroundColor*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Primary Background</Form.Label>
-                    <Form.Control
-                        className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}
-                        name="primaryBackgroundColor"
-                        onChange={onModelChange}
-                        type="color"
-                    />
-                </Form.Group>
+                    {/*Background Style*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Backgrund Style</Form.Label>
+                        <Form.Select
+                            className={defaultStyles.formInputField}
+                            name="backgroundStyle"
+                            onChange={onModelChange}>
+                            {backgroundStyleOptions.map((opt, index) => {
+                                return (
+                                    <option key={index} value={opt.value}>{opt.text}</option>
+                                )
+                            })}
+                        </Form.Select>
+                    </Form.Group>
 
-                {/*secondaryBackgroundColor*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Secondary Background</Form.Label>
-                    <Form.Control
-                        className={`${defaultStyles.formInputField} ${defaultStyles.formColorPicker}`}
-                        name="secondaryBackgroundColor"
-                        type="color"
-                        onChange={onModelChange}
-                    />
-                </Form.Group>
+                    {/*primaryBackgroundColor*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Primary Background</Form.Label>
+                        <Form.Control
+                            className={`${defaultStyles.formColorPicker}`}
+                            name="primaryBackgroundColor"
+                            onChange={onModelChange}
+                            type="color"
+                        />
+                    </Form.Group>
 
-                {/*gradientStyle*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Gradient Style</Form.Label>
-                    <Form.Select
-                        name="gradientStyle"
-                        onChange={onModelChange}
-                        className={defaultStyles.formInputField}>
-                        <option>Choose</option>
-                        {gradientBgOptions.map((opt, index) => {
-                            return (
-                                <option key={index} value={opt.value}>{opt.text}</option>
-                            )
-                        })}
-                    </Form.Select>
-                </Form.Group>
+                    {/*secondaryBackgroundColor*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Secondary Background</Form.Label>
+                        <Form.Control
+                            className={`${defaultStyles.formColorPicker}`}
+                            name="secondaryBackgroundColor"
+                            type="color"
+                            onChange={onModelChange}
+                        />
+                    </Form.Group>
 
-                {/*backgroundImgURL*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Background Image by URL</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formInputField}
-                        name="backgroundImgUrl"
-                        onChange={onModelChange}
-                    />
-                </Form.Group>
+                    {/*gradientStyle*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Gradient Style</Form.Label>
+                        <Form.Select
+                            name="gradientStyle"
+                            onChange={onModelChange}
+                            className={defaultStyles.formInputField}>
+                            <option>Choose</option>
+                            {gradientBgOptions.map((opt, index) => {
+                                return (
+                                    <option key={index} value={opt.value}>{opt.text}</option>
+                                )
+                            })}
+                        </Form.Select>
+                    </Form.Group>
 
-                {/*ButtonToProductText*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Button Text</Form.Label>
-                    <Form.Control
-                    className={defaultStyles.formInputField}
-                    name="buttonToProductText"
-                    onChange={onModelChange}/>
-                </Form.Group>
+                    {/*backgroundImgURL*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Background Image by URL</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formInputField}
+                            name="backgroundImgUrl"
+                            onChange={onModelChange}
+                        />
+                    </Form.Group>
 
-                {/*hideButtonToProduct*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Hide button to product</Form.Label>
-                    <Form.Control
-                    className={defaultStyles.formCheckbox}
-                    type="checkbox"
-                    name="hideButtonToProduct"
-                    onChange={onModelCheckboxChange}/>
-                </Form.Group>
+                    {/*ButtonToProductText*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Button Text</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formInputField}
+                            name="buttonToProductText"
+                            onChange={onModelChange}/>
+                    </Form.Group>
 
-                {/*hideUntilDate*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Hide date Until</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formCheckbox}
-                        type="checkbox"
-                        name="hideUntilDate"
-                        onChange={onModelCheckboxChange}/>
-                </Form.Group>
+                    {/*hideButtonToProduct*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Hide button to product</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formCheckbox}
+                            type="checkbox"
+                            name="hideButtonToProduct"
+                            onChange={onModelCheckboxChange}/>
+                    </Form.Group>
 
-                {/*hideProductPrice*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Hide product Price</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formCheckbox}
-                        type="checkbox"
-                        name="hideProductPrice"
-                        onChange={onModelCheckboxChange}/>
-                </Form.Group>
+                    {/*hideUntilDate*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Hide date Until</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formCheckbox}
+                            type="checkbox"
+                            name="hideUntilDate"
+                            onChange={onModelCheckboxChange}/>
+                    </Form.Group>
 
-                {/*rgbTitleAnimation*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Animate RGB at title</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formCheckbox}
-                        type="checkbox"
-                        name="rgbTitleAnimation"
-                        onChange={onModelCheckboxChange}/>
-                </Form.Group>
+                    {/*hideProductPrice*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Hide product Price</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formCheckbox}
+                            type="checkbox"
+                            name="hideProductPrice"
+                            onChange={onModelCheckboxChange}/>
+                    </Form.Group>
 
-                {/*runningCountdown*/}
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Countdown To End</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formCheckbox}
-                        type="checkbox"
-                        name="runningCountdown"
-                        onChange={onModelCheckboxChange}/>
-                </Form.Group>
+                    {/*rgbTitleAnimation*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Animate RGB at title</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formCheckbox}
+                            type="checkbox"
+                            name="rgbTitleAnimation"
+                            onChange={onModelCheckboxChange}/>
+                    </Form.Group>
 
+                    {/*runningCountdown*/}
+                    <Form.Group className={defaultStyles.formGroup}>
+                        <Form.Label className={defaultStyles.formLabel}>Countdown To End</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formCheckbox}
+                            type="checkbox"
+                            name="runningCountdown"
+                            onChange={onModelCheckboxChange}/>
+                    </Form.Group>
+                </div>
             </Form>
-            <div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>
+            <div className={highlightFormStyles.preferencePanel}>
+                <p>Editor Preview Background: </p>
+                <input
+                    value={editorBackground}
+                    type="color"
+                    onChange={e => setEditorBackground(e.target.value)}
+                    className={defaultStyles.formColorPicker}/>
+                { editorBackground !== "#FFFFFF" ?
+                    <i onClick={e => setEditorBackground("#FFFFFF")}>Reset color</i>
+                    : null
+                }
+                <p>Disable Editor Preview Background</p>
+                <input type="checkbox" className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(!e.target.checked)}/>
+                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Save Highlight</button>
+                <p>{model.gradientStyle}</p>
+            </div>
+            {/*<div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>*/}
         </div>
     )
 
