@@ -2,7 +2,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: auto 400px;
-    grid-template-rows: auto 550px 75px;
+    grid-template-rows: auto 50px 550px 75px;
     gap: 20px;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .highlightPreview {
-    grid-row: 2 / 2;
+    grid-row: 3 / 3;
     grid-column: 1 / 1;
     padding: 30px
 }
@@ -20,7 +20,7 @@
 .highlightEditorForm {
     width: 400px;
     height: 550px;
-    grid-row: 2 / 2;
+    grid-row: 3 / 3;
     grid-column: 2 / 2;
     border: solid 2px #8DF3E8;
     border-radius: 5px;
@@ -38,7 +38,7 @@
 
 .preferencePanel {
     background: #14318C;
-    grid-row: 3 / 3;
+    grid-row: 4 / 4;
     grid-column: 1 / span 2;
     display: flex;
     align-items: center;
@@ -60,6 +60,32 @@
     border-radius: 4px;
     padding: 5px
 }
-.textAreaField:focus {
+.textAreaField:focus, .colorOpacityRange:focus {
     outline: none
+}
+
+.colorOpacityRange {
+    border: solid 2px #FFFFFF;
+    height: 30px;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 6px;
+    background: transparent;
+}
+
+.colorOpacityRange[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    height: 30px;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 4px;
+}
+
+.colorOpacityRange[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: solid 2px #000000;
+    border-radius: 2px;
+    height: 30px;
+    width: 10px;
+    background: #FFFFFF;
 }

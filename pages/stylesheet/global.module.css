@@ -140,6 +140,10 @@
     accent-color: #8DF3E8;
 }
 
+.formInputRange {
+    height: 30px
+}
+
 .formLabel {
     color: white;
     font-family: Arial, sans-serif;

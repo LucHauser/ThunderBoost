@@ -4,15 +4,16 @@ import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
 import {getAllProducts} from "@lib/api";
 import HighlightView from "@components/HighlightView";
+import {hexToRgba} from "@components/stylesUtils";
 
 export default function HighlightForm(session) {
 
     const eventTypeOptions = [
-        {text: "Release", value: 0},
-        {text: "Announcement", value: 1},
-        {text: "Discount", value: 2},
-        {text: "Range", value: 3},
-        {text: "Bestseller", value: 4}
+        {text: "Release", value: "Release"},
+        {text: "Announcement", value: "Announcement"},
+        {text: "Discount", value: "Discount"},
+        {text: "Range", value: "Range"},
+        {text: "Bestseller", value: "Bestseller"}
     ]
 
     const fontFamilyOptions = [
@@ -50,7 +51,10 @@ export default function HighlightForm(session) {
     ]
 
     const defaultModel = {
-        eventType: "",
+        eventType: "Choose type",
+        eventTypeBackground: "#000000",
+        eventTypeBackgroundOpacity: "1",
+        eventTypeTextColor: "#FFFFFF",
         productId: null,
         dateFrom: "",
         dateUntil: "",
@@ -136,15 +140,17 @@ export default function HighlightForm(session) {
     return (
         <div className={highlightFormStyles.highlightEditor}>
             <div className={highlightFormStyles.highlightEditorTitle}>
-                <h2 className={defaultStyles.formTitle}>Plan a new Highlight</h2>
+                <h2 className={defaultStyles.formTitle}>Create a new Highlight</h2>
                 <div className={`${defaultStyles.formSeparatorLine}`}/>
             </div>
+            <h3 style={{color: "white", fontFamily: "Arial, sans-serif"}}>Live Preview</h3>
+            <h3 style={{color: "white", fontFamily: "Arial, sans-serif"}}>Editor</h3>
             <div className={highlightFormStyles.highlightPreview} style={{background: disableEditorBackground ? editorBackground : "transparent"}}>
                 <HighlightView prop={model} presentingProduct={productForPresentation} editViewMode={true}/>
             </div>
             <Form onSubmit={handleSubmit} className={highlightFormStyles.highlightEditorForm}>
                 <div className={highlightFormStyles.highlightEditorFormInputs}>
-                    <h2 className={defaultStyles.formSubtitle}>Planning and product selection</h2>
+                    <h2 className={defaultStyles.formSubtitle}>Event type</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
                     {/*eventType*/}
                     <Form.Group className={`${defaultStyles.formGroupSmall}`}>
@@ -153,13 +159,41 @@ export default function HighlightForm(session) {
                             className={defaultStyles.formInputFieldSmall}
                             name="eventType"
                             onChange={onModelChange}>
-                            <option>Choose Type</option>
+                            <option value="Choose type">Choose Type</option>
                             {eventTypeOptions.map(option => {
                                 return (
                                     <option key={option.value} value={option.value}>{option.text}</option>
                                 )
                             })}
                         </Form.Select>
+                    </Form.Group>
+
+                    {/*eventTypeBackground*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Event Type Background</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formColorPicker}
+                            name="eventTypeBackground"
+                            type="color"
+                            value={model.eventTypeBackground}
+                            onChange={onModelChange}/>
+                    </Form.Group>
+
+                    {/*eventTypeBackgroundOpacity*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Opacity</Form.Label>
+                        <input className={highlightFormStyles.colorOpacityRange} style={{background: `linear-gradient(to left, ${model.eventTypeBackground}, ${hexToRgba(model.eventTypeBackground, 0)})`}} name="eventTypeBackgroundOpacity" type="range" min="0" max="1" step="0.01" onChange={onModelChange}/>
+                    </Form.Group>
+
+                    {/*eventTypeTextColor*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Event Type Text Color</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formColorPicker}
+                            name="eventTypeTextColor"
+                            type="color"
+                            value={model.eventTypeTextColor}
+                            onChange={onModelChange}/>
                     </Form.Group>
 
                     {/*productID*/}
