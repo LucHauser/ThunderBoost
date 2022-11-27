@@ -2,6 +2,11 @@ import highlightViewStyles from "./HighlightView.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {hexToRgba} from "@components/stylesUtils";
+import {faBullhorn} from "@fortawesome/free-solid-svg-icons";
+import markdownElements from "@components/MarkdownReview.module.css";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import ReactMarkdown from "react-markdown";
 
 export default function HighlightView({prop, presentingProduct, editViewMode}) {
 
@@ -56,12 +61,13 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                             background: hexToRgba(prop.eventTypeBackground, prop.eventTypeBackgroundOpacity)
                         }
                     }>
-                    <p>&#128227;</p>
+                    <FontAwesomeIcon icon={faBullhorn} color={prop.eventTypeTextColor}/>
                     <i style={
                         {
                             color: prop.eventTypeTextColor
-                        }}>
-                        {prop.eventType}
+                        }}
+                        className={prop.eventTypeTextRgbAnimation ? highlightViewStyles.textRgbAnimation : null}>
+                        {prop.enableCustomEventType? prop.customEventTypeText : prop.eventType}
                     </i>
                 </div>
                 <img
@@ -76,7 +82,8 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                             color: prop.titleColor,
                             fontFamily: prop.titleFontFamily !== "HK-Modular" ?
                                 prop.titleFontFamily :
-                                null
+                                null,
+                            textShadow: prop.showTitleShadow ? `${prop.titleShadowStyle} ${prop.titleShadowColor}` : null
                         }
                     }
                     className={prop.titleFontFamily === "HK-Modular" ?
@@ -91,7 +98,14 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     presentingProduct?.price &&
                     <p>{presentingProduct.price}</p>
                 }
-                <p style={{color: prop.textColor}}>{prop.text === "" ? "Write a text..." : prop.text}</p>
+                <div style={{color: prop.textColor, fontFamily: "Arial, sans-serif"}}>
+                    <ReactMarkdown
+                        className={`${markdownElements.elements}`}
+                        /* eslint-disable-next-line react/no-children-prop */
+                        children={prop.text}
+                        rehypePlugins={[rehypeRaw, remarkGfm]}
+                    />
+                </div>
             </div>
             <div className={highlightViewStyles.footerArea}>
 

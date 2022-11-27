@@ -51,34 +51,56 @@ export default function HighlightForm(session) {
     ]
 
     const defaultModel = {
+        //Event Type
         eventType: "Choose type",
+        enableCustomEventType: false,
+        customEventTypeText: "",
         eventTypeBackground: "#000000",
         eventTypeBackgroundOpacity: "1",
         eventTypeTextColor: "#FFFFFF",
+        eventTypeTextRgbAnimation: false,
+
+        //Product Selection
         productId: null,
+        showProductPrice: false,
+
+        // Presentation Date
         dateFrom: "",
         dateUntil: "",
+        showDateUntil: false,
+        dateUntilColor: "",
+        additionalUntilText: "",
+        runningCountdown: false,
+
+        // Title area
         title: "",
         titleFontFamily: "Arial, sans-serif",
         titleColor: "#FFFFFF",
         showTitleShadow: false,
         titleShadowColor: "",
         titleShadowStyle: "",
+
+        // Text area
         text: "",
         textColor: "#FFFFFF",
+
+        // Backgrounding
         backgroundStyle: "0",
         primaryBackgroundColor: "#3b3b3b",
+        primaryBackgroundColorOpacity: "1",
         secondaryBackgroundColor: "#3b3b3b",
+        secondaryBackgroundColorOpacity: "1",
         gradientStyle: "",
         backgroundImgUrl: "",
-        buttonToProductText: "",
+
+        // Content Shadowing
         highlightContentShadow: false,
         highlightShadowColor: "",
+
+        // Button area
+        buttonToProductText: "",
         hideButtonToProduct: false,
-        hideUntilDate: false,
-        hideProductPrice: false,
         rgbTitleAnimation: false,
-        runningCountdown: false
     }
 
     const [model, setModel] = useState(defaultModel)
@@ -115,12 +137,20 @@ export default function HighlightForm(session) {
     const onChoosingProduct = (e) => {
         const name = e.target.name
         const value = e.target.value
-        setModel({
-            ...model,
-            [name]: products[value].id
-        })
-        console.log(model.productId)
-        setProductForPresentation(products[value])
+        if (value !== "Empty") {
+            setModel({
+                ...model,
+                [name]: products[value].id
+            })
+            console.log(model.productId)
+            setProductForPresentation(products[value])
+        } else {
+            setModel({
+                ...model,
+                [name]: value
+            })
+            setProductForPresentation(null)
+        }
     }
 
     const onModelCheckboxChange = (e) => {
@@ -145,56 +175,87 @@ export default function HighlightForm(session) {
             </div>
             <h3 style={{color: "white", fontFamily: "Arial, sans-serif"}}>Live Preview</h3>
             <h3 style={{color: "white", fontFamily: "Arial, sans-serif"}}>Editor</h3>
-            <div className={highlightFormStyles.highlightPreview} style={{background: disableEditorBackground ? editorBackground : "transparent"}}>
+            <div className={highlightFormStyles.highlightPreview} style={{background: !disableEditorBackground ? editorBackground : "transparent"}}>
                 <HighlightView prop={model} presentingProduct={productForPresentation} editViewMode={true}/>
             </div>
             <Form onSubmit={handleSubmit} className={highlightFormStyles.highlightEditorForm}>
                 <div className={highlightFormStyles.highlightEditorFormInputs}>
                     <h2 className={defaultStyles.formSubtitle}>Event type</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
-                    {/*eventType*/}
+
+                    {/*eventType, enableCustomEventType*/}
                     <Form.Group className={`${defaultStyles.formGroupSmall}`}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Choose Event Type</Form.Label>
-                        <Form.Select
-                            className={defaultStyles.formInputFieldSmall}
-                            name="eventType"
-                            onChange={onModelChange}>
-                            <option value="Choose type">Choose Type</option>
-                            {eventTypeOptions.map(option => {
-                                return (
-                                    <option key={option.value} value={option.value}>{option.text}</option>
-                                )
-                            })}
-                        </Form.Select>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Select
+                                className={defaultStyles.formInputFieldSmall}
+                                name="eventType"
+                                onChange={onModelChange}
+                                disabled={model.enableCustomEventType}>
+                                <option value="Choose type">Choose Type</option>
+                                {eventTypeOptions.map(option => {
+                                    return (
+                                        <option key={option.value} value={option.value}>{option.text}</option>
+                                    )
+                                })}
+                            </Form.Select>
+                            <p className={defaultStyles.formSubLabelSmall}>Custom: </p>
+                            <Form.Control
+                                className={defaultStyles.formCheckbox}
+                                type="checkbox"
+                                onChange={onModelCheckboxChange}
+                                name="enableCustomEventType"
+                            />
+                        </div>
                     </Form.Group>
 
-                    {/*eventTypeBackground*/}
+                    {/*customEventTypeText*/}
+                    <Form.Group className={defaultStyles.formGroupSmall} style={{display: !model.enableCustomEventType ? "none": null}}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Custom Event Type Text</Form.Label>
+                        <Form.Control className={defaultStyles.formInputFieldSmall} onChange={onModelChange} name="customEventTypeText" placeholder="Enter a custom text"/>
+                    </Form.Group>
+
+                    {/*eventTypeBackground, eventTypeBackgroundOpacity*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Event Type Background</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formColorPicker}
-                            name="eventTypeBackground"
-                            type="color"
-                            value={model.eventTypeBackground}
-                            onChange={onModelChange}/>
-                    </Form.Group>
-
-                    {/*eventTypeBackgroundOpacity*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Opacity</Form.Label>
-                        <input className={highlightFormStyles.colorOpacityRange} style={{background: `linear-gradient(to left, ${model.eventTypeBackground}, ${hexToRgba(model.eventTypeBackground, 0)})`}} name="eventTypeBackgroundOpacity" type="range" min="0" max="1" step="0.01" onChange={onModelChange}/>
+                        <div className={highlightFormStyles.colorPickerInput}>
+                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                name="eventTypeBackground"
+                                type="color"
+                                value={model.eventTypeBackground}
+                                onChange={onModelChange}
+                            />
+                            <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
+                            <input className={highlightFormStyles.colorOpacityRange} style={{background: `linear-gradient(to left, ${model.eventTypeBackground}, ${hexToRgba(model.eventTypeBackground, 0)})`}} name="eventTypeBackgroundOpacity" type="range" min="0" max="1" step="0.01" onChange={onModelChange}/>
+                        </div>
                     </Form.Group>
 
                     {/*eventTypeTextColor*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Event Type Text Color</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formColorPicker}
-                            name="eventTypeTextColor"
-                            type="color"
-                            value={model.eventTypeTextColor}
-                            onChange={onModelChange}/>
+                        <div className={highlightFormStyles.colorPickerInput}>
+                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                name="eventTypeTextColor"
+                                type="color"
+                                value={model.eventTypeTextColor}
+                                onChange={onModelChange}/>
+                            <p className={defaultStyles.formSubLabelSmall}>RGB-Animation: </p>
+                            <Form.Control
+                                className={defaultStyles.formCheckbox}
+                                name="eventTypeTextRgbAnimation"
+                                onChange={onModelCheckboxChange}
+                                type="checkbox"
+                            />
+                        </div>
+
                     </Form.Group>
+
+                    <h2 className={defaultStyles.formSubtitle}>Selecting Product</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
                     {/*productID*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
@@ -203,7 +264,7 @@ export default function HighlightForm(session) {
                             className={defaultStyles.formInputFieldSmall}
                             name="productId"
                             onChange={onChoosingProduct}>
-                            <option>Select Product</option>
+                            <option value={"Empty"}>Select Product</option>
                             {
                                 products.map((product, index) => {
                                     return (
@@ -216,8 +277,20 @@ export default function HighlightForm(session) {
                                 })
                             }
                         </Form.Select>
-                        {/*<p>{`product choosed: ${productForPresentation.id} ${model.productId}`}</p>*/}
                     </Form.Group>
+
+                    {/*hideProductPrice*/}
+                    <Form.Group className={highlightFormStyles.multiInputsLine}>
+                        <Form.Control
+                            className={defaultStyles.formCheckbox}
+                            type="checkbox"
+                            name="showProductPrice"
+                            onChange={onModelCheckboxChange}/>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Show Product Price</Form.Label>
+                    </Form.Group>
+
+                    <h2 className={defaultStyles.formSubtitle}>Presentation date</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
                     {/*dateFrom*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
@@ -242,6 +315,44 @@ export default function HighlightForm(session) {
                             placeholder="End date for highlight end"
                         />
                     </Form.Group>
+
+                    {/**/}
+                    {model.dateFrom !== "" || model.dateUntil !== "" ?
+                        <div>
+                            {/*additionalUntilText, dateUntilColor*/}
+                            <FormGroup className={defaultStyles.formGroupSmall}>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Additional Text</Form.Label>
+                                <div className={highlightFormStyles.multiInputsLine}>
+                                    <Form.Control name="addionalUntilText" className={defaultStyles.formInputFieldSmall} onChange={onModelChange}/>
+                                    <p className={defaultStyles.formSubLabelSmall}>Color:</p>
+                                    <Form.Control type="color" name="dateUntilColor" className={defaultStyles.formColorPicker} onChange={onModelChange}/>
+                                </div>
+
+                            </FormGroup>
+
+                            {/*runningCountdown*/}
+                            <Form.Group className={defaultStyles.formGroupSmall}>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
+                                <Form.Control
+                                    className={defaultStyles.formCheckbox}
+                                    type="checkbox"
+                                    name="runningCountdown"
+                                    onChange={onModelCheckboxChange}/>
+                            </Form.Group>
+
+                            {/*hideUntilDate*/}
+                            <Form.Group className={defaultStyles.formGroupSmall}>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Hide date Until</Form.Label>
+                                <Form.Control
+                                    className={defaultStyles.formCheckbox}
+                                    type="checkbox"
+                                    name="hideUntilDate"
+                                    onChange={onModelCheckboxChange}/>
+                            </Form.Group>
+                        </div>
+                        : <div/>}
+
+
 
                     <h2 className={defaultStyles.formSubtitle}>Title area</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
@@ -432,25 +543,9 @@ export default function HighlightForm(session) {
                             onChange={onModelCheckboxChange}/>
                     </Form.Group>
 
-                    {/*hideUntilDate*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Hide date Until</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formCheckbox}
-                            type="checkbox"
-                            name="hideUntilDate"
-                            onChange={onModelCheckboxChange}/>
-                    </Form.Group>
 
-                    {/*hideProductPrice*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Hide product Price</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formCheckbox}
-                            type="checkbox"
-                            name="hideProductPrice"
-                            onChange={onModelCheckboxChange}/>
-                    </Form.Group>
+
+
 
                     {/*rgbTitleAnimation*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
@@ -462,15 +557,7 @@ export default function HighlightForm(session) {
                             onChange={onModelCheckboxChange}/>
                     </Form.Group>
 
-                    {/*runningCountdown*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formCheckbox}
-                            type="checkbox"
-                            name="runningCountdown"
-                            onChange={onModelCheckboxChange}/>
-                    </Form.Group>
+
                 </div>
             </Form>
             <div className={highlightFormStyles.preferencePanel}>
@@ -479,13 +566,14 @@ export default function HighlightForm(session) {
                     value={editorBackground}
                     type="color"
                     onChange={e => setEditorBackground(e.target.value)}
-                    className={defaultStyles.formColorPicker}/>
+                    className={defaultStyles.formColorPicker}
+                    onDoubleClick={e => setEditorBackground("#14318C")}/>
                 { editorBackground !== "#FFFFFF" ?
                     <i onClick={e => setEditorBackground("#FFFFFF")}>Reset color</i>
                     : null
                 }
                 <p>Disable Editor Preview Background</p>
-                <input type="checkbox" className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(!e.target.checked)}/>
+                <input type="checkbox" className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(e.target.checked)}/>
                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Save Highlight</button>
                 <p className={defaultStyles.test}>Helllo World</p>
             </div>

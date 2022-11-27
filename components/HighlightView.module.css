@@ -25,6 +25,14 @@
     border-bottom-right-radius: 40px;
     width: 200px;
     padding-left: 5px;
+    gap: 5px
+}
+
+.textRgbAnimation {
+    background-image: linear-gradient(to left, red, orangered, orange, yellow, yellowgreen, green, turquoise, lightblue, blue, blueviolet, violet, mediumvioletred, red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: color-range 40s linear infinite
 }
 
 .contentArea {
@@ -35,4 +43,10 @@
 
 .footerArea {
     grid-column: 1 / span 2;
+}
+
+@keyframes color-range {
+    to {
+        background-position: 200vh;
+    }
 }

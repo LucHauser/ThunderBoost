@@ -82,7 +82,7 @@
 
 .formInputFieldSmall {
     height: 30px;
-    width: auto;
+    width: 100%;
     padding: 5px;
     background: transparent;
     border: solid 2px white;
@@ -115,14 +115,14 @@
 }
 
 .formColorPicker {
-    width: 30px;
+    min-width: 30px;
     height: 34px;
     background-color: transparent;
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
     outline: none;
-    border: none
+    border: none;
 }
 
 .formColorPicker::-webkit-color-swatch {
@@ -153,7 +153,15 @@
 .formLabelSmall {
     color: white;
     font-family: Arial, sans-serif;
-    font-size: 15px
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.formSubLabelSmall {
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+
 }
 
 .formLabelNotice {
