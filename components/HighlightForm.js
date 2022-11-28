@@ -67,9 +67,9 @@ export default function HighlightForm(session) {
         // Presentation Date
         dateFrom: "",
         dateUntil: "",
-        showDateUntil: false,
-        dateUntilColor: "",
+        showUntilDate: false,
         additionalUntilText: "",
+        dateUntilColor: "",
         runningCountdown: false,
 
         // Title area
@@ -317,17 +317,27 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/**/}
-                    {model.dateFrom !== "" || model.dateUntil !== "" ?
+                    {model.dateFrom !== "" && model.dateUntil !== "" ?
                         <div>
+                            {/*showUntilDate*/}
+                            <Form.Group className={defaultStyles.formGroupSmall}>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Show date until</Form.Label>
+                                <Form.Control
+                                    className={defaultStyles.formCheckbox}
+                                    type="checkbox"
+                                    name="showUntilDate"
+                                    onChange={onModelCheckboxChange}/>
+                            </Form.Group>
+
+
                             {/*additionalUntilText, dateUntilColor*/}
                             <FormGroup className={defaultStyles.formGroupSmall}>
                                 <Form.Label className={defaultStyles.formLabelSmall}>Additional Text</Form.Label>
                                 <div className={highlightFormStyles.multiInputsLine}>
-                                    <Form.Control name="addionalUntilText" className={defaultStyles.formInputFieldSmall} onChange={onModelChange}/>
+                                    <Form.Control name="additionalUntilText" className={defaultStyles.formInputFieldSmall} onChange={onModelChange}/>
                                     <p className={defaultStyles.formSubLabelSmall}>Color:</p>
                                     <Form.Control type="color" name="dateUntilColor" className={defaultStyles.formColorPicker} onChange={onModelChange}/>
                                 </div>
-
                             </FormGroup>
 
                             {/*runningCountdown*/}
@@ -340,15 +350,7 @@ export default function HighlightForm(session) {
                                     onChange={onModelCheckboxChange}/>
                             </Form.Group>
 
-                            {/*hideUntilDate*/}
-                            <Form.Group className={defaultStyles.formGroupSmall}>
-                                <Form.Label className={defaultStyles.formLabelSmall}>Hide date Until</Form.Label>
-                                <Form.Control
-                                    className={defaultStyles.formCheckbox}
-                                    type="checkbox"
-                                    name="hideUntilDate"
-                                    onChange={onModelCheckboxChange}/>
-                            </Form.Group>
+
                         </div>
                         : <div/>}
 

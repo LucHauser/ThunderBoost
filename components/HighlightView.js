@@ -7,6 +7,7 @@ import markdownElements from "@components/MarkdownReview.module.css";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import Countdown from 'react-countdown'
 
 export default function HighlightView({prop, presentingProduct, editViewMode}) {
 
@@ -96,7 +97,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     }</h1>
                 {
                     presentingProduct?.price &&
-                    <p>{presentingProduct.price}</p>
+                    <p className={!prop.showProductPrice ? defaultStyles.hideElement : null}>{presentingProduct.price}</p>
                 }
                 <div style={{color: prop.textColor, fontFamily: "Arial, sans-serif"}}>
                     <ReactMarkdown
@@ -108,6 +109,18 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                 </div>
             </div>
             <div className={highlightViewStyles.footerArea}>
+                {prop.showUntilDate ?
+                    <div className={highlightViewStyles.dateUntilBox}>
+                        <h3 style={{color: prop.dateUntilColor}}>{`${prop.additionalUntilText !== "" ? prop.additionalUntilText : "Until"}`}</h3>
+                        {prop.runningCountdown ?
+                            <div style={{fontFamily: "Arial, sans-serif", fontSize: 23, color: prop.dateUntilColor}}>
+                                <Countdown date={prop.dateUntil}/>
+                            </div>
+                            : <h3>{prop.dateUntil}</h3>
+                        }
+                    </div>
+                    : null
+                }
 
             </div>
 
