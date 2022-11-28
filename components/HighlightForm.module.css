@@ -73,6 +73,10 @@
     justify-content: start;
 }
 
+.multiInputsLine {
+    margin-bottom: 10px;
+}
+
 .colorOpacityRange {
     width: 100%;
     border: solid 2px #FFFFFF;

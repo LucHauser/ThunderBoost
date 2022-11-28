@@ -99,7 +99,12 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     presentingProduct?.price &&
                     <p className={!prop.showProductPrice ? defaultStyles.hideElement : null}>{presentingProduct.price}</p>
                 }
-                <div style={{color: prop.textColor, fontFamily: "Arial, sans-serif"}}>
+                <div style={{
+                    color: prop.textColor,
+                    fontFamily: prop.textFontFamily,
+                    textShadow: prop.showTextShadow ? `${prop.textShadowStyle} ${prop.textShadowColor}` : null
+                    }}
+                     className={prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null}>
                     <ReactMarkdown
                         className={`${markdownElements.elements}`}
                         /* eslint-disable-next-line react/no-children-prop */
@@ -110,7 +115,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
             </div>
             <div className={highlightViewStyles.footerArea}>
                 {prop.showUntilDate ?
-                    <div className={highlightViewStyles.dateUntilBox}>
+                    <div className={highlightViewStyles.dateUntilBox} style={{background: hexToRgba(prop.dateUntilBackground, prop.dateUntilBackgroundOpacity)}}>
                         <h3 style={{color: prop.dateUntilColor}}>{`${prop.additionalUntilText !== "" ? prop.additionalUntilText : "Until"}`}</h3>
                         {prop.runningCountdown ?
                             <div style={{fontFamily: "Arial, sans-serif", fontSize: 23, color: prop.dateUntilColor}}>

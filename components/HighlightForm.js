@@ -34,6 +34,8 @@ export default function HighlightForm(session) {
         {text: "Blurred", value: "2px 2px 5px"},
     ]
 
+    const textShadowOptions = []
+
     const backgroundStyleOptions = [
         {text: "Single Color (primary color)", value: 0},
         {text: "Gradient", value: 1},
@@ -68,8 +70,10 @@ export default function HighlightForm(session) {
         dateFrom: "",
         dateUntil: "",
         showUntilDate: false,
+        dateUntilBackground: "#000000",
+        dateUntilBackgroundOpacity: "1",
         additionalUntilText: "",
-        dateUntilColor: "",
+        dateUntilColor: "#FFFFFF",
         runningCountdown: false,
 
         // Title area
@@ -82,7 +86,11 @@ export default function HighlightForm(session) {
 
         // Text area
         text: "",
+        textFontFamily: "Arial, sans-serif",
         textColor: "#FFFFFF",
+        showTextShadow: false,
+        textShadowColor: "",
+        textShadowStyle: "",
 
         // Backgrounding
         backgroundStyle: "0",
@@ -316,45 +324,74 @@ export default function HighlightForm(session) {
                         />
                     </Form.Group>
 
-                    {/**/}
-                    {model.dateFrom !== "" && model.dateUntil !== "" ?
+                    {/*showDateUntil, additionalUntilText, dateUntilColor, dateUntilBackground, dateUntilBackgroundOpacity, runningCountdown*/}
+                    {
+                        model.dateFrom !== "" && model.dateUntil !== "" ?
                         <div>
                             {/*showUntilDate*/}
-                            <Form.Group className={defaultStyles.formGroupSmall}>
-                                <Form.Label className={defaultStyles.formLabelSmall}>Show date until</Form.Label>
+                            <Form.Group className={highlightFormStyles.multiInputsLine}>
                                 <Form.Control
                                     className={defaultStyles.formCheckbox}
                                     type="checkbox"
                                     name="showUntilDate"
-                                    onChange={onModelCheckboxChange}/>
+                                    onChange={onModelCheckboxChange}
+                                />
+                                <Form.Label className={defaultStyles.formLabelSmall}>Show date until</Form.Label>
                             </Form.Group>
+                            {model.showUntilDate ?
+                                <div>
+                                    {/*additionalUntilText, dateUntilColor*/}
+                                    <FormGroup className={defaultStyles.formGroupSmall}>
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Additional Text</Form.Label>
+                                        <div className={highlightFormStyles.multiInputsLine}>
+                                            <Form.Control name="additionalUntilText" className={defaultStyles.formInputFieldSmall} onChange={onModelChange}/>
+                                            <p className={defaultStyles.formSubLabelSmall}>Color:</p>
+                                            <Form.Control value={model.dateUntilColor} type="color" name="dateUntilColor" className={defaultStyles.formColorPicker} onChange={onModelChange}/>
+                                        </div>
+                                    </FormGroup>
 
+                                    {/*dateUntilBackground, dateUntilBackgroundOpacity*/}
+                                    <Form.Group className={defaultStyles.formGroupSmall}>
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Background</Form.Label>
+                                        <div className={highlightFormStyles.multiInputsLine}>
+                                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                            <Form.Control
+                                                className={defaultStyles.formColorPicker}
+                                                name="dateUntilBackground"
+                                                type="color"
+                                                onChange={onModelChange}
+                                            />
+                                            <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
+                                            <input
+                                                className={highlightFormStyles.colorOpacityRange}
+                                                style={{
+                                                    background: `linear-gradient(to left, ${model.dateUntilBackground}, ${hexToRgba(model.dateUntilBackground, 0)})`
+                                                }}
+                                                name="dateUntilBackgroundOpacity"
+                                                type="range"
+                                                min="0"
+                                                max="1"
+                                                step="0.01"
+                                                onChange={onModelChange}
+                                            />
+                                        </div>
+                                    </Form.Group>
 
-                            {/*additionalUntilText, dateUntilColor*/}
-                            <FormGroup className={defaultStyles.formGroupSmall}>
-                                <Form.Label className={defaultStyles.formLabelSmall}>Additional Text</Form.Label>
-                                <div className={highlightFormStyles.multiInputsLine}>
-                                    <Form.Control name="additionalUntilText" className={defaultStyles.formInputFieldSmall} onChange={onModelChange}/>
-                                    <p className={defaultStyles.formSubLabelSmall}>Color:</p>
-                                    <Form.Control type="color" name="dateUntilColor" className={defaultStyles.formColorPicker} onChange={onModelChange}/>
+                                    {/*runningCountdown*/}
+                                    <Form.Group className={defaultStyles.formGroupSmall}>
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
+                                        <Form.Control
+                                            className={defaultStyles.formCheckbox}
+                                            type="checkbox"
+                                            name="runningCountdown"
+                                            onChange={onModelCheckboxChange}/>
+                                    </Form.Group>
                                 </div>
-                            </FormGroup>
-
-                            {/*runningCountdown*/}
-                            <Form.Group className={defaultStyles.formGroupSmall}>
-                                <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
-                                <Form.Control
-                                    className={defaultStyles.formCheckbox}
-                                    type="checkbox"
-                                    name="runningCountdown"
-                                    onChange={onModelCheckboxChange}/>
-                            </Form.Group>
-
-
+                                : <div/>
+                            }
                         </div>
-                        : <div/>}
-
-
+                        : <div/>
+                    }
 
                     <h2 className={defaultStyles.formSubtitle}>Title area</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
@@ -370,63 +407,61 @@ export default function HighlightForm(session) {
                         />
                     </Form.Group>
 
-                    {/*titleFontFamily*/}
+                    {/*titleFontFamily, titleColor*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Font-family title</Form.Label>
-                        <Form.Select className={defaultStyles.formInputFieldSmall} name="titleFontFamily" onChange={onModelChange}>
-                            {fontFamilyOptions.map((font, index) => {
-                                return (
-                                    <option key={index} value={font.value} style={{fontFamily: font.value}}>{font.text}</option>
-                                )
-                            })}
-                        </Form.Select>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Title Styling</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Font: </p>
+                            <Form.Select className={defaultStyles.formInputFieldSmall} name="titleFontFamily" onChange={onModelChange}>
+                                {fontFamilyOptions.map((font, index) => {
+                                    return (
+                                        <option key={index} value={font.value} style={{fontFamily: font.value}}>{font.text}</option>
+                                    )
+                                })}
+                            </Form.Select>
+                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                            <Form.Control
+                                type="color"
+                                onChange={onModelChange}
+                                name="titleColor"
+                                className={`${defaultStyles.formColorPicker}`}
+                            />
+                        </div>
                     </Form.Group>
 
-                    {/*titleColor*/}
+                    {/*showTitleShadow, titleShadowStyle, titleShadowColor*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Title Color</Form.Label>
-                        <Form.Control
-                            type="color"
-                            onChange={onModelChange}
-                            name="titleColor"
-                            className={`${defaultStyles.formColorPicker}`}
-                        />
-                    </Form.Group>
-
-                    {/*showTitleShadow*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Title Shadow</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formCheckbox}
-                            name="showTitleShadow"
-                            onChange={onModelCheckboxChange}
-                            type="checkbox"
-                        />
-                    </Form.Group>
-
-                    {/*titleShadowColor*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Title shadow color</Form.Label>
-                        <Form.Control
-                            className={`${defaultStyles.formColorPicker}`}
-                            type="color"
-                            name="titleShadowColor"
-                            onChange={onModelChange}/>
-                    </Form.Group>
-
-                    {/*titleShadowStyle*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Title shadow style</Form.Label>
-                        <Form.Select
-                            className={defaultStyles.formInputFieldSmall}
-                            name="titleShadowStyle"
-                            onChange={onModelChange}>
-                            {titleShadowStyleOptions.map((opt, index) => {
-                                return (
-                                    <option key={index} value={opt.value}>{opt.text}</option>
-                                )
-                            })}
-                        </Form.Select>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Control
+                                className={defaultStyles.formCheckbox}
+                                name="showTitleShadow"
+                                onChange={onModelCheckboxChange}
+                                type="checkbox"
+                            />
+                            <Form.Label className={defaultStyles.formLabelSmall}>Title Shadowing</Form.Label>
+                        </div>
+                        {model.showTitleShadow ?
+                            <div className={highlightFormStyles.multiInputsLine}>
+                                <p className={defaultStyles.formSubLabelSmall}>Shadow style: </p>
+                                <Form.Select
+                                    className={defaultStyles.formInputFieldSmall}
+                                    name="titleShadowStyle"
+                                    onChange={onModelChange}>
+                                    {titleShadowStyleOptions.map((opt, index) => {
+                                        return (
+                                            <option key={index} value={opt.value}>{opt.text}</option>
+                                        )
+                                    })}
+                                </Form.Select>
+                                <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                <Form.Control
+                                    className={`${defaultStyles.formColorPicker}`}
+                                    type="color"
+                                    name="titleShadowColor"
+                                    onChange={onModelChange}
+                                />
+                            </div>
+                            : <div/>}
                     </Form.Group>
 
                     <h2 className={defaultStyles.formSubtitle}>Text area</h2>
@@ -443,15 +478,61 @@ export default function HighlightForm(session) {
                         />
                     </Form.Group>
 
-                    {/*textColor*/}
+                    {/*textFontFamily, textColor*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Text Color</Form.Label>
-                        <Form.Control
-                            name="textColor"
-                            type="color"
-                            onChange={onModelChange}
-                            className={`${defaultStyles.formColorPicker}`}
-                        />
+                        <Form.Label className={defaultStyles.formLabelSmall}>Text Styling</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Font: </p>
+                            <Form.Select className={defaultStyles.formInputFieldSmall} name="textFontFamily" onChange={onModelChange}>
+                                {fontFamilyOptions.map((font, index) => {
+                                    return (
+                                        <option key={index} value={font.value} style={{fontFamily: font.value}}>{font.text}</option>
+                                    )
+                                })}
+                            </Form.Select>
+                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                            <Form.Control
+                                name="textColor"
+                                type="color"
+                                onChange={onModelChange}
+                                className={`${defaultStyles.formColorPicker}`}
+                            />
+                        </div>
+                    </Form.Group>
+
+                    {/*showTextShadow, textShadowStyle, textShadowColor*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Control
+                                className={defaultStyles.formCheckbox}
+                                name="showTextShadow"
+                                onChange={onModelCheckboxChange}
+                                type="checkbox"
+                            />
+                            <Form.Label className={defaultStyles.formLabelSmall}>Text Shadowing</Form.Label>
+                        </div>
+                        {model.showTextShadow ?
+                            <div className={highlightFormStyles.multiInputsLine}>
+                                <p className={defaultStyles.formSubLabelSmall}>Shadow style: </p>
+                                <Form.Select
+                                    className={defaultStyles.formInputFieldSmall}
+                                    name="textShadowStyle"
+                                    onChange={onModelChange}>
+                                    {titleShadowStyleOptions.map((opt, index) => {
+                                        return (
+                                            <option key={index} value={opt.value}>{opt.text}</option>
+                                        )
+                                    })}
+                                </Form.Select>
+                                <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                <Form.Control
+                                    className={`${defaultStyles.formColorPicker}`}
+                                    type="color"
+                                    name="textShadowColor"
+                                    onChange={onModelChange}
+                                />
+                            </div>
+                            : <div/>}
                     </Form.Group>
 
                     <h2 className={defaultStyles.formSubtitle}>Highlighting Backgrounding</h2>
