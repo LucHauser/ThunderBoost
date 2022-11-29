@@ -34,12 +34,18 @@ export default function HighlightForm(session) {
         {text: "Blurred", value: "2px 2px 5px"},
     ]
 
-    const textShadowOptions = []
-
     const backgroundStyleOptions = [
         {text: "Single Color (primary color)", value: 0},
         {text: "Gradient", value: 1},
         {text: "Image by URL", value: 2}
+    ]
+
+    const backgroundImageCollection = [
+        {text: "Asphalt", value: "AsphaltWall.jpeg"},
+        {text: "Blue Gradients", value: "DarkBlueGradientMix.jpg"},
+        {text: "White gradiented Spripes", value: "WhiteStripedGradient.jpg"},
+        {text: "White gradiented Triangles", value: "WhiteTriangledGradient.jpg"},
+        {text: "Merry Christmas", value: "Christmas.jpg"},
     ]
 
     const gradientBgOptions = [
@@ -99,16 +105,16 @@ export default function HighlightForm(session) {
         secondaryBackgroundColor: "#3b3b3b",
         secondaryBackgroundColorOpacity: "1",
         gradientStyle: "",
-        backgroundImgUrl: "",
+        backgroundImg: "",
 
         // Content Shadowing
         highlightContentShadow: false,
         highlightShadowColor: "",
+        highlightShadowColorOpacity: "1",
 
         // Button area
         buttonToProductText: "",
         hideButtonToProduct: false,
-        rgbTitleAnimation: false,
     }
 
     const [model, setModel] = useState(defaultModel)
@@ -378,13 +384,14 @@ export default function HighlightForm(session) {
                                     </Form.Group>
 
                                     {/*runningCountdown*/}
-                                    <Form.Group className={defaultStyles.formGroupSmall}>
-                                        <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
+                                    <Form.Group className={highlightFormStyles.multiInputsLine}>
                                         <Form.Control
                                             className={defaultStyles.formCheckbox}
                                             type="checkbox"
                                             name="runningCountdown"
-                                            onChange={onModelCheckboxChange}/>
+                                            onChange={onModelCheckboxChange}
+                                        />
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
                                     </Form.Group>
                                 </div>
                                 : <div/>
@@ -538,6 +545,55 @@ export default function HighlightForm(session) {
                     <h2 className={defaultStyles.formSubtitle}>Highlighting Backgrounding</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
+                    {/*primaryBackgroundColor, secondaryBackgroundColor*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Background Colors</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Primary: </p>
+                            <Form.Control
+                                className={`${defaultStyles.formColorPicker}`}
+                                name="primaryBackgroundColor"
+                                onChange={onModelChange}
+                                type="color"
+                            />
+                            <p className={defaultStyles.formSubLabelSmall}>Opacity:  </p>
+                            <input
+                                className={highlightFormStyles.colorOpacityRange}
+                                style={{
+                                    background: `linear-gradient(to left, ${model.primaryBackgroundColor}, ${hexToRgba(model.primaryBackgroundColor, 0)})`
+                                }}
+                                name="primaryBackgroundColorOpacity"
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                onChange={onModelChange}
+                            />
+                        </div>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Secondary: </p>
+                            <Form.Control
+                                className={`${defaultStyles.formColorPicker}`}
+                                name="secondaryBackgroundColor"
+                                type="color"
+                                onChange={onModelChange}
+                            />
+                            <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
+                            <input
+                                className={highlightFormStyles.colorOpacityRange}
+                                style={{
+                                    background: `linear-gradient(to left, ${model.secondaryBackgroundColor}, ${hexToRgba(model.secondaryBackgroundColor, 0)})`
+                                }}
+                                name="secondaryBackgroundColorOpacity"
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                onChange={onModelChange}
+                            />
+                        </div>
+                    </Form.Group>
+
                     {/*Background Style*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Backgrund Style</Form.Label>
@@ -553,53 +609,45 @@ export default function HighlightForm(session) {
                         </Form.Select>
                     </Form.Group>
 
-                    {/*primaryBackgroundColor*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Primary Background</Form.Label>
-                        <Form.Control
-                            className={`${defaultStyles.formColorPicker}`}
-                            name="primaryBackgroundColor"
-                            onChange={onModelChange}
-                            type="color"
-                        />
-                    </Form.Group>
-
-                    {/*secondaryBackgroundColor*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Secondary Background</Form.Label>
-                        <Form.Control
-                            className={`${defaultStyles.formColorPicker}`}
-                            name="secondaryBackgroundColor"
-                            type="color"
-                            onChange={onModelChange}
-                        />
-                    </Form.Group>
-
                     {/*gradientStyle*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Gradient Style</Form.Label>
-                        <Form.Select
-                            name="gradientStyle"
-                            onChange={onModelChange}
-                            className={defaultStyles.formInputFieldSmall}>
-                            <option>Choose</option>
-                            {gradientBgOptions.map((opt, index) => {
-                                return (
-                                    <option key={index} value={opt.value}>{opt.text}</option>
-                                )
-                            })}
-                        </Form.Select>
-                    </Form.Group>
+                    {
+                        model.backgroundStyle === "1" ?
+
+                            <Form.Group className={defaultStyles.formGroupSmall}>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Gradient Style</Form.Label>
+                                <Form.Select
+                                    name="gradientStyle"
+                                    onChange={onModelChange}
+                                    className={defaultStyles.formInputFieldSmall}>
+                                    {gradientBgOptions.map((opt, index) => {
+                                        return (
+                                            <option key={index} value={opt.value}>{opt.text}</option>
+                                        )
+                                    })}
+                                </Form.Select>
+                            </Form.Group>
+                            : <div/>
+                    }
 
                     {/*backgroundImgURL*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Background Image by URL</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formInputFieldSmall}
-                            name="backgroundImgUrl"
-                            onChange={onModelChange}
-                        />
-                    </Form.Group>
+                    {
+                        model.backgroundStyle === "2" ?
+                            <Form.Group className={defaultStyles.formGroupSmall}>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Background Image</Form.Label>
+                                <Form.Select
+                                    className={defaultStyles.formInputFieldSmall}
+                                    name="backgroundImg"
+                                    onChange={onModelChange}>
+                                    {backgroundImageCollection.map((opt, index) => {
+                                        return (
+                                            <option key={index} value={opt.value}>{opt.text}</option>
+                                        )
+                                    })}
+                                </Form.Select>
+                            </Form.Group>
+                            : <div/>
+                    }
+
 
                     <h2 className={defaultStyles.formSubtitle}>Buttons area</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
@@ -625,22 +673,6 @@ export default function HighlightForm(session) {
                             name="hideButtonToProduct"
                             onChange={onModelCheckboxChange}/>
                     </Form.Group>
-
-
-
-
-
-                    {/*rgbTitleAnimation*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Animate RGB at title</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formCheckbox}
-                            type="checkbox"
-                            name="rgbTitleAnimation"
-                            onChange={onModelCheckboxChange}/>
-                    </Form.Group>
-
-
                 </div>
             </Form>
             <div className={highlightFormStyles.preferencePanel}>

@@ -44,7 +44,7 @@
 .footerArea {
     grid-column: 1 / span 2;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 400px auto;
 }
 
 .dateUntilBox {
@@ -59,6 +59,33 @@
     padding: 10px;
     font-family: Arial, sans-serif;
     font-size: 20px;
+    grid-column: 1 / 1;
+}
+
+.buttonSector {
+    grid-column: 3 / 3;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: right;
+    padding: 0 10px;
+    border-top-left-radius: 10px;
+    width: auto;
+    margin-left: auto;
+}
+
+.buttonSector > button {
+    width: auto;
+    height: 50px;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    border-radius: 6px;
+}
+
+.buttonSector > button:focus {
+    outline: none;
 }
 
 @keyframes color-range {

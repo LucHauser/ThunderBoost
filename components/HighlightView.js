@@ -2,7 +2,7 @@ import highlightViewStyles from "./HighlightView.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {hexToRgba} from "@components/stylesUtils";
-import {faBullhorn} from "@fortawesome/free-solid-svg-icons";
+import {faBullhorn, faCartShopping} from "@fortawesome/free-solid-svg-icons";
 import markdownElements from "@components/MarkdownReview.module.css";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
@@ -11,28 +11,28 @@ import Countdown from 'react-countdown'
 
 export default function HighlightView({prop, presentingProduct, editViewMode}) {
 
-    function backgroundingBySettings(styleOption, gradientOption, primaryColor, secondaryColor) {
+    function backgroundingBySettings(styleOption, gradientOption, primaryColor, primaryOpacity, secondaryColor, secondaryOpacity) {
         let val = ``
         switch (styleOption) {
             case "0":
-                val = `${primaryColor}`
+                val = `${hexToRgba(secondaryColor, secondaryOpacity)}`
                 break
             case "1": {
                 switch (gradientOption) {
                     case "0":
-                        val = `linear-gradient(${primaryColor}, ${secondaryColor})`
+                        val = `linear-gradient(${hexToRgba(primaryColor, primaryOpacity)}, ${hexToRgba(secondaryColor, secondaryOpacity)})`
                         break
                     case "1":
-                        val = `linear-gradient(to right, ${primaryColor}, ${secondaryColor})`
+                        val = `linear-gradient(to right, ${hexToRgba(primaryColor, primaryOpacity)}, ${hexToRgba(secondaryColor, secondaryOpacity)})`
                         break
                     case "2":
-                        val = `linear-gradient(to left, ${primaryColor}, ${secondaryColor}`
+                        val = `linear-gradient(to left, ${hexToRgba(primaryColor, primaryOpacity)}, ${hexToRgba(secondaryColor, secondaryOpacity)})`
                         break
                     case "3":
-                        val = `linear-gradient(to bottom right, ${primaryColor}, ${secondaryColor}`
+                        val = `linear-gradient(to bottom right, ${hexToRgba(primaryColor, primaryOpacity)}, ${hexToRgba(secondaryColor, secondaryOpacity)})`
                         break
                     case "4":
-                        val = `linear-gradient(to bottom left, ${primaryColor}, ${secondaryColor}`
+                        val = `linear-gradient(to bottom left, ${hexToRgba(primaryColor, primaryOpacity)}, ${hexToRgba(secondaryColor, secondaryOpacity)})`
                         break
                     case "5":
                         val = `linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)`
@@ -49,9 +49,9 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
     return (
         <div
             className={highlightViewStyles.container}
-            style={prop.gradientStyle !== "2" ?
-                {background: backgroundingBySettings(prop.backgroundStyle, prop.gradientStyle, prop.primaryBackgroundColor, prop.secondaryBackgroundColor)}
-                : {backgroundImage: `url(${prop.backgroundImgUrl})`}
+            style={prop.backgroundStyle !== "2" ?
+                {background: backgroundingBySettings(prop.backgroundStyle, prop.gradientStyle, prop.primaryBackgroundColor, prop.primaryBackgroundColorOpacity, prop.secondaryBackgroundColor, prop.secondaryBackgroundColorOpacity)}
+                : {backgroundImage: `url(${prop.backgroundImg})`, backgroundSize: "cover"}
         }
         >
             <div className={highlightViewStyles.imageArea}>
@@ -108,7 +108,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     <ReactMarkdown
                         className={`${markdownElements.elements}`}
                         /* eslint-disable-next-line react/no-children-prop */
-                        children={prop.text}
+                        children={prop.text !== "" ? prop.text : "Write your text..."}
                         rehypePlugins={[rehypeRaw, remarkGfm]}
                     />
                 </div>
@@ -118,15 +118,18 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     <div className={highlightViewStyles.dateUntilBox} style={{background: hexToRgba(prop.dateUntilBackground, prop.dateUntilBackgroundOpacity)}}>
                         <h3 style={{color: prop.dateUntilColor}}>{`${prop.additionalUntilText !== "" ? prop.additionalUntilText : "Until"}`}</h3>
                         {prop.runningCountdown ?
-                            <div style={{fontFamily: "Arial, sans-serif", fontSize: 23, color: prop.dateUntilColor}}>
+                            <h3 style={{fontFamily: "Arial, sans-serif", fontSize: 23, color: prop.dateUntilColor}}>
                                 <Countdown date={prop.dateUntil}/>
-                            </div>
-                            : <h3>{prop.dateUntil}</h3>
+                            </h3>
+                            : <h3 style={{color: prop.dateUntilColor}}>{prop.dateUntil}</h3>
                         }
                     </div>
                     : null
                 }
-
+                <div style={{background: "yellow"}} className={highlightViewStyles.buttonSector}>
+                    <button>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
+                    <button><FontAwesomeIcon icon={faCartShopping} color={"white"}/>&nbsp;Add to Cart</button>
+                </div>
             </div>
 
         </div>
