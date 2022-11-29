@@ -49,9 +49,13 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
     return (
         <div
             className={highlightViewStyles.container}
-            style={prop.backgroundStyle !== "2" ?
-                {background: backgroundingBySettings(prop.backgroundStyle, prop.gradientStyle, prop.primaryBackgroundColor, prop.primaryBackgroundColorOpacity, prop.secondaryBackgroundColor, prop.secondaryBackgroundColorOpacity)}
-                : {backgroundImage: `url(${prop.backgroundImg})`, backgroundSize: "cover"}
+            style={
+                Object.assign(prop.backgroundStyle !== "2" ?
+                    {background: backgroundingBySettings(prop.backgroundStyle, prop.gradientStyle, prop.primaryBackgroundColor, prop.primaryBackgroundColorOpacity, prop.secondaryBackgroundColor, prop.secondaryBackgroundColorOpacity)}
+                    : {backgroundImage: `url(${prop.backgroundImg})`, backgroundSize: "cover"},
+                    prop.highlightContentShadow ?
+                        {boxShadow: `0 0 8px 8px ${hexToRgba(prop.highlightShadowColor, prop.highlightShadowColorOpacity)}`}
+                        : null)
         }
         >
             <div className={highlightViewStyles.imageArea}>
@@ -128,7 +132,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                 }
                 <div style={{background: "yellow"}} className={highlightViewStyles.buttonSector}>
                     <button>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
-                    <button><FontAwesomeIcon icon={faCartShopping} color={"white"}/>&nbsp;Add to Cart</button>
+                    <button><FontAwesomeIcon icon={faCartShopping} color={"black"}/>&nbsp;Add to Cart</button>
                 </div>
             </div>
 

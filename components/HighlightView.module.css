@@ -44,12 +44,13 @@
 .footerArea {
     grid-column: 1 / span 2;
     display: grid;
-    grid-template-columns: 400px auto;
+    grid-template-columns: auto auto;
 }
 
 .dateUntilBox {
     margin-top: auto;
-    width: 300px;
+    margin-right: auto;
+    width: auto;
     height: 50px;
     border-bottom-left-radius: 15px;
     border-top-right-radius: 25px;
@@ -70,6 +71,7 @@
     justify-content: right;
     padding: 0 10px;
     border-top-left-radius: 10px;
+    border-bottom-right-radius: 15px;
     width: auto;
     margin-left: auto;
 }

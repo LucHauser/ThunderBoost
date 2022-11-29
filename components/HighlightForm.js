@@ -114,7 +114,12 @@ export default function HighlightForm(session) {
 
         // Button area
         buttonToProductText: "",
-        hideButtonToProduct: false,
+        disableButtonToProduct: false,
+        disablebuttonCart: false,
+
+        buttonAreaBackground: "",
+        buttonAreaBackgroundOpacity: "1"
+
     }
 
     const [model, setModel] = useState(defaultModel)
@@ -629,7 +634,7 @@ export default function HighlightForm(session) {
                             : <div/>
                     }
 
-                    {/*backgroundImgURL*/}
+                    {/*backgroundImg*/}
                     {
                         model.backgroundStyle === "2" ?
                             <Form.Group className={defaultStyles.formGroupSmall}>
@@ -648,6 +653,44 @@ export default function HighlightForm(session) {
                             : <div/>
                     }
 
+                    {/*highlightContentShadow, highlightShadowColor, highlightShadowColorOpacity*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Control
+                                type={"checkbox"}
+                                className={defaultStyles.formCheckbox}
+                                name="highlightContentShadow"
+                                onChange={onModelCheckboxChange}/>
+                            <Form.Label className={defaultStyles.formLabelSmall}>Content Shadowing</Form.Label>
+                        </div>
+                        {
+                            model.highlightContentShadow ?
+                                <div className={highlightFormStyles.multiInputsLine}>
+                                    <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                    <Form.Control
+                                        className={defaultStyles.formColorPicker}
+                                        name="highlightShadowColor"
+                                        type="color"
+                                        onChange={onModelChange}
+                                        value={model.highlightShadowColor}
+                                    />
+                                    <p className={defaultStyles.formSubLabelSmall}>Strength: </p>
+                                    <input
+                                        className={highlightFormStyles.colorOpacityRange}
+                                        style={{
+                                            background: `linear-gradient(to left, ${model.highlightShadowColor}, ${hexToRgba(model.highlightShadowColor, 0)})`
+                                        }}
+                                        name="highlightShadowColorOpacity"
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.01"
+                                        onChange={onModelChange}
+                                    />
+                                </div>
+                                : <div/>
+                        }
+                    </Form.Group>
 
                     <h2 className={defaultStyles.formSubtitle}>Buttons area</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
