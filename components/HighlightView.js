@@ -85,6 +85,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     style={
                         {
                             color: prop.titleColor,
+                            marginBottom: "auto",
                             fontFamily: prop.titleFontFamily !== "HK-Modular" ?
                                 prop.titleFontFamily :
                                 null,
@@ -101,9 +102,10 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     }</h1>
                 {
                     presentingProduct?.price &&
-                    <p className={!prop.showProductPrice ? defaultStyles.hideElement : null}>{presentingProduct.price}</p>
+                    <p className={!prop.showProductPrice ? defaultStyles.hideElement : null} style={{marginBottom: "auto"}}>{presentingProduct.price}</p>
                 }
                 <div style={{
+                    marginBottom: "auto",
                     color: prop.textColor,
                     fontFamily: prop.textFontFamily,
                     textShadow: prop.showTextShadow ? `${prop.textShadowStyle} ${prop.textShadowColor}` : null
@@ -130,7 +132,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     </div>
                     : null
                 }
-                <div style={{background: "yellow"}} className={highlightViewStyles.buttonSector}>
+                <div style={{background: hexToRgba(prop.buttonAreaBackground, prop.buttonAreaBackgroundOpacity)}} className={highlightViewStyles.buttonSector}>
                     <button>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
                     <button><FontAwesomeIcon icon={faCartShopping} color={"black"}/>&nbsp;Add to Cart</button>
                 </div>

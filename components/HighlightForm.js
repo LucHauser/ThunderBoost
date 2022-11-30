@@ -17,7 +17,7 @@ export default function HighlightForm(session) {
     ]
 
     const fontFamilyOptions = [
-        {text: "Default", value: "Arial, sans-serif"},
+        {text: "Default", value: "\"Nunito\", sans-serif"},
         {text: "HK-Modular", value: "HK-Modular"},
         {text: "Consolas", value: "Consolas, sans-serif"},
         {text: "Chiller", value: "Chiller, sans-serif"},
@@ -116,7 +116,6 @@ export default function HighlightForm(session) {
         buttonToProductText: "",
         disableButtonToProduct: false,
         disablebuttonCart: false,
-
         buttonAreaBackground: "",
         buttonAreaBackgroundOpacity: "1"
 
@@ -707,17 +706,47 @@ export default function HighlightForm(session) {
                     <h2 className={defaultStyles.formSubtitle}>Preferences</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
-                    {/*hideButtonToProduct*/}
+                    {/*buttonAreaBackground, buttonAreaBackgroundOpacity*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Backgronding</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                type={"color"}
+                                name={"buttonAreaBackground"}
+                                onChange={onModelChange}
+                            />
+                            <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
+                            <input
+                                className={highlightFormStyles.colorOpacityRange}
+                                style={{
+                                    background: `linear-gradient(to left, ${model.buttonAreaBackground}, ${hexToRgba(model.buttonAreaBackground, 0)})`
+                                }}
+                                name="buttonAreaBackgroundOpacity"
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                onChange={onModelChange}
+                            />
+                        </div>
+                    </Form.Group>
+
+                    {/*disableButtonToProduct*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Hide button to product</Form.Label>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             type="checkbox"
-                            name="hideButtonToProduct"
+                            name="disableButtonToProduct"
                             onChange={onModelCheckboxChange}/>
                     </Form.Group>
+
+                    {/*disableButtonCart*/}
                 </div>
             </Form>
+
             <div className={highlightFormStyles.preferencePanel}>
                 <p>Editor Preview Background: </p>
                 <input

@@ -45,14 +45,14 @@
 .formTitle {
     color: white;
     font-size: 30px;
-    font-family: Arial, sans-serif;
+    font-family: "Nunito", sans-serif;
     margin-bottom: 20px
 }
 
 .formSubtitle {
     font-size: 20px;
     color: #FFFFFF;
-    font-family: Arial, sans-serif;
+    font-family: Nunito, sans-serif;
     margin-bottom: 5px;
 }
 
@@ -100,7 +100,7 @@
 .formInputField[type=datetime-local],
 .formInputFieldSmall[type=date],
 .formInputFieldSmall[type=datetime-local]{
-    font-family: Arial, sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
 .formInputField[type=date]::-webkit-calendar-picker-indicator,
@@ -146,13 +146,13 @@
 
 .formLabel {
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: "Nunito", sans-serif;
     font-size: 20px;
 }
 
 .formLabelSmall {
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: "Nunito", sans-serif;
     font-size: 15px;
     font-weight: bold;
 }
@@ -176,7 +176,7 @@
 .formGroup > p {
     color: #D707F1;
     font-size: 15px;
-    font-family: Arial, sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
 .buttonFilled {
@@ -231,7 +231,7 @@
 
 .tableContainer {
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: Nunito, sans-serif;
     font-size: 20px;
     width: 100%;
     border-collapse: collapse;
