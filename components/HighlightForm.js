@@ -63,7 +63,7 @@ export default function HighlightForm(session) {
         eventType: "Choose type",
         enableCustomEventType: false,
         customEventTypeText: "",
-        eventTypeBackground: "#000000",
+        eventTypeBackground: "#5e5e5e",
         eventTypeBackgroundOpacity: "1",
         eventTypeTextColor: "#FFFFFF",
         eventTypeTextRgbAnimation: false,
@@ -76,7 +76,7 @@ export default function HighlightForm(session) {
         dateFrom: "",
         dateUntil: "",
         showUntilDate: false,
-        dateUntilBackground: "#000000",
+        dateUntilBackground: "#5e5e5e",
         dateUntilBackgroundOpacity: "1",
         additionalUntilText: "",
         dateUntilColor: "#FFFFFF",
@@ -87,36 +87,36 @@ export default function HighlightForm(session) {
         titleFontFamily: "Arial, sans-serif",
         titleColor: "#FFFFFF",
         showTitleShadow: false,
-        titleShadowColor: "",
-        titleShadowStyle: "",
+        titleShadowColor: "#ff00f7",
+        titleShadowStyle: "2px 2px",
 
         // Text area
         text: "",
         textFontFamily: "Arial, sans-serif",
         textColor: "#FFFFFF",
         showTextShadow: false,
-        textShadowColor: "",
-        textShadowStyle: "",
+        textShadowColor: "#ff00f7",
+        textShadowStyle: "2px 2px",
 
         // Backgrounding
         backgroundStyle: "0",
         primaryBackgroundColor: "#3b3b3b",
         primaryBackgroundColorOpacity: "1",
-        secondaryBackgroundColor: "#3b3b3b",
+        secondaryBackgroundColor: "#000000",
         secondaryBackgroundColorOpacity: "1",
-        gradientStyle: "",
+        gradientStyle: "0",
         backgroundImg: "",
 
         // Content Shadowing
         highlightContentShadow: false,
-        highlightShadowColor: "",
+        highlightShadowColor: "#000000",
         highlightShadowColorOpacity: "1",
 
         // Button area
         buttonToProductText: "",
         disableButtonToProduct: false,
-        disablebuttonCart: false,
-        buttonAreaBackground: "",
+        disableButtonCart: false,
+        buttonAreaBackground: "#5e5e5e",
         buttonAreaBackgroundOpacity: "1"
 
     }
@@ -354,9 +354,19 @@ export default function HighlightForm(session) {
                                     <FormGroup className={defaultStyles.formGroupSmall}>
                                         <Form.Label className={defaultStyles.formLabelSmall}>Additional Text</Form.Label>
                                         <div className={highlightFormStyles.multiInputsLine}>
-                                            <Form.Control name="additionalUntilText" className={defaultStyles.formInputFieldSmall} onChange={onModelChange}/>
+                                            <Form.Control
+                                                name="additionalUntilText"
+                                                className={defaultStyles.formInputFieldSmall}
+                                                onChange={onModelChange}
+                                            />
                                             <p className={defaultStyles.formSubLabelSmall}>Color:</p>
-                                            <Form.Control value={model.dateUntilColor} type="color" name="dateUntilColor" className={defaultStyles.formColorPicker} onChange={onModelChange}/>
+                                            <Form.Control
+                                                value={model.dateUntilColor}
+                                                type="color"
+                                                name="dateUntilColor"
+                                                className={defaultStyles.formColorPicker}
+                                                onChange={onModelChange}
+                                            />
                                         </div>
                                     </FormGroup>
 
@@ -370,6 +380,7 @@ export default function HighlightForm(session) {
                                                 name="dateUntilBackground"
                                                 type="color"
                                                 onChange={onModelChange}
+                                                value={model.dateUntilBackground}
                                             />
                                             <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
                                             <input
@@ -436,6 +447,7 @@ export default function HighlightForm(session) {
                                 onChange={onModelChange}
                                 name="titleColor"
                                 className={`${defaultStyles.formColorPicker}`}
+                                value={model.titleColor}
                             />
                         </div>
                     </Form.Group>
@@ -470,6 +482,7 @@ export default function HighlightForm(session) {
                                     type="color"
                                     name="titleShadowColor"
                                     onChange={onModelChange}
+                                    value={model.titleShadowColor}
                                 />
                             </div>
                             : <div/>}
@@ -507,6 +520,7 @@ export default function HighlightForm(session) {
                                 type="color"
                                 onChange={onModelChange}
                                 className={`${defaultStyles.formColorPicker}`}
+                                value={model.textColor}
                             />
                         </div>
                     </Form.Group>
@@ -541,6 +555,7 @@ export default function HighlightForm(session) {
                                     type="color"
                                     name="textShadowColor"
                                     onChange={onModelChange}
+                                    value={model.textShadowColor}
                                 />
                             </div>
                             : <div/>}
@@ -549,7 +564,7 @@ export default function HighlightForm(session) {
                     <h2 className={defaultStyles.formSubtitle}>Highlighting Backgrounding</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
-                    {/*primaryBackgroundColor, secondaryBackgroundColor*/}
+                    {/*primaryBackgroundColor, primaryBackgroundColorOpacity, secondaryBackgroundColor, secondaryBackgroundColorOpacity*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Background Colors</Form.Label>
                         <div className={highlightFormStyles.multiInputsLine}>
@@ -559,6 +574,7 @@ export default function HighlightForm(session) {
                                 name="primaryBackgroundColor"
                                 onChange={onModelChange}
                                 type="color"
+                                value={model.primaryBackgroundColor}
                             />
                             <p className={defaultStyles.formSubLabelSmall}>Opacity:  </p>
                             <input
@@ -581,6 +597,7 @@ export default function HighlightForm(session) {
                                 name="secondaryBackgroundColor"
                                 type="color"
                                 onChange={onModelChange}
+                                value={model.secondaryBackgroundColor}
                             />
                             <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
                             <input
@@ -713,6 +730,7 @@ export default function HighlightForm(session) {
                                 type={"color"}
                                 name={"buttonAreaBackground"}
                                 onChange={onModelChange}
+                                value={model.buttonAreaBackground}
                             />
                             <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
                             <input
@@ -730,26 +748,27 @@ export default function HighlightForm(session) {
                         </div>
                     </Form.Group>
 
-                    {/*disableButtonToProduct*/}
-                    <Form.Group className={highlightFormStyles.multiInputsLine}>
-                        <Form.Control
-                            className={defaultStyles.formCheckbox}
-                            type="checkbox"
-                            name="disableButtonToProduct"
-                            onChange={onModelCheckboxChange}
-                        />
-                        <Form.Label className={defaultStyles.formLabelSmall}>Hide button to product</Form.Label>
-                    </Form.Group>
-
-                    {/*disableButtonCart*/}
-                    <Form.Group className={highlightFormStyles.multiInputsLine}>
-                        <Form.Control
-                            type={"checkbox"}
-                            name={"disableButtonCart"}
-                            className={defaultStyles.formCheckbox}
-                            onChange={onModelCheckboxChange}
-                        />
-                        <Form.Label className={defaultStyles.formLabelSmall}>Hide Add-to-Cart-button</Form.Label>
+                    {/*disableButtonToProduct, disableButtonCart*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Visibility</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Control
+                                className={defaultStyles.formCheckbox}
+                                type="checkbox"
+                                name="disableButtonToProduct"
+                                onChange={onModelCheckboxChange}
+                            />
+                            <Form.Label className={defaultStyles.formSubLabelSmall}>Hide button to product</Form.Label>
+                        </div>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Control
+                                type={"checkbox"}
+                                name={"disableButtonCart"}
+                                className={defaultStyles.formCheckbox}
+                                onChange={onModelCheckboxChange}
+                            />
+                            <Form.Label className={defaultStyles.formSubLabelSmall}>Hide Add-to-Cart-button</Form.Label>
+                        </div>
                     </Form.Group>
 
                     <h2 className={defaultStyles.formSubtitle}>Preferences</h2>
@@ -773,7 +792,6 @@ export default function HighlightForm(session) {
                 <p>Disable Editor Preview Background</p>
                 <input type="checkbox" className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(e.target.checked)}/>
                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Save Highlight</button>
-                <p className={defaultStyles.test}>Helllo World</p>
             </div>
             {/*<div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>*/}
         </div>

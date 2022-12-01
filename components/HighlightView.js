@@ -15,7 +15,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
         let val = ``
         switch (styleOption) {
             case "0":
-                val = `${hexToRgba(secondaryColor, secondaryOpacity)}`
+                val = `${hexToRgba(primaryColor, primaryOpacity)}`
                 break
             case "1": {
                 switch (gradientOption) {
@@ -132,10 +132,25 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     </div>
                     : null
                 }
-                <div style={{background: hexToRgba(prop.buttonAreaBackground, prop.buttonAreaBackgroundOpacity)}} className={highlightViewStyles.buttonSector}>
-                    <button>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
-                    <button><FontAwesomeIcon icon={faCartShopping} color={"black"}/>&nbsp;Add to Cart</button>
-                </div>
+                {
+                    !prop.disableButtonToProduct || !prop.disableButtonCart ?
+                        <div style={{background: hexToRgba(prop.buttonAreaBackground, prop.buttonAreaBackgroundOpacity)}} className={highlightViewStyles.buttonSector}>
+                            {
+                                !prop.disableButtonToProduct ?
+                                    <button>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
+                                    : null
+                            }
+                            {
+                                !prop.disableButtonCart ?
+                                    <button><FontAwesomeIcon icon={faCartShopping} color={"black"}/>&nbsp;Add to Cart</button>
+                                    : null
+                            }
+
+
+                        </div>
+                        : null
+                }
+
             </div>
 
         </div>
