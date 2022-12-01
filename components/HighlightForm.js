@@ -703,9 +703,6 @@ export default function HighlightForm(session) {
                             onChange={onModelChange}/>
                     </Form.Group>
 
-                    <h2 className={defaultStyles.formSubtitle}>Preferences</h2>
-                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
-
                     {/*buttonAreaBackground, buttonAreaBackgroundOpacity*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Backgronding</Form.Label>
@@ -734,16 +731,30 @@ export default function HighlightForm(session) {
                     </Form.Group>
 
                     {/*disableButtonToProduct*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Hide button to product</Form.Label>
+                    <Form.Group className={highlightFormStyles.multiInputsLine}>
                         <Form.Control
                             className={defaultStyles.formCheckbox}
                             type="checkbox"
                             name="disableButtonToProduct"
-                            onChange={onModelCheckboxChange}/>
+                            onChange={onModelCheckboxChange}
+                        />
+                        <Form.Label className={defaultStyles.formLabelSmall}>Hide button to product</Form.Label>
                     </Form.Group>
 
                     {/*disableButtonCart*/}
+                    <Form.Group className={highlightFormStyles.multiInputsLine}>
+                        <Form.Control
+                            type={"checkbox"}
+                            name={"disableButtonCart"}
+                            className={defaultStyles.formCheckbox}
+                            onChange={onModelCheckboxChange}
+                        />
+                        <Form.Label className={defaultStyles.formLabelSmall}>Hide Add-to-Cart-button</Form.Label>
+                    </Form.Group>
+
+                    <h2 className={defaultStyles.formSubtitle}>Preferences</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
+
                 </div>
             </Form>
 
