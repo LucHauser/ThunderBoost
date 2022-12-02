@@ -8,21 +8,17 @@ import Select from "react-select";
 import ReactMarkdown from "react-markdown";
 import {faFilePen, faFileLines, faCircleInfo} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {addConnectProductWithVariety, getAllBaseDataVariety} from "@lib/api";
+import {getAllBaseDataVariety} from "@lib/api";
 import {selectStyles} from "@components/stylesUtils";
 import {createProduct, updateProduct} from "@lib/api";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
+import {useRouter} from "next/router";
 
-const toBase64 = file => new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
-})
 
-export default function ProductForm({session, onProductCreated, toggleModal}) {
+
+export default function ProductForm({session, productToEdit}) {
 
     const usages = ["Gaming", "Office", "Students & Pupils"]
 
@@ -114,7 +110,6 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
     }
 
     const [productModel, setProductModel] = useState(defaultProductModel)
-    const [product, setProduct] = useState({})
     const [errors, setErrors] = useState({})
     const [loadProduct, setLoadProduct] = useState(false)
     const [varieties, setVarieties] = useState([])
@@ -130,6 +125,14 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
     const [base64Image, setBase64Image] = useState("")
 
     const fileInput = useRef(null)
+    const router = useRouter()
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error)
+    })
 
     useEffect(() => {
         if (!base64Image) return
@@ -162,6 +165,13 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
         loadVarieties()
     }, [])
 
+    useEffect(() => {
+        if (productToEdit) {
+            setProductModel(productToEdit)
+            setMarkdownReview(productModel.description)
+        }
+    }, productToEdit)
+
     const onFileInputChange = async (e) => {
         console.log(e)
         console.log(fileInput.current.files[0])
@@ -190,10 +200,11 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
     }
 
     const onDescriptionChange = (e) => {
-        setMarkdownReview(e.target.value)
+        const value = e.target.value
+        setMarkdownReview(value)
         setProductModel({
             ...productModel,
-            description: e.target.value
+            description: value
         })
     }
 
@@ -226,34 +237,44 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
             setLoadProduct(false)
             return
         }
-        try {
-            const newProduct = await createProduct(productModel, session.accessToken)
-            setProduct(newProduct)
-            onProductCreated(newProduct)
-        } catch (e) {
-            console.log(e)
+        if (productModel.id) {
+            productModel.img = imagePath
+            try {
+                await updateProduct(productModel, session.accessToken)
+            } catch (e) {
+                console.log(e)
+            }
+        } else {
+            try {
+                await createProduct(productModel, session.accessToken)
+            } catch (e) {
+                console.log(e)
+            }
         }
-        toggleModal()
+        navigateBack()
     }
 
     const handleShowVarietyForm = () => {
         setShowVarietyForm(true)
     }
 
+    const navigateBack = () => {
+        router.push("../")
+    }
+
     return (
         <div>
             <Form className={productFormStyles.formWrapper}
                 onSubmit={handleSubmit}>
-                <h2 className={defaultStyles.formTitle}>Create new product</h2>
-                <div className={`${defaultStyles.formSeparatorLine} ${productFormStyles.formSeparatorLine}`}/>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputName}`}>
                     <Form.Label className={defaultStyles.formLabel}>Name</Form.Label>
                     <Form.Control
                         className={defaultStyles.formInputField}
-                        type="text"
-                        name="name"
+                        type={"text"}
+                        name={"name"}
                         onChange={onProductChange}
                         placeholder={"What's the name of this Product"}
+                        defaultValue={productModel.name}
                     />
                     {errors.name && <p>{errors.name}</p>}
                 </Form.Group>
@@ -266,6 +287,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         name="price"
                         onChange={onProductChange}
                         placeholder={"How much does this product cost"}
+                        defaultValue={productModel.price}
                     />
                     {errors.price && <p>{errors.price}</p>}
                 </Form.Group>
@@ -277,6 +299,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         name="servings"
                         onChange={onProductChange}
                         placeholder={"How many portions are here"}
+                        defaultValue={productModel.servings}
                     />
                     {errors.servings && <p>{errors.servings}</p>}
                 </Form.Group>
@@ -288,6 +311,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         name="stockAmount"
                         onChange={onProductChange}
                         placeholder={"Amount of Products in Stock"}
+                        defaultValue={productModel.stockAmount}
                     />
                     {errors.stockAmount && <p>{errors.stockAmount}</p>}
                 </Form.Group>
@@ -296,8 +320,9 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                     <Form.Select
                         className={defaultStyles.formInputField}
                         onChange={onProductChange}
-                        name="usage">
-                        <option disabled>Choose</option>
+                        name="usage"
+                        defaultValue={productModel.usage}>
+                        <option value={""}>Choose</option>
                         {
                             usages.map(usage => {
                                 return (
@@ -344,7 +369,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                         <TabPanel>
                             <textarea
                                 className={`${defaultStyles.formInputField} ${productFormStyles.textareaMarkdown}`}
-                                value={markdownReview}
+                                defaultValue={productModel.description}
                                 onChange={onDescriptionChange}
                                 placeholder="Enter your description, Markdown is supported"
                             />
@@ -377,10 +402,11 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                     <Form.Label className={defaultStyles.formLabel}>Release Date</Form.Label>
                     <Form.Control
                         className={`${defaultStyles.formInputField}`}
-                        type="date"
+                        type="datetime-local"
                         name="releaseDate"
                         onChange={onProductChange}
                         placeholder="Product sale date"
+                        defaultValue={productModel.releaseDate}
                     />
                     {errors.releaseDate && <p>{errors.releaseDate}</p>}
                 </Form.Group>
@@ -394,6 +420,9 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                             return {label: variety.name, value: variety.name}
                             })
                         }
+                        defaultValue={productModel.id && productModel.varieties.map(v => {
+                            return {label: v}
+                        })}
                         onChange={handleSelectVarieties}
                         escapeClearsValue={handleSelectVarieties}
                         isSearchable={true}
@@ -431,7 +460,7 @@ export default function ProductForm({session, onProductCreated, toggleModal}) {
                 <div className={productFormStyles.btnGroup}>
                     <button
                         className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Submit</button>
-                    <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.defaultTransparentButton}`} onClick={toggleModal}>Cancel</button>
+                    <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.defaultTransparentButton}`} onClick={navigateBack}>Cancel</button>
                 </div>
 
             </Form>

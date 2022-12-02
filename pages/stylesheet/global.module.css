@@ -27,7 +27,14 @@
     font-family: 'Raleway', sans-serif;
     color: #8DF3E8;
     margin-bottom: 28px;
+}
 
+.adminPageWrapper {
+    padding: 30px;
+    gap: 15px;
+    display: grid;
+    font-family: "Nunito", sans-serif;
+    color: white
 }
 
 .formGroup {
