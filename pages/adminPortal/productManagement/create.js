@@ -1,7 +1,8 @@
 import defaultStyles from "../../stylesheet/global.module.css"
 import ProductForm from "@components/ProductForm";
-import productFormStyles from "@components/ProductForm.module.css";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 
 export default function createProductPage({session}) {
 
@@ -15,6 +16,10 @@ export default function createProductPage({session}) {
 
     return (
         <div className={defaultStyles.adminPageWrapper}>
+            <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+                <FontAwesomeIcon icon={faLeftLong}/>
+                &nbsp;&nbsp;&nbsp;Back
+            </button>
             <h1>Create new Product</h1>
             <div className={`${defaultStyles.formSeparatorLine}`} style={{marginTop: 10}}/>
             <div style={{display: "flex", width: "100%", justifyContent: "center"}}>

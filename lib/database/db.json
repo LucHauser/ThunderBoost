@@ -1,7 +1,7 @@
 {
   "product": [
     {
-      "name": "Changed",
+      "name": "Updated Product",
       "price": "5",
       "servings": "5",
       "usage": "Gaming",
@@ -15,22 +15,6 @@
       ],
       "active": true,
       "id": 4
-    },
-    {
-      "name": "fdfdf",
-      "price": "5",
-      "servings": "5",
-      "usage": "Office",
-      "description": "gfdgfdgf",
-      "stockAmount": "2",
-      "img": "",
-      "releaseDate": "2022-11-21T04:50",
-      "varieties": [
-        "Chocolate",
-        "Papaya"
-      ],
-      "active": true,
-      "id": 5
     }
   ],
   "users": [
@@ -84,76 +68,91 @@
   ],
   "baseDataVariety": [
     {
+      "active": true,
       "name": "Strawberry",
-      "description": "My fav Fruit:)",
+      "description": "My fav Fruit:) yummy",
       "id": 1
     },
     {
+      "active": true,
       "name": "Orange",
       "description": "Orange",
       "id": 2
     },
     {
+      "active": true,
       "name": "Banana",
       "description": "Banana",
       "id": 3
     },
     {
+      "active": false,
       "name": "Smirnoff Ice",
       "description": "Smirnoff Vodka (4% Vol)",
       "id": 4
     },
     {
+      "active": true,
       "name": "Apple",
       "description": "",
       "id": 5
     },
     {
+      "active": true,
       "name": "Kiwi",
       "description": "",
       "id": 6
     },
     {
+      "active": true,
       "name": "Strawberry Milkshake",
       "description": "",
       "id": 7
     },
     {
+      "active": true,
       "name": "Chocolate",
       "description": "Chailler Chocolate",
       "id": 8
     },
     {
+      "active": true,
       "name": "Papaya",
       "description": "",
       "id": 9
     },
     {
+      "active": false,
       "name": "Cola",
       "description": "Coca Cola Pepsi",
       "id": 10
     },
     {
+      "active": true,
       "name": "Cherry",
       "description": "",
       "id": 11
     },
     {
+      "active": true,
       "name": "Raspberry",
       "description": "",
       "id": 12
     },
     {
+      "active": false,
       "name": "Lemon",
       "description": "",
       "id": 13
     },
     {
+      "active": true,
       "name": "Peach",
       "description": "",
       "id": 14
     },
     {
+      "active": true,
       "name": "Ingwer",
       "description": "",
       "id": 15

@@ -121,6 +121,18 @@ export default function HighlightForm(session) {
 
     }
 
+    function validateModel(model) {
+        const errors = {
+            eventType: "",
+            customEventTypeText: "",
+            productId: "",
+            dateFrom: "",
+            dateUntil: "",
+            title: "",
+            text: "",
+        }
+    }
+
     const [model, setModel] = useState(defaultModel)
     const [errors, setErrors] = useState({})
     const [loadHighlight, setLoadHighlight] = useState(false)
@@ -187,10 +199,6 @@ export default function HighlightForm(session) {
 
     return (
         <div className={highlightFormStyles.highlightEditor}>
-            <div className={highlightFormStyles.highlightEditorTitle}>
-                <h2 className={defaultStyles.formTitle}>Create a new Highlight</h2>
-                <div className={`${defaultStyles.formSeparatorLine}`}/>
-            </div>
             <h3 style={{color: "white", fontFamily: "Arial, sans-serif"}}>Live Preview</h3>
             <h3 style={{color: "white", fontFamily: "Arial, sans-serif"}}>Editor</h3>
             <div className={highlightFormStyles.highlightPreview} style={{background: !disableEditorBackground ? editorBackground : "transparent"}}>
@@ -778,20 +786,27 @@ export default function HighlightForm(session) {
             </Form>
 
             <div className={highlightFormStyles.preferencePanel}>
-                <p>Editor Preview Background: </p>
-                <input
-                    value={editorBackground}
-                    type="color"
-                    onChange={e => setEditorBackground(e.target.value)}
-                    className={defaultStyles.formColorPicker}
-                    onDoubleClick={e => setEditorBackground("#14318C")}/>
-                { editorBackground !== "#FFFFFF" ?
-                    <i onClick={e => setEditorBackground("#FFFFFF")}>Reset color</i>
-                    : null
-                }
-                <p>Disable Editor Preview Background</p>
-                <input type="checkbox" className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(e.target.checked)}/>
-                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Save Highlight</button>
+                <div className={highlightFormStyles.editorSettings}>
+                    <p>Editor Preview Background: </p>
+                    <input
+                        value={editorBackground}
+                        type="color"
+                        onChange={e => setEditorBackground(e.target.value)}
+                        className={defaultStyles.formColorPicker}
+                        onDoubleClick={e => setEditorBackground("#14318C")}/>
+                    { editorBackground !== "#FFFFFF" ?
+                        <i onClick={e => setEditorBackground("#FFFFFF")}>Reset color</i>
+                        : null
+                    }
+                    <p>Disable Editor Preview Background</p>
+                    <input type="checkbox" className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(e.target.checked)}/>
+                    <button className={`${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>Reset draft</button>
+                </div>
+                <div className={highlightFormStyles.buttonGroup}>
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Save Highlight</button>
+                    <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `}>Discard</button>
+                </div>
+
             </div>
             {/*<div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>*/}
         </div>

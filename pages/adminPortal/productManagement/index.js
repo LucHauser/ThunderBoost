@@ -6,7 +6,7 @@ import {
     faCheck, faChevronDown,
     faChevronUp,
     faCircle, faDollar,
-    faFilter, faFont, faLock, faLockOpen, faPencil,
+    faFilter, faFont, faHashtag, faLock, faLockOpen, faPencil,
     faPlus, faRocket, faSpoon, faTags, faTrash, faUsers,
     faWarehouse,
     faXmark
@@ -41,13 +41,12 @@ export default function ProductManagementPage({session}) {
     const selectFilterActivableOptions = ["all", "active", "inactive"]
     const selectFilterStockAmountOptions = ["all", "available", "empty"]
 
-    const [showProductFormDialog, setShowProductFormDialog] = useState(false)
-    const [showProductQuantityKrementing, setShowProductQuantityKrementing] = useState(false)
     const [products, setProducts] = useState([])
+    const [allProducts, setAllProducts] = useState([])
     const [productToEdit, setProductToEdit] = useState({})
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
-    const [filterActiveProduct, setFilterActiveProduct] = useState(selectFilterActivableOptions[0])
+    const [filterActivable, setFilterActivable] = useState(selectFilterActivableOptions[0])
     const [filterStockAmount, setFilterStockAmount] = useState(selectFilterStockAmountOptions[0])
     const [openedItem, setOpenedItem] = useState(0)
 
@@ -57,6 +56,7 @@ export default function ProductManagementPage({session}) {
         const loadProducts = async () => {
             try {
                 const products = await getAllProducts()
+                setAllProducts(products)
                 setProducts(products)
                 setNumberOfProducts(products.length)
             } catch (e) {
@@ -68,6 +68,35 @@ export default function ProductManagementPage({session}) {
 
     const switchItem = (id) =>  {
         setOpenedItem(id)
+    }
+
+    const handleChangeFilter = () => {
+        let filteredProduct
+        if (filterActivable === selectFilterActivableOptions[1]) {
+            filteredProduct = allProducts.filter(p => p.active)
+            if (filterStockAmount === selectFilterStockAmountOptions[1]) {
+                filteredProduct.filter(p => p.stockAmount > 0)
+            } else if (filterStockAmount === selectFilterStockAmountOptions[2]) {
+                filteredProduct.filter(p => p.stockAmount === 0)
+            }
+        } else if (filterActivable === selectFilterActivableOptions[2]) {
+            filteredProduct = allProducts.filter(p => !p.active)
+            if (filterStockAmount === selectFilterStockAmountOptions[1]) {
+                filteredProduct.filter(p => p.stockAmount > 0)
+            } else if (filterStockAmount === selectFilterStockAmountOptions[2]) {
+                filteredProduct.filter(p => p.stockAmount === 0)
+            }
+        } else {
+            if (filterStockAmount === selectFilterStockAmountOptions[1]) {
+                filteredProduct = allProducts.filter(p => p.stockAmount > 0)
+            } else if (filterStockAmount === selectFilterStockAmountOptions[2]) {
+                filteredProduct = allProducts.filter(p => p.stockAmount === 0)
+            } else {
+                filteredProduct = allProducts
+            }
+        }
+        setProducts(filteredProduct.filter(p => p.name.toString().toUpperCase().toLowerCase().includes(filterProduct)))
+        setNumberOfProducts(products.length)
     }
 
     const handleProductActivation = async (product) => {
@@ -110,12 +139,21 @@ export default function ProductManagementPage({session}) {
                 <div className={productManagementStyles.filterGroup}>
                     <div>
                         <FontAwesomeIcon icon={faFilter} size={"xl"} color={"white"} style={{marginRight: 10}}/>
-                        <Form.Control className={productManagementStyles.filterInput} placeholder={"Filter Product"} value={filterProduct} onChange={(e) => setFilterProduct(e.target.value)}/>
+                        <Form.Control className={productManagementStyles.filterInput} placeholder={"Filter Product"} value={filterProduct} onChange={(e) => {
+                            setFilterProduct(e.target.value)
+                            handleChangeFilter()
+                        }}/>
                         <FontAwesomeIcon icon={faXmark} size={"xl"} onClick={() => setFilterProduct("")} color={"white"} title={"Clear filter"}/>
                     </div>
                     <div>
                         <FontAwesomeIcon icon={faCheck} size={"1x"} color={"white"} style={{marginRight: 10}}/>
-                        <Form.Select className={productManagementStyles.dropDownFilter}>
+                        <Form.Select
+                            className={productManagementStyles.dropDownFilter}
+                            onChange={(e) => {
+                                setFilterActivable(e.target.value)
+                                handleChangeFilter()
+                            }}
+                            defaultValue={filterActivable}>
                             <option disabled>select</option>
                             {selectFilterActivableOptions.map((selectOption, index) => {
                                 return (
@@ -126,7 +164,10 @@ export default function ProductManagementPage({session}) {
                     </div>
                     <div>
                         <FontAwesomeIcon icon={faWarehouse} size={"1x"} color={"white"} style={{marginRight: 10}}/>
-                        <Form.Select className={productManagementStyles.dropDownFilter}>
+                        <Form.Select className={productManagementStyles.dropDownFilter} onChange={(e) => {
+                            setFilterStockAmount(e.target.value)
+                            handleChangeFilter()
+                        }}>
                             <option disabled>select</option>
                             {selectFilterStockAmountOptions.map((selectOption, index) => {
                                 return (
@@ -153,9 +194,7 @@ export default function ProductManagementPage({session}) {
             <p style={{fontSize: 20}}>Number of products: {numberOfProducts}</p>
             <Accordion className={productManagementStyles.accordionContainer}>
                 {
-                    products.filter(
-                        product => product.name.toString().toLowerCase().includes(filterProduct) ||
-                            !product.active === true)
+                    products
                         .map((product, index) => {
                             return (
                                 <AccordionItem key={index} className={productManagementStyles.accordionItem} eventKey={product.id} onClick={() => switchItem(product.id)}>
@@ -204,6 +243,11 @@ export default function ProductManagementPage({session}) {
                                             <div className={productManagementStyles.productInformation}>
                                                 <h4>Information</h4>
                                                 <table className={productManagementStyles.productSpecs}>
+                                                    <tr>
+                                                        <td><FontAwesomeIcon icon={faHashtag}/></td>
+                                                        <td>Id</td>
+                                                        <td>{product.id}</td>
+                                                    </tr>
                                                     <tr>
                                                         <td><FontAwesomeIcon icon={faFont}/></td>
                                                         <td>Name</td>

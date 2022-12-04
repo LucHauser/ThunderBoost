@@ -2,17 +2,12 @@
     width: 100%;
     display: grid;
     grid-template-columns: auto 400px;
-    grid-template-rows: auto 50px 550px 75px;
+    grid-template-rows: auto 550px 75px;
     gap: 20px;
 }
 
-.highlightEditorTitle {
-    grid-row: 1 / 1;
-    grid-column: 1 / span 2
-}
-
 .highlightPreview {
-    grid-row: 3 / 3;
+    grid-row: 2 / 2;
     grid-column: 1 / 1;
     padding: 30px
 }
@@ -20,7 +15,7 @@
 .highlightEditorForm {
     width: 400px;
     height: 550px;
-    grid-row: 3 / 3;
+    grid-row: 2 / 2;
     grid-column: 2 / 2;
     border: solid 2px #8DF3E8;
     border-radius: 5px;
@@ -40,13 +35,26 @@
 
 .preferencePanel {
     background: #14318C;
-    grid-row: 4 / 4;
+    grid-row: 3 / 3;
     grid-column: 1 / span 2;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 0 15px;
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: "Nunito", sans-serif;
+}
+
+.editorSettings {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.buttonGroup {
+    width: 400px;
+    display: flex;
+    justify-content: flex-end;
     gap: 10px
 }
 

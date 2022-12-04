@@ -1,0 +1,39 @@
+.tableHeader {
+    padding: 0 10px;
+    background: #14318C;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    justify-content: space-between;
+}
+
+.filterActions {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    gap: 15px
+}
+
+.dropdownFilter {
+    background: transparent;
+    outline: none;
+    border: none;
+    font-size: 20px;
+    font-family: "Nunito", sans-serif;
+    color: #FFFFFF;
+}
+
+.dropdownFilter > option {
+    background: #060525;
+}
+
+.addBtn {
+    height: 40px;
+    font-size: 20px;
+    font-family: "Nunito", sans-serif;
+    color: #FFFFFF;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+}

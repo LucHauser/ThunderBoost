@@ -10,6 +10,7 @@ export default function AdminPortalHeader({session, currentPage}) {
         {name: "Product Management", routerTo: "/productManagement"},
         {name: "Highlights", routerTo: "/highlights"},
         {name: "Base Data Variety", routerTo: "/baseDataVariety"},
+        {name: "Images Management", routerTo: "/imagesManagement"},
         {name: "Questions from Client", routerTo: "/clientQuestions"},
         {name: "Users and Privileges", routerTo: "/usersAndPrivileges"},
     ]

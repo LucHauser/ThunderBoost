@@ -90,7 +90,7 @@ export default function Header({session}) {
                             <FontAwesomeIcon icon={faCaretDown} size={"1x"} color={"white"} className={headerStyles.caretDown}/>
                         </NavLink>
                         <NavLink href="#" className={headerStyles.navLink}>What is Thunderboost</NavLink>
-                        <NavLink href="/admin" className={headerStyles.navLink}>About</NavLink>
+                        <NavLink href="/adminPortal" className={headerStyles.navLink}>About</NavLink>
                     </div>
 
                     <div className={`${headerStyles.iconBtnGroup} ${showNavOffcanvas ? headerStyles.iconBtnGroupInOffcanvas: null}`}>

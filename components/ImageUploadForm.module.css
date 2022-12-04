@@ -1,0 +1,21 @@
+.component {
+    min-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    gap: 15px
+}
+
+.form {
+    display: grid;
+    column-gap: 15px
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: end;
+    gap: 15px
+}
+
+.imagePreview {
+    max-width: 100%
+}

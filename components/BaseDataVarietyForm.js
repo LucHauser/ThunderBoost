@@ -3,8 +3,9 @@ import {Form} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import baseDataVarietyStyles from "./BaseDataVarietyForm.module.css"
 import {createBaseDataVariety, updateBaseDataVariety} from "@lib/api"
+import {useRouter} from "next/router";
 
-export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCreated, onVarietyEdited, toggleModal, toggleSubform}) {
+export default function BaseDataVarietyForm({session, varietyToEdit}) {
 
     function validateVarietyModel(variety) {
 
@@ -31,6 +32,7 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
     }
 
     const defaultVarietyModel = {
+        active: true,
         name: "",
         description: ""
     }
@@ -38,6 +40,8 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
     const [variety, setVariety] = useState(defaultVarietyModel)
     const [errors, setErrors] = useState(defaultVarietyModel)
     const [loadVariety, setLoadVariety] = useState(false)
+
+    const router = useRouter()
 
     useEffect(() => {
         if (varietyToEdit) {
@@ -67,30 +71,28 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
         }
         if (variety.id) {
             try {
-                const response = await updateBaseDataVariety(variety, session.accessToken)
-                setVariety(response)
-                onVarietyEdited(response)
+                await updateBaseDataVariety(variety, session.accessToken)
+                navigateBack("../../baseDataVariety")
             } catch (e) {
                 console.log(e)
             }
-            toggleModal()
         } else {
             try {
-                const newVariety = await createBaseDataVariety(variety, session.accessToken)
-                setVariety(newVariety)
-                onVarietyCreated(newVariety)
+                await createBaseDataVariety(variety, session.accessToken)
+                navigateBack("../baseDataVariety")
             } catch (e) {
                 console.log(e)
             }
-            toggleModal()
         }
+    }
+
+    const navigateBack = (route) => {
+        router.push(route)
     }
 
     return (
         <div>
             <Form className={baseDataVarietyStyles.baseDataVarietyForm} onSubmit={handleSubmit}>
-                <h2 className={defaultStyles.formTitle}>{variety.id ? "Edit " + variety.name : "Create new Variety"}</h2>
-                <div className={defaultStyles.formSeparatorLine}/>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Designation</Form.Label>
                     <Form.Control className={defaultStyles.formInputField} type={"text"} name="name" onChange={handleChange} value={variety.name} placeholder={"Designation of Variety"} disabled={false}/>
@@ -101,13 +103,20 @@ export default function BaseDataVarietyForm({session, varietyToEdit, onVarietyCr
                     <Form.Control className={defaultStyles.formInputField} type={"text"} name="description" onChange={handleChange} value={variety.description} placeholder={"Description of Variety"} disabled={false}/>
                     { errors.description && <p>{errors.description}</p> }
                 </Form.Group>
+                {
+                    variety.id &&
+                    <Form.Group style={{display: "flex", alignItems: "center", gap: 10}}>
+                        <Form.Control className={defaultStyles.formCheckbox} onChange={(e) => setVariety({...variety, active: e.target.checked})} type={"checkbox"} defaultChecked={variety.active}/>
+                        <Form.Label className={defaultStyles.formLabel}>Active</Form.Label>
+                    </Form.Group>
+                }
                 <div className={baseDataVarietyStyles.buttonGroup}>
                     {variety.id ?
-                        <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save changes</button>
-                        : <button className={`${defaultStyles.buttonFilled}`} type={"submit"}>Save variety</button>
+                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Save changes</button>
+                        : <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Save variety</button>
                     }
-                    <button type={"button"} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent}`}
-                            onClick={toggleModal}>
+                    <button type={"button"} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth}`}
+                            onClick={() => variety.id ? navigateBack("../../baseDataVariety") : navigateBack("../baseDataVariety")}>
                         Cancel
                     </button>
                 </div>

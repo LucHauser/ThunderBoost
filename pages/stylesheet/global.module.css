@@ -249,7 +249,7 @@
 }
 
 .tableHeader > tr {
-    height: 50px
+    height: 50px;
 }
 
 .tableHeader > tr > th {

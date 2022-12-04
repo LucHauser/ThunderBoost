@@ -15,10 +15,19 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
 import {useRouter} from "next/router";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 
 
 
 export default function ProductForm({session, productToEdit}) {
+
+    if (session.user) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useRedirectBlockAdmin(session)
+    } else {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useRedirectToLogin(session)
+    }
 
     const usages = ["Gaming", "Office", "Students & Pupils"]
 
@@ -170,7 +179,7 @@ export default function ProductForm({session, productToEdit}) {
             setProductModel(productToEdit)
             setMarkdownReview(productModel.description)
         }
-    }, productToEdit)
+    }, [productToEdit])
 
     const onFileInputChange = async (e) => {
         console.log(e)
@@ -179,14 +188,10 @@ export default function ProductForm({session, productToEdit}) {
         if (!file) return
         const base64 = await toBase64(file)
         setBase64Image(base64)
-        // console.log("HERE")
-        // console.log(base64Image)
         setProductModel({
             ...productModel,
             img: base64Image
         })
-        // console.log("HERE")
-        // console.log(productModel.img)
     }
 
     const onProductChange = (e) => {
@@ -230,7 +235,6 @@ export default function ProductForm({session, productToEdit}) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoadProduct(true)
-        setErrors(defaultStyles)
         const result = validateProductModel(productModel, selectedVarieties)
         if (!result.isValid) {
             setErrors(result.errors)
