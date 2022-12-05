@@ -3,6 +3,7 @@ import ProductForm from "@components/ProductForm";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
+import {useRouter} from "next/router";
 
 export default function createProductPage({session}) {
 
@@ -14,9 +15,12 @@ export default function createProductPage({session}) {
         useRedirectToLogin(session)
     }
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const router = useRouter()
+
     return (
         <div className={defaultStyles.adminPageWrapper}>
-            <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+            <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => router.push("../productManagement")}>
                 <FontAwesomeIcon icon={faLeftLong}/>
                 &nbsp;&nbsp;&nbsp;Back
             </button>

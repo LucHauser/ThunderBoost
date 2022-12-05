@@ -1,22 +1,5 @@
 {
-  "product": [
-    {
-      "name": "Updated Product",
-      "price": "5",
-      "servings": "5",
-      "usage": "Gaming",
-      "description": "fdgffdgfdgfdsgfds",
-      "stockAmount": "5",
-      "img": "",
-      "releaseDate": "2022-11-22T10:00",
-      "varieties": [
-        "Cherry",
-        "Papaya"
-      ],
-      "active": true,
-      "id": 4
-    }
-  ],
+  "product": [],
   "users": [
     {
       "email": "admin@admin.ch",
@@ -156,6 +139,78 @@
       "name": "Ingwer",
       "description": "",
       "id": 15
+    }
+  ],
+  "image": [
+    {
+      "img": "/973a11b2-03e7-4ce3-89f0-d83ecfcb3e75.jpeg",
+      "fileType": "jpeg",
+      "designation": "AsphaltWall",
+      "description": "Black Asphalt Background",
+      "usage": "Highlights Background",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 1
+    },
+    {
+      "img": "/956e2fd7-3eec-474f-bf26-df3e21f3e31b.jpeg",
+      "fileType": "jpeg",
+      "designation": "Christmas Theme",
+      "description": "Background for Christmas Theme",
+      "usage": "Highlights Background",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 2
+    },
+    {
+      "img": "/33590572-409a-4657-934e-067d9e700117.jpeg",
+      "fileType": "jpeg",
+      "designation": "DarkBlueGradientMix",
+      "description": "Gradient Colors of black and dark blue",
+      "usage": "Highlights Background",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 3
+    },
+    {
+      "img": "/af9ae3dd-da8c-4b3f-ac41-5a582657caa4.jpeg",
+      "fileType": "jpeg",
+      "designation": "WhiteStripedGradient",
+      "description": "Natural white grey gradients with stripes",
+      "usage": "Highlights Background",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 4
+    },
+    {
+      "img": "/f6841e67-fcc3-4c70-98a2-95fef99d31c1.jpeg",
+      "fileType": "jpeg",
+      "designation": "WhiteTriangledGradient",
+      "description": "White and grey background with triangles-shapes",
+      "usage": "Highlights Background",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 5
+    },
+    {
+      "img": "/8849fd0d-e315-4a0e-8554-bc51e3057ea8.jpeg",
+      "fileType": "jpeg",
+      "designation": "Booster example 1",
+      "description": "Gamers only Vitamin drink with peach",
+      "usage": "Product Image",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 6
+    },
+    {
+      "img": "/8785a4d6-8a71-4479-adf6-c3b3f542cea1.jpeg",
+      "fileType": "jpeg",
+      "designation": "Booster example 2",
+      "description": "Gamersonly drink with watermelon",
+      "usage": "Product Image",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 7
     }
   ]
 }

@@ -2,6 +2,8 @@ import {useEffect, useRef, useState} from "react";
 import {Form} from "react-bootstrap";
 import imageUploadFormStyles from "./ImageUploadForm.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
+import {uploadImageData} from "@lib/api";
+import {useRouter} from "next/router";
 
 export default function ImageUploadForm({session}) {
 
@@ -20,12 +22,12 @@ export default function ImageUploadForm({session}) {
     const [model, setModel] = useState(defaultModel)
     const [errors, setErrors] = useState({})
     const [loadModel, setLoadModel] = useState(false)
-    const [imagePath, setImagePath] = useState({})
+    const [imagePath, setImagePath] = useState("")
     const [selectedFile, setSelectedFile] = useState()
     const [imagePreview, setImagePreview] = useState("")
     const [base64Image, setBase64Image] = useState("")
 
-    const fileInput = useRef(null)
+    const router = useRouter()
 
     function validateModel(model, selectedFile) {
         const errors = {
@@ -67,6 +69,16 @@ export default function ImageUploadForm({session}) {
     }, [selectedFile])
 
     useEffect(() => {
+        if (imagePath) {
+            setModel({
+                ...model,
+                img: imagePath
+            })
+        }
+    }, [imagePath])
+
+    /*
+    useEffect(() => {
         if (!base64Image) return
 
         const uploadImage = async () => {
@@ -84,6 +96,7 @@ export default function ImageUploadForm({session}) {
         }
         uploadImage()
     }, [base64Image])
+    */
 
     const toBase64 = file => new Promise((resolve, reject) => {
         const reader = new FileReader()
@@ -100,6 +113,7 @@ export default function ImageUploadForm({session}) {
             ...model,
             [name]: value
         })
+        // console.log(model)
     }
 
     const onChoosingImage = (e) => {
@@ -113,7 +127,23 @@ export default function ImageUploadForm({session}) {
             ...model,
             fileType: e.target.files[0].type.split("/")[1]
         })
-        console.log(selectedFile)
+        // console.log(selectedFile)
+    }
+
+    const uploadImageToPublic = async (base64Image) => {
+        const response = await fetch("/api/upload", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                base64Image
+            })
+        })
+        const data = await response.json()
+        const path = data.filePath
+        return path
+
     }
 
     const submitUploadImage = async (e) => {
@@ -128,22 +158,15 @@ export default function ImageUploadForm({session}) {
         }
         const base64 = await toBase64(selectedFile)
         setBase64Image(base64)
-        setModel({
-            ...model,
-            img: base64Image,
-        })
-        setModel({
-            ...model,
-            uploaded: Date.now(),
-            fileType: selectedFile
-        })
+        if (!base64Image) return
+        model.img = await uploadImageToPublic(base64Image)
+        model.uploaded = "unknown"
         try {
-
-
+            await uploadImageData(model, session.accessToken)
         } catch (e) {
             console.log(e)
         }
-
+        router.push("../imagesManagement")
 
     }
 
@@ -153,7 +176,7 @@ export default function ImageUploadForm({session}) {
 
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Image</Form.Label>
-                    <Form.Control type={"file"} accept={".jpg, .png, .jpeg"} onChange={onChoosingImage} ref={fileInput} name={"img"} className={defaultStyles.formInputField}/>
+                    <Form.Control type={"file"} accept={".jpg, .png, .jpeg"} onChange={onChoosingImage} name={"img"} className={defaultStyles.formInputField}/>
                     {errors.selectedFile && <p>{errors.selectedFile}</p>}
                 </Form.Group>
 

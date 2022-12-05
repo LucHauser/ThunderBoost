@@ -1,0 +1,49 @@
+.filterInput {
+    width: 50%;
+    height: 40px;
+    background: none;
+    border: none;
+    border-bottom: solid 2px #FFFFFF;
+    margin-top: 10px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    margin-right: 10px;
+}
+
+.filterInput:focus {
+    outline: none;
+}
+
+.addBtn {
+    height: 40px;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+}
+
+.colBtn {
+    background: transparent;
+    border: none;
+    font-family: "Nunito", sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+.colBtn:focus, .addBtn:focus {
+    outline: none;
+}
+
+.colBtn:hover, .addBtn:hover {
+    cursor: pointer;
+}
+
+.buttonCol {
+    display: flex;
+    justify-content: right;
+    gap: 10px
+}

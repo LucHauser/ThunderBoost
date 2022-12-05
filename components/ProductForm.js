@@ -6,9 +6,9 @@ import markdownElements from "./MarkdownReview.module.css"
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import Select from "react-select";
 import ReactMarkdown from "react-markdown";
-import {faFilePen, faFileLines, faCircleInfo} from "@fortawesome/free-solid-svg-icons";
+import {faFilePen, faFileLines, faCircleInfo, faTrash, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getAllBaseDataVariety} from "@lib/api";
+import {getAllBaseDataVariety, getAllImagesByUsage} from "@lib/api";
 import {selectStyles} from "@components/stylesUtils";
 import {createProduct, updateProduct} from "@lib/api";
 import rehypeRaw from "rehype-raw";
@@ -41,7 +41,7 @@ export default function ProductForm({session, productToEdit}) {
             usage: "",
             releaseDate: "",
             varieties: null,
-            img: ""
+            images: ""
         }
 
         let isValid = true
@@ -112,7 +112,7 @@ export default function ProductForm({session, productToEdit}) {
         usage: "",
         description: "",
         stockAmount: null,
-        img: "",
+        images: [],
         releaseDate: "",
         varieties: null,
         active: true
@@ -122,18 +122,12 @@ export default function ProductForm({session, productToEdit}) {
     const [errors, setErrors] = useState({})
     const [loadProduct, setLoadProduct] = useState(false)
     const [varieties, setVarieties] = useState([])
+    const [images, setImages] = useState([])
     const [markdownReview, setMarkdownReview] = useState("")
     const [markdownMode, setMarkdownMode] = useState(false)
     const [showVarietyForm, setShowVarietyForm] = useState(false)
-
-    const [generatedProductId, setGeneratedProductId] = useState("")
     const [selectedVarieties, setSelectedVarieties] = useState([])
-    const [addConnectProductToVariety, setAddConnectProductToVariety] = useState({})
 
-    const [imagePath, setImagePath] = useState("")
-    const [base64Image, setBase64Image] = useState("")
-
-    const fileInput = useRef(null)
     const router = useRouter()
 
     const toBase64 = file => new Promise((resolve, reject) => {
@@ -142,25 +136,6 @@ export default function ProductForm({session, productToEdit}) {
         reader.onload = () => resolve(reader.result)
         reader.onerror = error => reject(error)
     })
-
-    useEffect(() => {
-        if (!base64Image) return
-
-        const uploadImage = async () => {
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify({
-                    base64Image
-                })
-            })
-            const data = await response.json()
-            setImagePath(data.filePath)
-        }
-        uploadImage()
-    }, [base64Image])
 
     useEffect(() => {
         const loadVarieties = async () => {
@@ -175,24 +150,18 @@ export default function ProductForm({session, productToEdit}) {
     }, [])
 
     useEffect(() => {
+        const loadImages = async () => {
+            const images = await getAllImagesByUsage("Product Image")
+            set
+        }
+    })
+
+    useEffect(() => {
         if (productToEdit) {
             setProductModel(productToEdit)
             setMarkdownReview(productModel.description)
         }
     }, [productToEdit])
-
-    const onFileInputChange = async (e) => {
-        console.log(e)
-        console.log(fileInput.current.files[0])
-        const file = fileInput.current.files[0]
-        if (!file) return
-        const base64 = await toBase64(file)
-        setBase64Image(base64)
-        setProductModel({
-            ...productModel,
-            img: base64Image
-        })
-    }
 
     const onProductChange = (e) => {
         const target = e.target
@@ -242,7 +211,6 @@ export default function ProductForm({session, productToEdit}) {
             return
         }
         if (productModel.id) {
-            productModel.img = imagePath
             try {
                 await updateProduct(productModel, session.accessToken)
             } catch (e) {
@@ -390,17 +358,26 @@ export default function ProductForm({session, productToEdit}) {
                     </Tabs>
                     {errors.description && <p>{errors.description}</p>}
                 </Form.Group>
-                <Form.Group className={`${defaultStyles.formGroup}`}>
+                <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.imageSelectionForm}`}>
                     <Form.Label className={defaultStyles.formLabel}>Product Image</Form.Label>
-                    <Form.Control
-                        className={defaultStyles.formInputField}
-                        type="file"
-                        accept=".jpg, .png"
-                        name="img"
-                        onChange={onFileInputChange}
-                        ref={fileInput}
-                    />
-                    {errors.img && <p>{errors.img}</p>}
+                    <div className={productFormStyles.selectedProductImages}>
+                        {
+                            productModel.images.map((image, index) => {
+                                return (
+                                    <div key={index} className={productFormStyles.selectedImage} style={{backgroundImage: `url(${image})`, backgroundSize: "cover"}}>
+                                        <button><FontAwesomeIcon icon={faTrash}/></button>
+                                    </div>
+                                )
+                            })
+                        }
+                        <Form.Select className={productFormStyles.addImageSelect}>
+                            <FontAwesomeIcon icon={faPlus} size={"2x"} color={"red"}/>
+                            <option></option>
+                        </Form.Select>
+                    </div>
+
+
+                    {errors.images && <p>{errors.images}</p>}
                 </Form.Group>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputReleaseDate}`}>
                     <Form.Label className={defaultStyles.formLabel}>Release Date</Form.Label>

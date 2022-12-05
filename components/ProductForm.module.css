@@ -52,6 +52,37 @@
     outline: none
 }
 
+.imageSelectionForm {
+    grid-column: 1 / span 2;
+}
+
+.selectedProductImages {
+    width: 100%;
+    min-height: 110px;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    background: #14318C;
+}
+
+.selectedImage {
+    width: 100px;
+    height: 100px;
+}
+
+.deleteSelectedImageBtn {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    outline: none;
+}
+
+.addImageSelect {
+    width: 100px;
+    height: 100px;
+    background: dimgrey;
+}
+
 .multiSelectDropdown {
     background: #060525 !important;
     color: #FFFFFF;
@@ -80,11 +111,17 @@
     .formWrapper {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: repeat(8, auto);
+        grid-template-rows: repeat(9, auto);
         column-gap: 15px;
     }
 
-    .formWrapper > h2, .formSeparatorLine, .inputName, .inputDescription, .multiSelectVariety, .btnGroup {
+    .formWrapper > h2,
+    .formSeparatorLine,
+    .inputName,
+    .inputDescription,
+    .multiSelectVariety,
+    .imageSelectionForm,
+    .btnGroup {
         grid-column: 1 / span 2
     }
 
