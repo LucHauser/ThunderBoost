@@ -26,7 +26,7 @@ export default function createProductPage({session}) {
             </button>
             <h1>Create new Product</h1>
             <div className={`${defaultStyles.formSeparatorLine}`} style={{marginTop: 10}}/>
-            <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
+            <div>
                 <ProductForm session={session}/>
             </div>
 

@@ -211,6 +211,26 @@
       "uploaded": "unknown",
       "active": true,
       "id": 7
+    },
+    {
+      "img": "/9079866a-d397-4c11-8b26-688d8c1ad9ef.jpeg",
+      "fileType": "jpeg",
+      "designation": "Levl Up Iced out",
+      "description": "Levl up gaming perfomance drink",
+      "usage": "Product Image",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 8
+    },
+    {
+      "img": "/f59147b0-d6f2-4dd5-9d28-3ef672ad7e42.jpeg",
+      "fileType": "jpeg",
+      "designation": "Smirnoff vodka",
+      "description": "The default vodka crafted by Smirnoff",
+      "usage": "Product Image",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 9
     }
   ]
 }

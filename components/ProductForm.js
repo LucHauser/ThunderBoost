@@ -1,8 +1,9 @@
 import {useEffect, useRef, useState} from "react";
-import {Form, FormGroup} from "react-bootstrap";
+import {Form, FormGroup, Modal} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import productFormStyles from "./ProductForm.module.css"
 import markdownElements from "./MarkdownReview.module.css"
+import addImageSelectionBackground from "../resources/assets/PlusImage.png"
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import Select from "react-select";
 import ReactMarkdown from "react-markdown";
@@ -16,6 +17,7 @@ import remarkGfm from "remark-gfm";
 import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import ImageSelectionList from "@components/ImageSelectionList";
 
 
 
@@ -125,6 +127,7 @@ export default function ProductForm({session, productToEdit}) {
     const [images, setImages] = useState([])
     const [markdownReview, setMarkdownReview] = useState("")
     const [markdownMode, setMarkdownMode] = useState(false)
+    const [showImageSelectionDialog, setShowImageSelectionDialog] = useState(false)
     const [showVarietyForm, setShowVarietyForm] = useState(false)
     const [selectedVarieties, setSelectedVarieties] = useState([])
 
@@ -148,13 +151,6 @@ export default function ProductForm({session, productToEdit}) {
         }
         loadVarieties()
     }, [])
-
-    useEffect(() => {
-        const loadImages = async () => {
-            const images = await getAllImagesByUsage("Product Image")
-            set
-        }
-    })
 
     useEffect(() => {
         if (productToEdit) {
@@ -235,7 +231,7 @@ export default function ProductForm({session, productToEdit}) {
     }
 
     return (
-        <div>
+        <div className={productFormStyles.component}>
             <Form className={productFormStyles.formWrapper}
                 onSubmit={handleSubmit}>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputName}`}>
@@ -370,10 +366,12 @@ export default function ProductForm({session, productToEdit}) {
                                 )
                             })
                         }
-                        <Form.Select className={productFormStyles.addImageSelect}>
-                            <FontAwesomeIcon icon={faPlus} size={"2x"} color={"red"}/>
-                            <option></option>
-                        </Form.Select>
+                        <div style={{backgroundImage: `url(${addImageSelectionBackground})`, background: "#FF00CC"}}>
+                            <Form.Select className={productFormStyles.addImageSelect}>
+                                <option></option>
+                            </Form.Select>
+                        </div>
+
                     </div>
 
 
@@ -445,6 +443,13 @@ export default function ProductForm({session, productToEdit}) {
                 </div>
 
             </Form>
+            {
+                showImageSelectionDialog ?
+                    <div className={productFormStyles.imageSelectionDialog}>
+                        <ImageSelectionList usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => setImages(images.push(image))}/>
+                    </div>
+                    : null
+            }
         </div>
     )
 }
