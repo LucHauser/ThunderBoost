@@ -18,6 +18,7 @@ import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import ImageSelectionList from "@components/ImageSelectionList";
+import VarietySelectionList from "@components/VarietySelectionList";
 
 
 
@@ -100,7 +101,7 @@ export default function ProductForm({session, productToEdit}) {
             errors.img = "Image is required"
             isValid = false
         } */
-        if (!selectedVarieties > 0) {
+        if (!product.varieties > 0) {
             errors.varieties = "Please choose one Variety or more"
             isValid = false
         }
@@ -117,7 +118,7 @@ export default function ProductForm({session, productToEdit}) {
         images: [],
         releaseDate: "",
         showProductBeforeRelease: false,
-        varieties: null,
+        varieties: [],
         active: true,
         // Discount properties when update Product
         discountActive: false,
@@ -137,8 +138,7 @@ export default function ProductForm({session, productToEdit}) {
     const [markdownReview, setMarkdownReview] = useState("")
     const [markdownMode, setMarkdownMode] = useState(false)
     const [showImageSelectionDialog, setShowImageSelectionDialog] = useState(false)
-    const [showVarietyForm, setShowVarietyForm] = useState(false)
-    const [selectedVarieties, setSelectedVarieties] = useState([])
+    const [showVarietySelectionDialog, setShowVarietySelectDialog] = useState(false)
 
     const router = useRouter()
 
@@ -196,19 +196,6 @@ export default function ProductForm({session, productToEdit}) {
         })
     }
 
-    const handleSelectVarieties = (item) => {
-        console.log(item)
-        let selectedValuesOnly = item.map(i => {
-            return i.value
-        })
-        setProductModel({
-            ...productModel,
-            varieties: selectedValuesOnly
-        })
-        setSelectedVarieties(item)
-
-    }
-
     const addImageToList = (name) => {
         if (!images.includes(name)) {
             setImages(current => [...current, name])
@@ -231,7 +218,7 @@ export default function ProductForm({session, productToEdit}) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoadProduct(true)
-        const result = validateProductModel(productModel, selectedVarieties)
+        const result = validateProductModel(productModel)
         if (!result.isValid) {
             setErrors(result.errors)
             setLoadProduct(false)
@@ -422,49 +409,18 @@ export default function ProductForm({session, productToEdit}) {
                     {errors.releaseDate && <p>{errors.releaseDate}</p>}
                 </Form.Group>
                 <FormGroup className={`${defaultStyles.formGroup} ${productFormStyles.multiSelectVariety}`}>
-                    <Form.Label className={defaultStyles.formLabel}>Varieties
-                        <i className={defaultStyles.formLabelNotice}>! Multiple selectable</i>
-                    </Form.Label>
-                    <Select
-                        isMulti
-                        options={varieties.map(v => {
-                            return {label: v.label, value: v.value}
-                        })}
-                        value={productModel.id && productModel.varieties.map(v => {
-                            return {label: v, value: v}
-                        })}
-                        onChange={handleSelectVarieties}
-                        isSearchable={true}
-                        menuPlacement={"top"}
-                        className={productFormStyles.multiSelectDropdown}
-                        placeholder={"Select Varieties in this Booster"}
-                        styles={selectStyles}
-                        theme={(theme) => ({
-                            ...theme,
-                            borderRadius: 6,
-                            background: "#060525",
-                            height: 50,
-                            colors: {
-                                primary: '#FFFFFF'
-                            }
-                        })}
-                        noOptionsMessage={() =>
-                            <div className={productFormStyles.multiSelectNotFound}>
-                                <div className={!showVarietyForm ? productFormStyles.hideThis: null}>
-                                    <BaseDataVarietyForm
-                                        toggleModal={() => setShowVarietyForm(false)}
-                                        onVarietyCreated={(variety) => setVarieties([...varieties, variety])}/>
-                                </div>
-                                <div className={showVarietyForm ? productFormStyles.hideThis : null}>
-                                    <p>Missing Variety?</p>
-                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} onClick={() => setShowVarietyForm(true)}>Create new Variety</button>
-                                </div>
-
-                            </div>
+                    <Form.Label className={defaultStyles.formLabel}>Varieties</Form.Label>
+                    <div>
+                        {
+                            productModel.varieties.map(v => {
+                                return (
+                                    // eslint-disable-next-line react/jsx-key
+                                    <p>{v}</p>
+                                )
+                            })
                         }
-                    />
-                    {errors.varieties && <p>{errors.varieties}</p>}
-                    <p>{selectedVarieties}</p>
+                        <button onClick={() => setShowVarietySelectDialog(true)}>Add varieties</button>
+                    </div>
                 </FormGroup>
                 <i className={productFormStyles.formNotice}>* Required field</i>
                 <div className={productFormStyles.btnGroup}>
@@ -477,10 +433,18 @@ export default function ProductForm({session, productToEdit}) {
             <button onClick={() => console.log(productModel)}>Print</button>
             {
                 showImageSelectionDialog ?
-                    <div className={productFormStyles.imageSelectionDialog}>
+                    <div className={productFormStyles.selectionDialog}>
                         <ImageSelectionList usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => addImageToList(image)}/>
                     </div>
                     : null
+            }
+            {
+                showVarietySelectionDialog ?
+                    <div className={productFormStyles.selectionDialog}>
+                        <VarietySelectionList session={session} onSelectedVarieties={(selectedVarieties) => setProductModel({...productModel, varieties: selectedVarieties})} toggleDialog={() => setShowVarietySelectDialog(false)} onEditVarieties={productModel.varieties}/>
+                    </div> :
+                    null
+
             }
         </div>
     )

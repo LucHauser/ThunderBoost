@@ -3,9 +3,10 @@
     width: 500px;
     height: 600px;
     color: white;
-    padding: 10px 20px;
+    padding: 20px 20px;
     border-radius: 10px;
     border: solid 2px #8DF3E8;
+    display: grid;
 }
 
 .searchFieldGroup {
@@ -13,6 +14,7 @@
     font-size: 20px;
     gap: 10px;
     align-items: center;
+    margin-top: 10px;
 }
 
 .searchField {
@@ -28,5 +30,65 @@
 }
 
 .varietiesCollections {
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px
+}
 
+.selectionOption {
+    font-size: 20px;
+    color: #000000;
+    padding: 3px 5px;
+    background: #8DF3E8;
+    border-radius: 5px;
+    transition: ease-in 3s linear;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.selectionOption:hover {
+    background: #6ab0a5;
+    cursor: pointer;
+}
+
+.selectedVarieties > p:hover {
+    background: #8DF3E8;
+}
+
+.removeBtn {
+    outline: none;
+    margin-left: 5px;
+    background: #8DF3E8;
+    font-size: 20px;
+    border-radius: 2px;
+}
+
+.removeBtn:hover {
+    background: rgba(211, 211, 211, 0.3);
+}
+
+.createVarietyBtn {
+    font-family: "Nunito", sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: bold;
+    background: transparent;
+    padding: 3px 5px;
+    border: solid 2px #8DF3E8;
+    border-radius: 5px;
+    outline: none;
+}
+
+.varietyForm {
+    width: 100%;
+    margin-top: 15px
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    margin-top: auto;
 }

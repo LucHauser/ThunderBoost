@@ -5,7 +5,7 @@ import baseDataVarietyStyles from "./BaseDataVarietyForm.module.css"
 import {createBaseDataVariety, updateBaseDataVariety} from "@lib/api"
 import {useRouter} from "next/router";
 
-export default function BaseDataVarietyForm({session, varietyToEdit}) {
+export default function BaseDataVarietyForm({session, varietyToEdit, disableRouting, onVarietyCreated, toggleForm, smallInputs}) {
 
     function validateVarietyModel(variety) {
 
@@ -78,8 +78,14 @@ export default function BaseDataVarietyForm({session, varietyToEdit}) {
             }
         } else {
             try {
-                await createBaseDataVariety(variety, session.accessToken)
-                navigateBack("../baseDataVariety")
+                const newVariety = await createBaseDataVariety(variety, session.accessToken)
+                if (disableRouting) {
+                    console.log("HERE")
+                    onVarietyCreated(newVariety.name)
+                    toggleForm()
+                } else {
+                    navigateBack("../baseDataVariety")
+                }
             } catch (e) {
                 console.log(e)
             }
@@ -93,32 +99,68 @@ export default function BaseDataVarietyForm({session, varietyToEdit}) {
     return (
         <div>
             <Form className={baseDataVarietyStyles.baseDataVarietyForm} onSubmit={handleSubmit}>
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Designation</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type={"text"} name="name" onChange={handleChange} value={variety.name} placeholder={"Designation of Variety"} disabled={false}/>
+                <Form.Group
+                    className={!smallInputs ?
+                        defaultStyles.formGroup :
+                        defaultStyles.formGroupSmall}>
+                    <Form.Label
+                        className={!smallInputs ?
+                            defaultStyles.formLabel :
+                            defaultStyles.formLabelSmall}>Designation</Form.Label>
+                    <Form.Control
+                        className={!smallInputs ?
+                            defaultStyles.formInputField :
+                            defaultStyles.formInputFieldSmall}
+                        type={"text"}
+                        name="name"
+                        onChange={handleChange}
+                        defaultValue={variety.name}
+                        placeholder={"Designation of Variety"}
+                    />
                     { errors.name && <p>{errors.name}</p> }
                 </Form.Group>
-                <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Description</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} type={"text"} name="description" onChange={handleChange} value={variety.description} placeholder={"Description of Variety"} disabled={false}/>
+                <Form.Group className={!smallInputs ?
+                    defaultStyles.formGroup :
+                    defaultStyles.formGroupSmall}>
+                    <Form.Label className={!smallInputs ?
+                        defaultStyles.formLabel :
+                        defaultStyles.formLabelSmall}>Description</Form.Label>
+                    <Form.Control
+                        className={!smallInputs ? defaultStyles.formInputField : defaultStyles.formInputFieldSmall}
+                        type={"text"}
+                        name="description"
+                        onChange={handleChange}
+                        defaultValue={variety.description}
+                        placeholder={"Description of Variety"}
+                    />
                     { errors.description && <p>{errors.description}</p> }
                 </Form.Group>
                 {
                     variety.id &&
-                    <Form.Group style={{display: "flex", alignItems: "center", gap: 10}}>
+                    <Form.Group style={
+                        {
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10
+                        }
+                    }>
                         <Form.Control className={defaultStyles.formCheckbox} onChange={(e) => setVariety({...variety, active: e.target.checked})} type={"checkbox"} defaultChecked={variety.active}/>
                         <Form.Label className={defaultStyles.formLabel}>Active</Form.Label>
                     </Form.Group>
                 }
                 <div className={baseDataVarietyStyles.buttonGroup}>
-                    {variety.id ?
-                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Save changes</button>
-                        : <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Save variety</button>
-                    }
-                    <button type={"button"} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth}`}
-                            onClick={() => variety.id ? navigateBack("../../baseDataVariety") : navigateBack("../baseDataVariety")}>
-                        Cancel
-                    </button>
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${smallInputs ? defaultStyles.buttonSm : null}`} type={"submit"}>{variety.id ? "Save changes" : (disableRouting ? "Add Variety" : "Save variety")}</button>
+                    <button type={"button"}
+                            className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth} ${smallInputs ? defaultStyles.buttonSm : null}`}
+                            onClick={() =>
+                                variety.id ?
+                                    navigateBack("../../baseDataVariety")
+                                    : (disableRouting ?
+                                        toggleForm()
+                                        : navigateBack("../baseDataVariety")
+                                    )
+                    }>Cancel</button>
+
                 </div>
 
             </Form>

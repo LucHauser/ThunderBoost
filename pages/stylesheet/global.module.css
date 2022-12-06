@@ -180,7 +180,7 @@
     text-decoration: underline;
 }
 
-.formGroup > p {
+.formGroup > p, .formGroupSmall > p {
     color: #D707F1;
     font-size: 15px;
     font-family: "Nunito", sans-serif;

@@ -168,6 +168,12 @@
       "name": "Ingwer",
       "description": "",
       "id": 15
+    },
+    {
+      "active": true,
+      "name": "Test",
+      "description": "fdfdsafsa",
+      "id": 16
     }
   ],
   "image": [
@@ -260,6 +266,16 @@
       "uploaded": "unknown",
       "active": true,
       "id": 9
+    },
+    {
+      "img": "/cb82b1d9-399d-4cf0-ad54-49667ab299cb.png",
+      "fileType": "png",
+      "designation": "Ome-bus",
+      "description": "Bus for omeTv for Spam",
+      "usage": "Diverse",
+      "uploaded": "unknown",
+      "active": true,
+      "id": 10
     }
   ]
 }
