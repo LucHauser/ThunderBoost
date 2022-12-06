@@ -9,7 +9,7 @@ import Select from "react-select";
 import ReactMarkdown from "react-markdown";
 import {faFilePen, faFileLines, faCircleInfo, faTrash, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getAllBaseDataVariety, getAllImagesByUsage} from "@lib/api";
+import {getAllBaseDataVariety, getAllImagesByUsage, login} from "@lib/api";
 import {selectStyles} from "@components/stylesUtils";
 import {createProduct, updateProduct} from "@lib/api";
 import rehypeRaw from "rehype-raw";
@@ -116,8 +116,17 @@ export default function ProductForm({session, productToEdit}) {
         stockAmount: null,
         images: [],
         releaseDate: "",
+        showProductBeforeRelease: false,
         varieties: null,
-        active: true
+        active: true,
+        // Discount properties when update Product
+        discountActive: false,
+        discountPercent: null,
+        discountFrom: "",
+        discountUntil: "",
+        showDiscountUntilDate: false,
+        discountUntilText: "",
+        enableCountdown: false
     }
 
     const [productModel, setProductModel] = useState(defaultProductModel)
@@ -143,8 +152,14 @@ export default function ProductForm({session, productToEdit}) {
     useEffect(() => {
         const loadVarieties = async () => {
             try {
-                const varieties = await getAllBaseDataVariety()
-                setVarieties(varieties)
+                const fetchedVarieties = await getAllBaseDataVariety()
+                let varietyListString = []
+                for (let i = 0; i < fetchedVarieties.length; i++) {
+                    if (fetchedVarieties[i].active) {
+                        varietyListString.push({label: fetchedVarieties[i].name, value: fetchedVarieties[i].name})
+                    }
+                }
+                setVarieties(varietyListString)
             } catch (e) {
                 console.log(e)
             }
@@ -156,7 +171,10 @@ export default function ProductForm({session, productToEdit}) {
         if (productToEdit) {
             setProductModel(productToEdit)
             setMarkdownReview(productModel.description)
+            const imagesOfProductToEdit = productToEdit.images
+            setImages(imagesOfProductToEdit)
         }
+        console.log(images)
     }, [productToEdit])
 
     const onProductChange = (e) => {
@@ -179,22 +197,35 @@ export default function ProductForm({session, productToEdit}) {
     }
 
     const handleSelectVarieties = (item) => {
-        let selectedValuesOnly = []
-        if (item.length > 0) {
-            // console.log("List is not empty")
-            for (let i = 0; i < item.length; i++) {
-                selectedValuesOnly.push(item[i].value)
-            }
-            selectedValuesOnly = selectedValuesOnly.sort()
-            setSelectedVarieties(selectedValuesOnly)
-        }
-        setSelectedVarieties(selectedValuesOnly)
+        console.log(item)
+        let selectedValuesOnly = item.map(i => {
+            return i.value
+        })
         setProductModel({
             ...productModel,
-            varieties: selectedVarieties
-            }
-        )
-        console.log(productModel)
+            varieties: selectedValuesOnly
+        })
+        setSelectedVarieties(item)
+
+    }
+
+    const addImageToList = (name) => {
+        if (!images.includes(name)) {
+            setImages(current => [...current, name])
+        }
+        console.log(images)
+        setProductModel({
+            ...productModel,
+            images: images
+        })
+    }
+
+    const removeImage = (name) => {
+        setImages(images.filter(i => i !== name))
+        setProductModel({
+            ...productModel,
+            images: images
+        })
     }
 
     const handleSubmit = async (e) => {
@@ -358,20 +389,17 @@ export default function ProductForm({session, productToEdit}) {
                     <Form.Label className={defaultStyles.formLabel}>Product Image</Form.Label>
                     <div className={productFormStyles.selectedProductImages}>
                         {
-                            productModel.images.map((image, index) => {
+                            images.map((image, index) => {
                                 return (
                                     <div key={index} className={productFormStyles.selectedImage} style={{backgroundImage: `url(${image})`, backgroundSize: "cover"}}>
-                                        <button><FontAwesomeIcon icon={faTrash}/></button>
+                                        <button onClick={() => removeImage(image)} className={productFormStyles.deleteSelectedImageBtn}><FontAwesomeIcon className={productFormStyles.trash} icon={faTrash} size={"2x"} color={"white"}/></button>
                                     </div>
                                 )
                             })
                         }
-                        <div style={{backgroundImage: `url(${addImageSelectionBackground})`, background: "#FF00CC"}}>
-                            <Form.Select className={productFormStyles.addImageSelect}>
-                                <option></option>
-                            </Form.Select>
+                        <div className={productFormStyles.addImageSelect} onClick={() => setShowImageSelectionDialog(true)}>
+                            <p>+</p>
                         </div>
-
                     </div>
 
 
@@ -379,14 +407,18 @@ export default function ProductForm({session, productToEdit}) {
                 </Form.Group>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputReleaseDate}`}>
                     <Form.Label className={defaultStyles.formLabel}>Release Date</Form.Label>
-                    <Form.Control
-                        className={`${defaultStyles.formInputField}`}
-                        type="datetime-local"
-                        name="releaseDate"
-                        onChange={onProductChange}
-                        placeholder="Product sale date"
-                        defaultValue={productModel.releaseDate}
-                    />
+                    <div className={productFormStyles.inputReleaseDateGroup}>
+                        <Form.Control
+                            className={`${defaultStyles.formInputField}`}
+                            type="datetime-local"
+                            name="releaseDate"
+                            onChange={onProductChange}
+                            placeholder="Product sale date"
+                            defaultValue={productModel.releaseDate}
+                        />
+                        <Form.Control type={"checkbox"} name={"showProductBeforeRelease"} className={defaultStyles.formCheckbox} onChange={e => setProductModel({...productModel, showProductBeforeRelease: e.target.checked})}/>
+                        <Form.Label className={defaultStyles.formLabel}>Show Product in the shop before release</Form.Label>
+                    </div>
                     {errors.releaseDate && <p>{errors.releaseDate}</p>}
                 </Form.Group>
                 <FormGroup className={`${defaultStyles.formGroup} ${productFormStyles.multiSelectVariety}`}>
@@ -395,15 +427,13 @@ export default function ProductForm({session, productToEdit}) {
                     </Form.Label>
                     <Select
                         isMulti
-                        options={varieties.map(variety => {
-                            return {label: variety.name, value: variety.name}
-                            })
-                        }
-                        defaultValue={productModel.id && productModel.varieties.map(v => {
-                            return {label: v}
+                        options={varieties.map(v => {
+                            return {label: v.label, value: v.value}
+                        })}
+                        value={productModel.id && productModel.varieties.map(v => {
+                            return {label: v, value: v}
                         })}
                         onChange={handleSelectVarieties}
-                        escapeClearsValue={handleSelectVarieties}
                         isSearchable={true}
                         menuPlacement={"top"}
                         className={productFormStyles.multiSelectDropdown}
@@ -434,6 +464,7 @@ export default function ProductForm({session, productToEdit}) {
                         }
                     />
                     {errors.varieties && <p>{errors.varieties}</p>}
+                    <p>{selectedVarieties}</p>
                 </FormGroup>
                 <i className={productFormStyles.formNotice}>* Required field</i>
                 <div className={productFormStyles.btnGroup}>
@@ -443,10 +474,11 @@ export default function ProductForm({session, productToEdit}) {
                 </div>
 
             </Form>
+            <button onClick={() => console.log(productModel)}>Print</button>
             {
                 showImageSelectionDialog ?
                     <div className={productFormStyles.imageSelectionDialog}>
-                        <ImageSelectionList usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => setImages(images.push(image))}/>
+                        <ImageSelectionList usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => addImageToList(image)}/>
                     </div>
                     : null
             }
