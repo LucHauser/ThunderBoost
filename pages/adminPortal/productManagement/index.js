@@ -6,7 +6,7 @@ import {
     faCheck, faChevronDown,
     faChevronUp,
     faCircle, faDollar,
-    faFilter, faFont, faHashtag, faLock, faLockOpen, faPencil,
+    faFilter, faFont, faHashtag, faLock, faLockOpen, faPencil, faPercent,
     faPlus, faRocket, faSpoon, faTags, faTrash, faUsers,
     faWarehouse,
     faXmark
@@ -239,7 +239,26 @@ export default function ProductManagementPage({session}) {
                                     </AccordionItemHeading>
                                     <AccordionItemPanel className={productManagementStyles.accordionPanel}>
                                         <div>
-                                            <img src={"https://via.placeholder.com/300"}/>
+                                            <div>
+                                                <h4>Images</h4>
+                                                <div className={productManagementStyles.productImagesCollection}>
+                                                    {
+                                                        product.images.sort().map((image, index) => {
+                                                            return (
+                                                                <img
+                                                                    style={!index > 0 ? {border: "solid 2px #8DF3E8", width: 300, height: 300} : null}
+                                                                    key={index}
+                                                                    src={image}
+                                                                    alt={`${product.name} ${index}`}
+                                                                    title={`${product.name} Image ${index + 1} ${!index > 0 ? "\nFirst Image" : ""}`}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+                                            </div>
+
+
                                             <div className={productManagementStyles.productInformation}>
                                                 <h4>Information</h4>
                                                 <table className={productManagementStyles.productSpecs}>
@@ -329,6 +348,13 @@ export default function ProductManagementPage({session}) {
                                                         style={{marginRight: 10}}
                                                     />
                                                     Edit stock quantity
+                                                </button>
+                                                <button
+                                                    className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
+                                                    /*onClick={}*/
+                                                >
+                                                    <FontAwesomeIcon icon={faPercent} style={{marginRight: 10}}/>
+                                                    Manage Discount
                                                 </button>
                                                 <div>
                                                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}

@@ -1,22 +1,23 @@
 {
   "product": [
     {
-      "name": "Test",
-      "price": "56",
-      "servings": "50",
+      "name": "Thunderboost Smirnoff Shot",
+      "price": "50",
+      "servings": "5",
       "usage": "Gaming",
-      "description": "Test Test\n\n## Tests",
-      "stockAmount": "48",
+      "description": "Thunderboost with tasty alcoholic powder (30% vol.)",
+      "stockAmount": "8",
       "images": [
-        "/f59147b0-d6f2-4dd5-9d28-3ef672ad7e42.jpeg"
+        "/8849fd0d-e315-4a0e-8554-bc51e3057ea8.jpeg",
+        "/8785a4d6-8a71-4479-adf6-c3b3f542cea1.jpeg"
       ],
-      "releaseDate": "2022-12-06T14:15",
+      "releaseDate": "2022-12-08T18:00",
       "showProductBeforeRelease": false,
       "varieties": [
-        "Papaya",
-        "Cherry",
+        "Apple",
+        "Chocolate",
         "Kiwi",
-        "Banana"
+        "Grape (Green)"
       ],
       "active": true,
       "discountActive": false,
@@ -174,6 +175,12 @@
       "name": "Test",
       "description": "fdfdsafsa",
       "id": 16
+    },
+    {
+      "active": true,
+      "name": "Grape (Green)",
+      "description": "Green Grapes",
+      "id": 17
     }
   ],
   "image": [

@@ -82,6 +82,19 @@
     grid-template-columns: 350px auto 200px;
 }
 
+.productImagesCollection {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 5px
+}
+
+.productImagesCollection > img {
+    width: 150px;
+    height: 150px;
+}
+
 .productSpecs {
     margin-top: 15px
 }

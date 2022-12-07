@@ -77,7 +77,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                 </div>
                 <img
                     className={highlightViewStyles.productImage}
-                    src={"https://via.placeholder.com/300"}
+                    src={presentingProduct?.images[1]}
                 />
             </div>
             <div className={highlightViewStyles.contentArea}>

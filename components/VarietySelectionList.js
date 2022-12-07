@@ -19,10 +19,14 @@ export default function VarietySelectionList({session, onEditVarieties, onSelect
             try {
                 const allVarieties = await getAllBaseDataVariety()
                 const allActiveVarieties = allVarieties.filter(v => v.active)
-                const allNames = allActiveVarieties.map(v => v.name)
+                let allNames = allActiveVarieties.map(v => v.name)
+                if (onEditVarieties.length > 0) {
+                    for (let i = 0; i < onEditVarieties.length; i++) {
+                        allNames = allNames.filter(n => n !== onEditVarieties[i])
+                    }
+                    setSelectedVarieties(onEditVarieties)
+                }
                 setChoiceVarieties(allNames)
-                console.log(choiceVarieties)
-
             } catch (e) {
                 console.log(e)
             }
@@ -30,7 +34,8 @@ export default function VarietySelectionList({session, onEditVarieties, onSelect
         loadVarieties()
     }, [])
 
-    const selectVariety = (name) => {
+
+    function selectVariety(name){
         if (!selectedVarieties.includes(name)) {
             setSelectedVarieties(selectedVarieties => [...selectedVarieties, name])
             setChoiceVarieties(choiceVarieties.filter(v => v !== name))

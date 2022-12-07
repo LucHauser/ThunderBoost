@@ -197,21 +197,19 @@ export default function ProductForm({session, productToEdit}) {
     }
 
     const addImageToList = (name) => {
-        if (!images.includes(name)) {
-            setImages(current => [...current, name])
+        if (!productModel.images.includes(name)) {
+            setProductModel({
+                ...productModel,
+                images: [...productModel.images, name]
+            })
         }
-        console.log(images)
-        setProductModel({
-            ...productModel,
-            images: images
-        })
+
     }
 
     const removeImage = (name) => {
-        setImages(images.filter(i => i !== name))
         setProductModel({
             ...productModel,
-            images: images
+            images: productModel.images.filter(i => i !== name)
         })
     }
 
@@ -238,10 +236,6 @@ export default function ProductForm({session, productToEdit}) {
             }
         }
         navigateBack()
-    }
-
-    const handleShowVarietyForm = () => {
-        setShowVarietyForm(true)
     }
 
     const navigateBack = () => {
@@ -376,10 +370,10 @@ export default function ProductForm({session, productToEdit}) {
                     <Form.Label className={defaultStyles.formLabel}>Product Image</Form.Label>
                     <div className={productFormStyles.selectedProductImages}>
                         {
-                            images.map((image, index) => {
+                            productModel.images.map((img, index) => {
                                 return (
-                                    <div key={index} className={productFormStyles.selectedImage} style={{backgroundImage: `url(${image})`, backgroundSize: "cover"}}>
-                                        <button onClick={() => removeImage(image)} className={productFormStyles.deleteSelectedImageBtn}><FontAwesomeIcon className={productFormStyles.trash} icon={faTrash} size={"2x"} color={"white"}/></button>
+                                    <div key={index} className={productFormStyles.selectedImage} style={{backgroundImage: `url(${img})`, backgroundSize: "cover"}}>
+                                        <button onClick={() => removeImage(img)} className={productFormStyles.deleteSelectedImageBtn}><FontAwesomeIcon className={productFormStyles.trash} icon={faTrash} size={"2x"} color={"white"}/></button>
                                     </div>
                                 )
                             })
@@ -410,16 +404,18 @@ export default function ProductForm({session, productToEdit}) {
                 </Form.Group>
                 <FormGroup className={`${defaultStyles.formGroup} ${productFormStyles.multiSelectVariety}`}>
                     <Form.Label className={defaultStyles.formLabel}>Varieties</Form.Label>
-                    <div>
-                        {
-                            productModel.varieties.map(v => {
-                                return (
-                                    // eslint-disable-next-line react/jsx-key
-                                    <p>{v}</p>
-                                )
-                            })
-                        }
-                        <button onClick={() => setShowVarietySelectDialog(true)}>Add varieties</button>
+                    <div className={`${productFormStyles.varietyList}`}>
+                        <div>
+                            {
+                                productModel.varieties.map(v => {
+                                    return (
+                                        // eslint-disable-next-line react/jsx-key
+                                        <p>{v}</p>
+                                    )
+                                })
+                            }
+                        </div>
+                        <button className={`${productFormStyles.addVarietyBtn}`} onClick={() => setShowVarietySelectDialog(true)} type={"button"}>{productModel.varieties.length > 0 ? "Edit varieties" : "Add variety"}</button>
                     </div>
                 </FormGroup>
                 <i className={productFormStyles.formNotice}>* Required field</i>

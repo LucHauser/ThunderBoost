@@ -125,17 +125,39 @@
     align-items: center;
 }
 
-.multiSelectDropdown {
-    background: #060525 !important;
-    color: #FFFFFF;
-    font-family: Arial, sans-serif;
-    font-size: 20px
+.varietyList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    border: solid 2px #FFFFFF;
+    padding: 0 5px;
+    border-radius: 5px;
 }
 
-.multiSelectNotFound {
+.varietyList > div {
     display: flex;
-    gap: 15px;
-    align-items: center;
+    gap: 5px
+
+}
+
+.varietyList > div > p {
+    font-size: 20px;
+    color: #000000;
+    padding: 3px 5px;
+    background: #8DF3E8;
+    border-radius: 5px;
+    display: flex;
+    text-align: center;
+    width: auto;
+}
+
+.addVarietyBtn {
+    outline: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    justify-self: flex-end;
+
 }
 
 .formNotice {
