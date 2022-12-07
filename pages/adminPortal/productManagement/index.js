@@ -132,6 +132,10 @@ export default function ProductManagementPage({session}) {
         router.push(`./productManagement/${id}/edit`)
     }
 
+    const editDiscount = (id) => {
+        router.push(`./productManagement/${id}/discountSettings`)
+    }
+
     return (
         <div className={defaultStyles.adminPageWrapper}>
             <AdminPortalHeader session={session} currentPage={1}/>
@@ -351,7 +355,7 @@ export default function ProductManagementPage({session}) {
                                                 </button>
                                                 <button
                                                     className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
-                                                    /*onClick={}*/
+                                                    onClick={() => editDiscount(product.id)}
                                                 >
                                                     <FontAwesomeIcon icon={faPercent} style={{marginRight: 10}}/>
                                                     Manage Discount

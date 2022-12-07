@@ -40,7 +40,10 @@ export default function editProductPage({session}) {
 
     return (
         <div className={defaultStyles.adminPageWrapper}>
-            <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() =>router.push("../../productManagement")}>
+            <button
+                style={{width: 100}}
+                className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}
+                onClick={() =>router.push("../../productManagement")}>
                 <FontAwesomeIcon icon={faLeftLong}/>
                 &nbsp;&nbsp;&nbsp;Back
             </button>
