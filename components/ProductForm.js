@@ -1,20 +1,16 @@
-import {useEffect, useRef, useState} from "react";
-import {Form, FormGroup, Modal} from "react-bootstrap";
+import {useEffect, useState} from "react";
+import {Form, FormGroup} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import productFormStyles from "./ProductForm.module.css"
 import markdownElements from "./MarkdownReview.module.css"
-import addImageSelectionBackground from "../resources/assets/PlusImage.png"
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
-import Select from "react-select";
 import ReactMarkdown from "react-markdown";
-import {faFilePen, faFileLines, faCircleInfo, faTrash, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faFilePen, faFileLines, faCircleInfo, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getAllBaseDataVariety, getAllImagesByUsage, login} from "@lib/api";
-import {selectStyles} from "@components/stylesUtils";
+import {getAllBaseDataVariety} from "@lib/api";
 import {createProduct, updateProduct} from "@lib/api";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import ImageSelectionList from "@components/ImageSelectionList";
@@ -141,13 +137,6 @@ export default function ProductForm({session, productToEdit}) {
     const [showVarietySelectionDialog, setShowVarietySelectDialog] = useState(false)
 
     const router = useRouter()
-
-    const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = error => reject(error)
-    })
 
     useEffect(() => {
         const loadVarieties = async () => {

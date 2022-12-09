@@ -11,7 +11,7 @@
         "/8785a4d6-8a71-4479-adf6-c3b3f542cea1.jpeg",
         "/8849fd0d-e315-4a0e-8554-bc51e3057ea8.jpeg"
       ],
-      "releaseDate": "2022-12-08T18:00",
+      "releaseDate": "2022-12-08T18:10",
       "showProductBeforeRelease": false,
       "varieties": [
         "Apple",
@@ -21,11 +21,11 @@
       ],
       "active": true,
       "discountActive": false,
-      "discountPercent": null,
-      "discountFrom": "",
-      "discountUntil": "",
-      "showDiscountUntilDate": false,
-      "discountUntilText": "",
+      "discountPercent": "24",
+      "discountFrom": "2022-12-08T15:11",
+      "discountUntil": "2022-12-11T15:11",
+      "showDiscountUntilDate": true,
+      "discountUntilText": "Breaks in",
       "enableCountdown": false,
       "id": 1
     }
@@ -99,7 +99,7 @@
       "id": 3
     },
     {
-      "active": false,
+      "active": true,
       "name": "Smirnoff Ice",
       "description": "Smirnoff Vodka (4% Vol)",
       "id": 4
@@ -171,7 +171,7 @@
       "id": 15
     },
     {
-      "active": true,
+      "active": false,
       "name": "Test",
       "description": "fdfdsafsa",
       "id": 16

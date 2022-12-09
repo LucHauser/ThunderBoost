@@ -27,6 +27,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import markdownElements from "@components/MarkdownReview.module.css";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import formatTimestamp from "@components/stylesUtils";
 
 export default function ProductManagementPage({session}) {
 
@@ -299,7 +300,7 @@ export default function ProductManagementPage({session}) {
                                                     <tr>
                                                         <td><FontAwesomeIcon icon={faRocket}/></td>
                                                         <td>Release Date</td>
-                                                        <td>{product.releaseDate}</td>
+                                                        <td>{formatTimestamp(product.releaseDate, "dd.MMMM.yyyy HH:mm")}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><FontAwesomeIcon icon={faTags}/></td>
