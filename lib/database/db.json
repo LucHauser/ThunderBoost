@@ -6,7 +6,7 @@
       "servings": "5",
       "usage": "Gaming",
       "description": "Thunderboost with tasty alcoholic powder (30% vol.)",
-      "stockAmount": "8",
+      "stockAmount": "10",
       "images": [
         "/8785a4d6-8a71-4479-adf6-c3b3f542cea1.jpeg",
         "/8849fd0d-e315-4a0e-8554-bc51e3057ea8.jpeg"
@@ -14,20 +14,42 @@
       "releaseDate": "2022-12-08T18:10",
       "showProductBeforeRelease": false,
       "varieties": [
-        "Apple",
-        "Chocolate",
-        "Kiwi",
-        "Grape (Green)"
+        "Smirnoff Ice",
+        "Ananas"
       ],
       "active": true,
-      "discountActive": false,
+      "discountActive": true,
       "discountPercent": "24",
-      "discountFrom": "2022-12-08T15:11",
-      "discountUntil": "2022-12-11T15:11",
+      "discountFrom": "2022-12-05T15:11",
+      "discountUntil": "2022-12-13T15:11",
       "showDiscountUntilDate": true,
       "discountUntilText": "Breaks in",
       "enableCountdown": false,
       "id": 1
+    },
+    {
+      "name": "Test",
+      "price": "54",
+      "servings": "4",
+      "usage": "Office",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren",
+      "stockAmount": "3",
+      "images": [],
+      "releaseDate": "2022-12-15T16:26",
+      "showProductBeforeRelease": false,
+      "varieties": [
+        "Raspberry",
+        "Orange"
+      ],
+      "active": true,
+      "discountActive": true,
+      "discountPercent": null,
+      "discountFrom": "",
+      "discountUntil": "",
+      "showDiscountUntilDate": false,
+      "discountUntilText": "",
+      "enableCountdown": false,
+      "id": 2
     }
   ],
   "users": [
@@ -181,6 +203,12 @@
       "name": "Grape (Green)",
       "description": "Green Grapes",
       "id": 17
+    },
+    {
+      "active": true,
+      "name": "Ananas",
+      "description": "",
+      "id": 18
     }
   ],
   "image": [

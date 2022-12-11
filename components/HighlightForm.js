@@ -2,9 +2,9 @@ import {Form, FormGroup} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
-import {getAllProducts} from "@lib/api";
+import {getAllImagesByUsage, getAllProducts} from "@lib/api";
 import HighlightView from "@components/HighlightView";
-import {hexToRgba} from "@components/stylesUtils";
+import {hexToRgba} from "@components/Utils";
 
 export default function HighlightForm(session) {
 
@@ -14,6 +14,12 @@ export default function HighlightForm(session) {
         {text: "Discount", value: "Discount"},
         {text: "Range", value: "Range"},
         {text: "Bestseller", value: "Bestseller"}
+    ]
+
+    const alignmentOptions = [
+        {text: "Top", value: "flex-start"},
+        {text: "Center", value: "center"},
+        {text: "Bottom", value: "flex-end"},
     ]
 
     const fontFamilyOptions = [
@@ -40,14 +46,6 @@ export default function HighlightForm(session) {
         {text: "Image by URL", value: 2}
     ]
 
-    const backgroundImageCollection = [
-        {text: "Asphalt", value: "AsphaltWall.jpeg"},
-        {text: "Blue Gradients", value: "DarkBlueGradientMix.jpg"},
-        {text: "White gradiented Spripes", value: "WhiteStripedGradient.jpg"},
-        {text: "White gradiented Triangles", value: "WhiteTriangledGradient.jpg"},
-        {text: "Merry Christmas", value: "Christmas.jpg"},
-    ]
-
     const gradientBgOptions = [
         {text: "Top to bottom", value: 0},
         {text: "Left to right", value: 1},
@@ -70,7 +68,17 @@ export default function HighlightForm(session) {
 
         //Product Selection
         productId: null,
+        productImageIndex: 0,
         showProductPrice: false,
+        showProductPriceInclusiveDiscount: false,
+        productPriceColor: "#FFFFFF",
+        productPriceFontFamily: "Arial, sans-serif",
+        enableProductPriceBackground: false,
+        originalPriceColor: "#FFFFFF",
+        originalPriceAlignment: "flex-start",
+        productPriceBackground: "#5e5e5e",
+        productPriceBackgroundOpacity: "1",
+
 
         // Presentation Date
         dateFrom: "",
@@ -137,6 +145,8 @@ export default function HighlightForm(session) {
     const [errors, setErrors] = useState({})
     const [loadHighlight, setLoadHighlight] = useState(false)
     const [products, setProducts] = useState([])
+    const [productImageIndexOptions, setProductImageIndexOptions] = useState([])
+    const [backgroundImages, setBackgroundImages] = useState([])
     const [productForPresentation, setProductForPresentation] = useState(null)
     const [editorBackground, setEditorBackground] = useState("#FFFFFF")
     const [disableEditorBackground, setDisableEditorBackground] = useState(false)
@@ -154,6 +164,18 @@ export default function HighlightForm(session) {
         loadProducts()
     }, [])
 
+    useEffect(() => {
+        const loadImages = async () => {
+            try {
+                const images = await getAllImagesByUsage("Highlights Background")
+                setBackgroundImages(images)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        loadImages()
+    }, [])
+
     const onModelChange = (e) => {
         const target = e.target
         const name = target.name
@@ -167,20 +189,30 @@ export default function HighlightForm(session) {
     const onChoosingProduct = (e) => {
         const name = e.target.name
         const value = e.target.value
-        if (value !== "Empty") {
+        if (value !== null) {
             setModel({
                 ...model,
-                [name]: products[value].id
+                [name]: products[value]?.id
             })
             console.log(model.productId)
             setProductForPresentation(products[value])
+            createOptionList(products[value]?.images)
         } else {
             setModel({
                 ...model,
                 [name]: value
             })
             setProductForPresentation(null)
+            setProductImageIndexOptions([])
         }
+    }
+
+    function createOptionList(imagesOfProduct) {
+        let list = []
+        for (let i = 0; i < imagesOfProduct.length; i++) {
+            list.push(i)
+        }
+        setProductImageIndexOptions(list)
     }
 
     const onModelCheckboxChange = (e) => {
@@ -290,7 +322,7 @@ export default function HighlightForm(session) {
                             className={defaultStyles.formInputFieldSmall}
                             name="productId"
                             onChange={onChoosingProduct}>
-                            <option value={"Empty"}>Select Product</option>
+                            <option value={null}>Select Product</option>
                             {
                                 products.map((product, index) => {
                                     return (
@@ -305,15 +337,143 @@ export default function HighlightForm(session) {
                         </Form.Select>
                     </Form.Group>
 
-                    {/*hideProductPrice*/}
-                    <Form.Group className={highlightFormStyles.multiInputsLine}>
-                        <Form.Control
-                            className={defaultStyles.formCheckbox}
-                            type="checkbox"
-                            name="showProductPrice"
-                            onChange={onModelCheckboxChange}/>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Show Product Price</Form.Label>
-                    </Form.Group>
+                    { model.productId ?
+                        <>
+                            {productForPresentation.images && productImageIndexOptions.length > 1 ?
+                                <>
+                                    {/*productImageIndex*/}
+                                    <Form.Group className={defaultStyles.formGroupSmall}>
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Image Variant</Form.Label>
+                                        <Form.Select name={"productImageIndex"} className={defaultStyles.formInputFieldSmall} onChange={onModelChange}>
+                                            {productImageIndexOptions.map(index => {
+                                                return <option key={index} value={index}>Image {index}</option>
+                                            })}
+                                        </Form.Select>
+                                    </Form.Group>
+                                </> : null
+                            }
+
+                            {/*showProductPrice*/}
+                            <Form.Group className={highlightFormStyles.multiInputsLine}>
+                                <Form.Control
+                                    className={defaultStyles.formCheckbox}
+                                    type="checkbox"
+                                    name="showProductPrice"
+                                    onChange={onModelCheckboxChange}/>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Show Product Price</Form.Label>
+                            </Form.Group>
+
+                            {model.showProductPrice ?
+                                <>
+                                    {/*productPriceFontFamily, productPriceColor*/}
+                                    <Form.Group className={defaultStyles.formGroupSmall}>
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Product Price Styling</Form.Label>
+                                        <div className={highlightFormStyles.multiInputsLine}>
+                                            <p className={defaultStyles.formSubLabelSmall}>Font: </p>
+                                            <Form.Select className={defaultStyles.formInputFieldSmall} name="productPriceFontFamily" onChange={onModelChange}>
+                                                {fontFamilyOptions.map((font, index) => {
+                                                    return (
+                                                        <option key={index} value={font.value} style={{fontFamily: font.value}}>{font.text}</option>
+                                                    )
+                                                })}
+                                            </Form.Select>
+                                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                            <Form.Control
+                                                type="color"
+                                                onChange={onModelChange}
+                                                name="productPriceColor"
+                                                className={`${defaultStyles.formColorPicker}`}
+                                                value={model.productPriceColor}
+                                            />
+                                        </div>
+                                    </Form.Group>
+
+                                    {model.showProductPrice && productForPresentation?.discountActive ?
+                                        <>
+                                            {/*showProductPriceInclusiveDiscount*/}
+                                            <Form.Group className={highlightFormStyles.multiInputsLine}>
+                                                <Form.Control
+                                                    className={defaultStyles.formCheckbox}
+                                                    type={"checkbox"}
+                                                    name={"showProductPriceInclusiveDiscount"}
+                                                    onChange={onModelCheckboxChange}/>
+                                                <Form.Label className={defaultStyles.formLabelSmall}>Show Discount of Product Price</Form.Label>
+                                            </Form.Group>
+
+                                            {model.showProductPriceInclusiveDiscount ?
+                                                <>
+                                                    {/*originalPriceColor, originalPriceAlignment*/}
+                                                    <Form.Group className={defaultStyles.formGroupSmall}>
+                                                        <Form.Label className={defaultStyles.formLabelSmall}>Original Price Text Styling</Form.Label>
+                                                        <div className={highlightFormStyles.multiInputsLine}>
+                                                            <p>Color: </p>
+                                                            <Form.Control
+                                                                type="color"
+                                                                onChange={onModelChange}
+                                                                name="originalPriceColor"
+                                                                className={`${defaultStyles.formColorPicker}`}
+                                                                value={model.originalPriceColor}
+                                                            />
+                                                            <p>Alignment: </p>
+                                                            <Form.Select className={defaultStyles.formInputFieldSmall} name={"originalPriceAlignment"} onChange={onModelChange}>
+                                                                {alignmentOptions.map((opt, index) => {
+                                                                    return (<option key={index} value={opt.value}>{opt.text}</option>)
+                                                                })}
+                                                            </Form.Select>
+                                                        </div>
+                                                    </Form.Group>
+                                                </> : null
+                                            }
+                                        </> : null
+                                    }
+                                </> : null
+                            }
+
+                            {/*enableProductPriceBackground*/}
+                            <Form.Group className={highlightFormStyles.multiInputsLine}>
+                                <Form.Control
+                                    className={defaultStyles.formCheckbox}
+                                    name={"enableProductPriceBackground"}
+                                    type={"checkbox"}
+                                    onChange={onModelCheckboxChange}/>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Enable Backgrounding Product Price</Form.Label>
+                            </Form.Group>
+
+                            {model.enableProductPriceBackground ?
+                                <>
+                                    {/*productPriceBackground, productPriceBackgroundOpacity*/}
+                                    <Form.Group className={defaultStyles.formGroupSmall}>
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Product Price Background</Form.Label>
+                                        <div className={highlightFormStyles.multiInputsLine}>
+                                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                            <Form.Control
+                                                className={defaultStyles.formColorPicker}
+                                                name="productPriceBackground"
+                                                type="color"
+                                                onChange={onModelChange}
+                                                value={model.productPriceBackground}
+                                            />
+                                            <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
+                                            <input
+                                                className={highlightFormStyles.colorOpacityRange}
+                                                style={{
+                                                    background: `linear-gradient(to left, ${model.productPriceBackground}, ${hexToRgba(model.productPriceBackground, 0)})`
+                                                }}
+                                                name="productPriceBackgroundOpacity"
+                                                type="range"
+                                                min="0"
+                                                max="1"
+                                                step="0.01"
+                                                onChange={onModelChange}
+                                            />
+                                        </div>
+                                    </Form.Group>
+                                </> : null
+                            }
+                        </> : null
+                    }
+
+
 
                     <h2 className={defaultStyles.formSubtitle}>Presentation date</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
@@ -667,9 +827,9 @@ export default function HighlightForm(session) {
                                     className={defaultStyles.formInputFieldSmall}
                                     name="backgroundImg"
                                     onChange={onModelChange}>
-                                    {backgroundImageCollection.map((opt, index) => {
+                                    {backgroundImages.map((opt, index) => {
                                         return (
-                                            <option key={index} value={opt.value}>{opt.text}</option>
+                                            <option key={index} value={opt.img}>{opt.designation}</option>
                                         )
                                     })}
                                 </Form.Select>

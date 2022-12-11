@@ -11,7 +11,7 @@ import {
     faMagnifyingGlass,
     faPencil,
     faPlus,
-    faUpload,
+    faUpload, faX,
     faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import baseDataVarietyStyles from "../../stylesheet/baseDataVariety.module.css";
@@ -21,8 +21,8 @@ export default function ImagesManagementPage({session}) {
 
     const [images, setImages] = useState([])
     const [filteredImages, setFilteredImages] = useState([])
-    const [previewImage, setPreviewImage] = useState()
-    const [numberOfCollection, setNumberOfCollection] = useState(0)
+    const [showImagePreview, setShowImagePreview] = useState(false)
+    const [previewImage, setPreviewImage] = useState("")
 
     const router = useRouter()
 
@@ -32,7 +32,6 @@ export default function ImagesManagementPage({session}) {
                 const images = await getAllImages()
                 setImages(images)
                 setFilteredImages(images)
-                setNumberOfCollection(images.length)
             } catch (e) {
                 console.log(e)
             }
@@ -56,6 +55,11 @@ export default function ImagesManagementPage({session}) {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    const closeFullPicMode = () => {
+        setShowImagePreview(false)
+        setPreviewImage("")
     }
 
     return (
@@ -102,7 +106,10 @@ export default function ImagesManagementPage({session}) {
                                     }
                                 </td>
                                 <td className={imagesManagementStyles.buttonCol}>
-                                    <button className={imagesManagementStyles.colBtn}>
+                                    <button className={imagesManagementStyles.colBtn} onClick={() => {
+                                        setPreviewImage(image.img)
+                                        setShowImagePreview(true)
+                                    }}>
                                         View Image&nbsp;&nbsp;&nbsp;
                                         <FontAwesomeIcon icon={faEye}/>
                                     </button>
@@ -126,6 +133,15 @@ export default function ImagesManagementPage({session}) {
                 }
                 </tbody>
             </Table>
+            {
+                showImagePreview ?
+                    <div className={imagesManagementStyles.imagePreview} onClick={() => closeFullPicMode()}>
+                        <img alt src={previewImage} style={{maxWidth: 1000}}/>
+                        <button className={`${imagesManagementStyles.closeButtonImagePreview}`} onClick={() => closeFullPicMode()}>
+                            <FontAwesomeIcon icon={faX} color={"white"} size={"2xl"}/>
+                        </button>
+                    </div> : null
+            }
         </div>
     )
 }

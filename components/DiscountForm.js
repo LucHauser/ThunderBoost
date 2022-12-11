@@ -5,7 +5,7 @@ import discountSettingsStyles from "@components/DiscountSettingsForm.module.css"
 import {Form, FormGroup} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css";
 import {useRouter} from "next/router";
-import {getDiscountPrice} from "@components/stylesUtils";
+import {getDiscountPrice} from "@components/Utils";
 
 export default function DiscountSettingsForm({session, productToEdit}) {
 
@@ -58,7 +58,6 @@ export default function DiscountSettingsForm({session, productToEdit}) {
             setLoadProduct(false)
             return
         }
-        console.log("HERE")
         try {
             await updateProduct(product, session.accessToken)
         } catch (e) {
@@ -86,7 +85,7 @@ export default function DiscountSettingsForm({session, productToEdit}) {
             </FormGroup>
             {
                 !product.discountPercent < 1 || !product.discountPercent > 100 || product.discountPercent !== "" ?
-                    <p>{`Current Price: ${product.price} Discount Price: ${getDiscountPrice(product.price, product.discountPercent)}`}</p>
+                    <p id={discountSettingsFormStyles["discountInformation"]}>{`Current Price: ${product.price} Discount Price: ${getDiscountPrice(product.price, product.discountPercent)}`}</p>
                     : null
             }
 

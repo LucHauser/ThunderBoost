@@ -3,7 +3,7 @@ import {getAllBaseDataVariety} from "@lib/api";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import varietySelectionListStyles from "./VarietySelectionList.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCross, faMagnifyingGlass, faX} from "@fortawesome/free-solid-svg-icons";
+import {faMagnifyingGlass, faX} from "@fortawesome/free-solid-svg-icons";
 import {Form} from "react-bootstrap";
 import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
 

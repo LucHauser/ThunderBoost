@@ -3,6 +3,7 @@ import defaultStyles from "../../stylesheet/global.module.css"
 import productManagementStyles from "../../stylesheet/productManagement.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
+    faCalendar, faCalendarCheck, faCalendarXmark,
     faCheck, faChevronDown,
     faChevronUp,
     faCircle, faDollar,
@@ -27,7 +28,11 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import markdownElements from "@components/MarkdownReview.module.css";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
-import formatTimestamp from "@components/stylesUtils";
+import formatTimestamp, {
+    checkIfDiscountStartIsFutureOfNow,
+    checkIfProductIsNowDiscount,
+    getDate
+} from "@components/Utils";
 
 export default function ProductManagementPage({session}) {
 
@@ -103,7 +108,24 @@ export default function ProductManagementPage({session}) {
     const handleProductActivation = async (product) => {
         //delete product.productHasVarieties
         product.active = !product.active;
-        console.log(product)
+        try {
+            const updatedProduct = await updateProduct(product, session.accessToken)
+            setProducts(products => {
+                return products.map(p => {
+                    if (p.id === updatedProduct.id) {
+                        return {...p, ...updatedProduct}
+                    } else {
+                        return p
+                    }
+                })
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const handleDiscountActivation = async (product) => {
+        product.discountActive = !product.discountActive
         try {
             const updatedProduct = await updateProduct(product, session.accessToken)
             setProducts(products => {
@@ -207,15 +229,6 @@ export default function ProductManagementPage({session}) {
                                         <AccordionItemButton className={productManagementStyles.accordionHeader}>
                                             <p>{product.name}</p>
                                             <div style={{display: "flex", gap: 15}}>
-                                                <p>Stock Amount:&nbsp;
-                                                    <FontAwesomeIcon
-                                                        icon={faCircle}
-                                                        size={"1x"}
-                                                        color={product.stockAmount === 0 ? "#cc0000" : (product.stockAmount > 5 ? "#6aa84f" : "#ccaa00")}
-                                                        title={`Stock Amount: ${product.stockAmount}`}
-                                                        style={{cursor: "help"}}
-                                                    />
-                                                </p>
                                                 <p>Status:&nbsp;
                                                     <FontAwesomeIcon
                                                         icon={faCircle}
@@ -223,6 +236,25 @@ export default function ProductManagementPage({session}) {
                                                         color={product.active ? "#6aa84f" : "#cc0000"}
                                                         title={product.active ? "Activ - Visible in shop" : "Not activ - Not visible in shop"}
                                                         style={{cursor: "help"}}
+                                                    />
+                                                </p>
+                                                <p>Stock Amount:&nbsp;
+                                                    <FontAwesomeIcon
+                                                        icon={faCircle}
+                                                        size={"1x"}
+                                                        color={product.stockAmount === "0" ? "#cc0000" : (product.stockAmount > 5 ? "#6aa84f" : "#ccaa00")}
+                                                        title={`Stock Amount: ${product.stockAmount}`}
+                                                        style={{cursor: "help"}}
+                                                    />
+                                                </p>
+                                                <p>Discount Status&nbsp;
+                                                    <FontAwesomeIcon
+                                                        icon={faCircle}
+                                                        size={"1x"}
+                                                        color={checkIfProductIsNowDiscount(product.discountFrom, product.discountUntil, product.discountActive) ?
+                                                            "#6aa84f"
+                                                            : "#cc0000"
+                                                    }
                                                     />
                                                 </p>
                                                 <div>
@@ -293,7 +325,7 @@ export default function ProductManagementPage({session}) {
                                                         <td>{parseFloat(product.price).toFixed(2)} $</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><FontAwesomeIcon icon={faWarehouse}/></td>
+                                                        <td><FontAwesomeIcon icon={faWarehouse} size={"sm"}/></td>
                                                         <td>Stock amount</td>
                                                         <td>{product.stockAmount} pieces</td>
                                                     </tr>
@@ -316,6 +348,49 @@ export default function ProductManagementPage({session}) {
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <td colSpan={2}>
+                                                            <h4>Discount Information</h4>
+                                                        </td>
+                                                    </tr>
+                                                    {
+                                                        product.discountActive ?
+                                                            <>
+                                                                <tr>
+                                                                    <td><FontAwesomeIcon icon={faCheck}/></td>
+                                                                    <td>Discount Active</td>
+                                                                    <td>{checkIfProductIsNowDiscount(product.discountFrom, product.discountUntil, product.discountActive) ? "active": "inactive"}</td>
+                                                                </tr>
+                                                                {
+                                                                    product.discountFrom !== "" || product.discountUntil !== "" ?
+                                                                        <>
+                                                                            <tr>
+                                                                                <td><FontAwesomeIcon icon={faCalendarCheck}/></td>
+                                                                                <td>Discount Start</td>
+                                                                                <td>{product.discountFrom !== "" ? formatTimestamp(product.discountFrom, "dd.MMMM.yyyy HH:mm") : "Not setted, ends until end date"}</td>
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <td><FontAwesomeIcon icon={faCalendarXmark}/></td>
+                                                                                <td>Discount End</td>
+                                                                                <td>{product.discountUntil !== "" ? formatTimestamp(product.discountUntil, "dd.MMMM.yyyy HH:mm") : "Not setted, active after start"}</td>
+                                                                            </tr>
+                                                                        </> :
+                                                                        <tr>
+                                                                            <td><FontAwesomeIcon icon={faCalendar}/></td>
+                                                                            <td colSpan={1}>No dates, discount always active</td>
+                                                                        </tr>
+
+                                                                }
+
+                                                            </> :
+                                                            <tr>
+                                                                <td colSpan={2}><i>Not Activated</i></td>
+                                                            </tr>
+                                                    }
+
+
+
                                                 </table>
 
                                                 <h4 style={{
@@ -334,16 +409,27 @@ export default function ProductManagementPage({session}) {
                                             </div>
                                             <div className={productManagementStyles.productCrudBtnGroup}>
                                                 <h4>Edit & Delete</h4>
-                                                <button
-                                                    className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
-                                                    onClick={() => editProduct(product.id)}
-                                                >
-                                                    <FontAwesomeIcon
-                                                        icon={faPencil}
-                                                        style={{marginRight: 10}}
-                                                    />
-                                                    Edit product
-                                                </button>
+                                                <div>
+                                                    <button
+                                                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}
+                                                        onClick={() => editProduct(product.id)}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faPencil}
+                                                            style={{marginRight: 10}}
+                                                        />
+                                                        Edit product
+                                                    </button>
+                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}
+                                                            onClick={() => handleProductActivation(product)}>
+                                                        {
+                                                            product.active ?
+                                                                <><FontAwesomeIcon icon={faLockOpen}/></>
+                                                                : <><FontAwesomeIcon icon={faLock}/></>
+                                                        }
+                                                    </button>
+                                                </div>
+
                                                 <button
                                                     className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
                                                     /*onClick={}*/
@@ -354,26 +440,32 @@ export default function ProductManagementPage({session}) {
                                                     />
                                                     Edit stock quantity
                                                 </button>
-                                                <button
-                                                    className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}
-                                                    onClick={() => editDiscount(product.id)}
-                                                >
-                                                    <FontAwesomeIcon icon={faPercent} style={{marginRight: 10}}/>
-                                                    Manage Discount
-                                                </button>
                                                 <div>
-                                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}
-                                                            onClick={() => handleProductActivation(product)}>
+                                                    <button
+                                                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}
+                                                        onClick={() => editDiscount(product.id)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faPercent} style={{marginRight: 10}}/>
+                                                        Manage Discount
+                                                    </button>
+                                                    <button
+                                                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.discountActive ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}
+                                                        onClick={() => handleDiscountActivation(product)}
+                                                    >
                                                         {
-                                                            product.active ?
+                                                            product.discountActive ?
                                                                 <><FontAwesomeIcon icon={faLockOpen}/></>
                                                                 : <><FontAwesomeIcon icon={faLock}/></>
                                                         }
                                                     </button>
+                                                </div>
+
+                                                <div>
+
                                                     <button
-                                                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}
+                                                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}
                                                         onClick={() => handleDeleteProduct(product.id)}>
-                                                        <FontAwesomeIcon icon={faTrash}/>Delete
+                                                        <FontAwesomeIcon icon={faTrash}/>&nbsp;Delete
                                                     </button>
                                                 </div>
                                             </div>

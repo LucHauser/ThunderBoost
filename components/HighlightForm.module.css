@@ -62,7 +62,8 @@
     min-height: 150px;
     width: 100%;
     resize: none;
-    font-family: Arial, sans-serif;
+    font-family: Courier, sans-serif;
+    font-style: normal;
     color: #FFFFFF;
     font-size: 15px;
     background: transparent;

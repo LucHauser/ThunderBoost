@@ -1,7 +1,7 @@
 import highlightViewStyles from "./HighlightView.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {hexToRgba} from "@components/stylesUtils";
+import {getDiscountPrice, hexToRgba} from "@components/Utils";
 import {faBullhorn, faCartShopping} from "@fortawesome/free-solid-svg-icons";
 import markdownElements from "@components/MarkdownReview.module.css";
 import rehypeRaw from "rehype-raw";
@@ -77,7 +77,7 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                 </div>
                 <img
                     className={highlightViewStyles.productImage}
-                    src={presentingProduct?.images[1]}
+                    src={presentingProduct?.images[prop.productImageIndex]}
                 />
             </div>
             <div className={highlightViewStyles.contentArea}>
@@ -85,7 +85,6 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     style={
                         {
                             color: prop.titleColor,
-                            marginBottom: "auto",
                             fontFamily: prop.titleFontFamily !== "HK-Modular" ?
                                 prop.titleFontFamily :
                                 null,
@@ -101,8 +100,25 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                         : prop.title
                     }</h1>
                 {
-                    presentingProduct?.price &&
-                    <p className={!prop.showProductPrice ? defaultStyles.hideElement : null} style={{marginBottom: "auto"}}>{presentingProduct.price}</p>
+                    prop.showProductPrice ?
+                    <p className={
+                        !prop.showProductPrice ?
+                            defaultStyles.hideElement
+                            : null
+                        }
+                        style={Object.assign({
+                            fontFamily: prop.productPriceFontFamily,
+                            color: prop.productPriceColor
+                        }, prop.enableProductPriceBackground ? {
+                            background: hexToRgba(prop.productPriceBackground, prop.productPriceBackgroundOpacity),
+                            padding: 5
+                            } : null )
+                        }
+                        id={highlightViewStyles["productPrice"]}>
+                        {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ?
+                            getDiscountPrice(presentingProduct?.price, presentingProduct?.discountPercent) : presentingProduct?.price}$
+                        {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ? <span style={{alignSelf: prop.originalPriceAlignment, color: prop.originalPriceColor}}>instead {presentingProduct.price}$</span> : null}
+                    </p> : null
                 }
                 <div style={{
                     marginBottom: "auto",
@@ -110,7 +126,8 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     fontFamily: prop.textFontFamily,
                     textShadow: prop.showTextShadow ? `${prop.textShadowStyle} ${prop.textShadowColor}` : null
                     }}
-                     className={prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null}>
+                     className={`${prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null}`}
+                    id={highlightViewStyles["highlightText"]}>
                     <ReactMarkdown
                         className={`${markdownElements.elements}`}
                         /* eslint-disable-next-line react/no-children-prop */

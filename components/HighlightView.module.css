@@ -37,10 +37,29 @@
 }
 
 .contentArea {
-    display: grid;
-    grid-template-rows: auto auto auto;
-    grid-auto-flow: dense;
     padding: 60px 20px 20px;
+}
+
+.contentArea > h1 {
+    margin-bottom: 15px
+}
+
+.contentArea > #productPrice {
+    font-size: 30px;
+    font-weight: bold;
+    width: fit-content;
+    display: flex;
+    padding: 5px 0
+}
+
+#productPrice > span {
+    font-size: 15px;
+    margin-left: 5px;
+    font-style: oblique;
+}
+
+.contentArea > #highlightText {
+    margin-top: 15px
 }
 
 .footerArea {

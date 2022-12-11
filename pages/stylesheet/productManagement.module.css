@@ -79,7 +79,7 @@
 
 .accordionPanel > div {
     display: grid;
-    grid-template-columns: 350px auto 200px;
+    grid-template-columns: 350px auto 225px;
 }
 
 .productImagesCollection {
