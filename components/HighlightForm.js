@@ -2,10 +2,13 @@ import {Form, FormGroup} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
-import {getAllImagesByUsage, getAllProducts} from "@lib/api";
+import {createHighlight, getAllImagesByUsage, getAllProducts} from "@lib/api";
 import HighlightView from "@components/HighlightView";
-import {hexToRgba} from "@components/Utils";
+import {checkIfEndDateIsGreaterThanStartDate, hexToRgba} from "@components/Utils";
 import FormContext from "react-bootstrap/FormContext";
+import ImageUploadForm from "@components/ImageUploadForm";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faUpload} from "@fortawesome/free-solid-svg-icons";
 
 export default function HighlightForm(session) {
 
@@ -61,7 +64,7 @@ export default function HighlightForm(session) {
         //Information About Highlight
         designation: "",
         description: "",
-        isDraft: true,
+        isDraft: false,
         archived: false,
 
         //Event Type
@@ -146,7 +149,6 @@ export default function HighlightForm(session) {
         disableButtonCart: false,
         buttonAreaBackground: "#5e5e5e",
         buttonAreaBackgroundOpacity: "1"
-
     }
 
     function validateModel(model) {
@@ -175,7 +177,67 @@ export default function HighlightForm(session) {
         }
         if (model.description.length > 100) {
             errors.description = "Description too long (Max. 100 Character)"
+            isValid = false
         }
+        if (!model.enableCustomEventType && model.eventType === "Choose type") {
+            errors.eventType = "Please select an event type"
+            isValid = false
+        }
+        if (model.enableCustomEventType) {
+            if (model.customEventTypeText.trim().length === 0) {
+                errors.customEventTypeText = "Event type is required"
+                isValid = false
+            }
+            if (model.customEventTypeText.length > 20) {
+                errors.customEventTypeText = "Text too long (max. 20 Character)"
+                isValid = false
+            }
+        }
+        if (model.productId === null) {
+            errors.productId = "Please select a product"
+            isValid = false
+        }
+        if (model.dateFrom && model.dateUntil) {
+            if (checkIfEndDateIsGreaterThanStartDate(model.dateFrom, model.dateUntil)) {
+                errors.dateUntil = "End Date cannot be greater than start date"
+                isValid = false
+            }
+        } else {
+            errors.dateFrom = "Start Date is Required"
+            errors.dateUntil = "End Date is Required"
+            isValid = false
+        }
+        if (model.additionalUntilText !== "") {
+            if (model.additionalUntilText.trim().length === 1) {
+                errors.additionalUntilText = "Please enter a additional text or keep empty"
+                isValid = false
+            }
+            if (model.additionalUntilText > 20) {
+                errors.additionalUntilText = "Text too long (Max. 20 characters)"
+                isValid = false
+            }
+        }
+        if (model.title.trim().length === 0) {
+            errors.title = "Title is Required"
+            isValid = false
+        }
+        if (model.title.length > 60) {
+            errors.title = "Title too long (Max. 60 character"
+            isValid = false
+        }
+        if (model.text.trim().length === 0) {
+            errors.text = "Text is required"
+            isValid = false
+        }
+        if (model.backgroundStyle === 2 && model.backgroundImg === "") {
+            errors.backgroundImg = "Please select a background Image"
+            isValid = false
+        }
+        if (!model.disableButtonToProduct && model.buttonToProductText.trim().length === 0 || model.buttonToProductText !== "") {
+            errors.buttonToProductText = "Text of this button is required or can be empty"
+            isValid = false
+        }
+        return {errors, isValid}
     }
 
     const [model, setModel] = useState(defaultModel)
@@ -184,6 +246,7 @@ export default function HighlightForm(session) {
     const [products, setProducts] = useState([])
     const [productImageIndexOptions, setProductImageIndexOptions] = useState([])
     const [backgroundImages, setBackgroundImages] = useState([])
+    const [showImageUploaderDialog, setShowImageUploaderDialog] = useState(false)
     const [productForPresentation, setProductForPresentation] = useState(null)
     const [editorBackground, setEditorBackground] = useState("#FFFFFF")
     const [disableEditorBackground, setDisableEditorBackground] = useState(false)
@@ -263,13 +326,21 @@ export default function HighlightForm(session) {
     }
 
     const handleSubmit = async (e) => {
-        /*
         e.preventDefault()
         setLoadHighlight(true)
-        const result = validateModel(model)
+        if (!model.isDraft) {
+            const result = validateModel(model)
+            setErrors(result.errors)
+            setLoadHighlight(false)
+            return
+        } else {
+            try {
+                await createHighlight(model, session.accessToken)
+            } catch (e) {
+                console.log(e)
+            }
+        }
 
-         */
-        alert("Submitted")
     }
 
     return (
@@ -965,17 +1036,23 @@ export default function HighlightForm(session) {
                         model.backgroundStyle === "2" ?
                             <Form.Group className={defaultStyles.formGroupSmall}>
                                 <Form.Label className={defaultStyles.formLabelSmall}>Background Image</Form.Label>
-                                <Form.Select
-                                    className={defaultStyles.formInputFieldSmall}
-                                    name="backgroundImg"
-                                    onChange={onModelChange}>
-                                    <option>Select Background</option>
-                                    {backgroundImages.map((opt, index) => {
-                                        return (
-                                            <option key={index} value={opt.img}>{opt.designation}</option>
-                                        )
-                                    })}
-                                </Form.Select>
+                                <div className={highlightFormStyles.multiInputsLine}>
+                                    <Form.Select
+                                        className={defaultStyles.formInputFieldSmall}
+                                        name="backgroundImg"
+                                        onChange={onModelChange}>
+                                        <option>Select Background</option>
+                                        {backgroundImages.map((opt, index) => {
+                                            return (
+                                                <option key={index} value={opt.img}>{opt.designation}</option>
+                                            )
+                                        })}
+                                    </Form.Select>
+                                    <button type={"button"} onClick={() => setShowImageUploaderDialog(true)} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}>
+                                        <FontAwesomeIcon icon={faUpload}/>
+                                    </button>
+                                </div>
+
                             </Form.Group>
                             : <div/>
                     }
@@ -1193,11 +1270,27 @@ export default function HighlightForm(session) {
                 </div>
                 <div className={highlightFormStyles.buttonGroup}>
                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"} form={"highlight-form"}>Save Highlight</button>
+                    <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => {
+                        setModel({
+                            ...model,
+                            isDraft: true
+                        })
+
+
+                    }} type={"submit"} form={"highlight-form"}>Save as Draft</button>
                     <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `}>Discard</button>
                 </div>
 
             </div>
-            {/*<div style={{width: 50, height: 50, background: "radial-gradient(farthest-corner at 25px 25px, red 0%, yellow 100%)"}}></div>*/}
+            {showImageUploaderDialog ?
+                <div className={highlightFormStyles.imageUploadDialog}>
+                    <div>
+                        <ImageUploadForm session={session} staticImageUsage={"Highlights Background"} onDialogMode={true} toggleDialog={() => setShowImageUploaderDialog(false)} onImageUploaded={(newImage) => setBackgroundImages(backgroundImages => [...backgroundImages, newImage])}/>
+                    </div>
+
+                </div> : null
+            }
+
         </div>
     )
 

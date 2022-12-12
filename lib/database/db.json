@@ -50,6 +50,33 @@
       "discountUntilText": "",
       "enableCountdown": false,
       "id": 2
+    },
+    {
+      "name": "Timos Booster",
+      "price": "58",
+      "servings": "60",
+      "usage": "Office",
+      "description": "## Hello\n\ntest\n\n<b>This is Bold</b>",
+      "stockAmount": "7",
+      "images": [
+        "/9079866a-d397-4c11-8b26-688d8c1ad9ef.jpeg"
+      ],
+      "releaseDate": "2022-12-15T00:00",
+      "showProductBeforeRelease": false,
+      "varieties": [
+        "Aubergine",
+        "Banana",
+        "Ananas"
+      ],
+      "active": true,
+      "discountActive": false,
+      "discountPercent": null,
+      "discountFrom": "",
+      "discountUntil": "",
+      "showDiscountUntilDate": false,
+      "discountUntilText": "",
+      "enableCountdown": false,
+      "id": 3
     }
   ],
   "users": [
@@ -209,6 +236,12 @@
       "name": "Ananas",
       "description": "",
       "id": 18
+    },
+    {
+      "active": true,
+      "name": "Aubergine",
+      "description": "Aubergine",
+      "id": 19
     }
   ],
   "image": [
@@ -311,6 +344,16 @@
       "uploaded": "unknown",
       "active": true,
       "id": 10
+    },
+    {
+      "img": "/765b4f31-1bc5-42b2-8c5d-402cd2f44c01.jpeg",
+      "fileType": "jpeg",
+      "designation": "Forest Theme",
+      "description": "Forest with trees and a lake",
+      "usage": "Highlights Background",
+      "uploaded": "12.11.2022T21:13",
+      "active": true,
+      "id": 11
     }
   ]
 }

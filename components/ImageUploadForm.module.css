@@ -16,6 +16,12 @@
     gap: 15px
 }
 
+.imagePreviewSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .imagePreview {
-    max-width: 100%
+    max-width: 400px
 }

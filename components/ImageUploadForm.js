@@ -4,8 +4,9 @@ import imageUploadFormStyles from "./ImageUploadForm.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import {uploadImageData} from "@lib/api";
 import {useRouter} from "next/router";
+import formatTimestamp from "@components/Utils";
 
-export default function ImageUploadForm({session}) {
+export default function ImageUploadForm({session, onImageUploaded, onDialogMode, staticImageUsage, toggleDialog}) {
 
     const usageOptions = ["Product Image", "Highlights Background", "Diverse"]
 
@@ -26,6 +27,7 @@ export default function ImageUploadForm({session}) {
     const [selectedFile, setSelectedFile] = useState()
     const [imagePreview, setImagePreview] = useState("")
     const [base64Image, setBase64Image] = useState("")
+    const [disableDropdown, setDisableDropdown] = useState(false)
 
     const router = useRouter()
 
@@ -77,26 +79,15 @@ export default function ImageUploadForm({session}) {
         }
     }, [imagePath])
 
-    /*
     useEffect(() => {
-        if (!base64Image) return
-
-        const uploadImage = async () => {
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify({
-                    base64Image
-                })
+        if (staticImageUsage) {
+            setModel({
+                ...model,
+                usage: staticImageUsage
             })
-            const data = await response.json()
-            setImagePath(data.filePath)
+            setDisableDropdown(true)
         }
-        uploadImage()
-    }, [base64Image])
-    */
+    })
 
     const toBase64 = file => new Promise((resolve, reject) => {
         const reader = new FileReader()
@@ -160,39 +151,74 @@ export default function ImageUploadForm({session}) {
         setBase64Image(base64)
         if (!base64Image) return
         model.img = await uploadImageToPublic(base64Image)
-        model.uploaded = "unknown"
+        if (model.uploaded === "") {
+            model.uploaded = formatTimestamp(new Date().toString(), "dd.MM.yyyyTHH:mm")
+        }
         try {
-            await uploadImageData(model, session.accessToken)
+            const response = await uploadImageData(model, session.accessToken)
+            if (onDialogMode) {
+                onImageUploaded(response)
+                toggleDialog()
+            } else {
+                router.push("../imagesManagement")
+            }
         } catch (e) {
             console.log(e)
         }
-        router.push("../imagesManagement")
 
+
+
+    }
+
+    const handleCancelling = () => {
+        onDialogMode ? toggleDialog() : router.push("../imagesManagement")
     }
 
     return (
         <div className={imageUploadFormStyles.component}>
-            <Form className={imageUploadFormStyles.form} onSubmit={submitUploadImage}>
-
+            <Form
+                className={imageUploadFormStyles.form}
+                onSubmit={submitUploadImage}
+            >
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Image</Form.Label>
-                    <Form.Control type={"file"} accept={".jpg, .png, .jpeg"} onChange={onChoosingImage} name={"img"} className={defaultStyles.formInputField}/>
+                    <Form.Control
+                        type={"file"}
+                        accept={".jpg, .png, .jpeg"}
+                        onChange={onChoosingImage}
+                        name={"img"}
+                        className={defaultStyles.formInputField}
+                    />
                     {errors.selectedFile && <p>{errors.selectedFile}</p>}
                 </Form.Group>
 
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Designation</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} name={"designation"} onChange={onModelChange}/>
+                    <Form.Control
+                        className={defaultStyles.formInputField}
+                        name={"designation"}
+                        onChange={onModelChange}
+                    />
                     {errors.designation && <p>{errors.designation}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Description</Form.Label>
-                    <Form.Control className={defaultStyles.formInputField} name={"description"} onChange={onModelChange}/>
+                    <Form.Control
+                        className={defaultStyles.formInputField}
+                        name={"description"}
+                        onChange={onModelChange}
+                    />
                     {errors.description && <p>{errors.description}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
                     <Form.Label className={defaultStyles.formLabel}>Usage</Form.Label>
-                    <Form.Select className={defaultStyles.formInputField} name={"usage"} onChange={onModelChange}>
+                    <Form.Select
+                        className={defaultStyles.formInputField}
+                        name={"usage"}
+                        onChange={onModelChange}
+                        value={staticImageUsage && model.usage}
+                        disabled={disableDropdown}
+                    >
                         <option>Choose</option>
                         {
                             usageOptions.map((opt, index) => {
@@ -206,14 +232,15 @@ export default function ImageUploadForm({session}) {
                 </Form.Group>
                 <div className={imageUploadFormStyles.buttonGroup}>
                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Upload</button>
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth}`}>Cancel</button>
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth}`} onClick={() => handleCancelling()}>Cancel</button>
                 </div>
             </Form>
-            <div>
-                {selectedFile && <>
-                    <img className={imageUploadFormStyles.imagePreview} src={imagePreview}/>
-                    <p>{}</p>
-                    </>
+            <div className={imageUploadFormStyles.imagePreviewSection}>
+                {selectedFile &&
+                    <img
+                        className={imageUploadFormStyles.imagePreview}
+                        src={imagePreview}
+                    />
                 }
             </div>
         </div>
