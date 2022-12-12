@@ -1,7 +1,7 @@
 import highlightViewStyles from "./HighlightView.module.css"
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getDiscountPrice, hexToRgba} from "@components/Utils";
+import formatTimestamp, {getDiscountPrice, hexToRgba} from "@components/Utils";
 import {faBullhorn, faCartShopping} from "@fortawesome/free-solid-svg-icons";
 import markdownElements from "@components/MarkdownReview.module.css";
 import rehypeRaw from "rehype-raw";
@@ -9,7 +9,7 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import Countdown from 'react-countdown'
 
-export default function HighlightView({prop, presentingProduct, editViewMode}) {
+export default function HighlightView({prop, presentingProduct, editorViewMode}) {
 
     function backgroundingBySettings(styleOption, gradientOption, primaryColor, primaryOpacity, secondaryColor, secondaryOpacity) {
         let val = ``
@@ -82,14 +82,14 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
             </div>
             <div className={highlightViewStyles.contentArea}>
                 <h1
-                    style={
+                    style={Object.assign(
                         {
                             color: prop.titleColor,
                             fontFamily: prop.titleFontFamily !== "HK-Modular" ?
                                 prop.titleFontFamily :
                                 null,
                             textShadow: prop.showTitleShadow ? `${prop.titleShadowStyle} ${prop.titleShadowColor}` : null
-                        }
+                        }, prop.showTitleBackground ? {background: hexToRgba(prop.titleBackgroundColor, prop.titleBackgroundOpacity), padding: "3px 10px"} : null)
                     }
                     className={prop.titleFontFamily === "HK-Modular" ?
                         defaultStyles.getHKModular :
@@ -120,12 +120,15 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                         {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ? <span style={{alignSelf: prop.originalPriceAlignment, color: prop.originalPriceColor}}>instead {presentingProduct.price}$</span> : null}
                     </p> : null
                 }
-                <div style={{
+                <div style={Object.assign({
                     marginBottom: "auto",
                     color: prop.textColor,
                     fontFamily: prop.textFontFamily,
                     textShadow: prop.showTextShadow ? `${prop.textShadowStyle} ${prop.textShadowColor}` : null
-                    }}
+                    }, prop.showTextBackground ? {
+                    background: hexToRgba(prop.textBackgroundColor, prop.textBackgroundOpacity),
+                    padding: "5px 10px"
+                } : null)}
                      className={`${prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null}`}
                     id={highlightViewStyles["highlightText"]}>
                     <ReactMarkdown
@@ -141,10 +144,10 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                     <div className={highlightViewStyles.dateUntilBox} style={{background: hexToRgba(prop.dateUntilBackground, prop.dateUntilBackgroundOpacity)}}>
                         <h3 style={{color: prop.dateUntilColor}}>{`${prop.additionalUntilText !== "" ? prop.additionalUntilText : "Until"}`}</h3>
                         {prop.runningCountdown ?
-                            <h3 style={{fontFamily: "Arial, sans-serif", fontSize: 23, color: prop.dateUntilColor}}>
+                            <h3 style={{fontFamily: "Nunito, sans-serif", fontSize: 23, color: prop.dateUntilColor}}>
                                 <Countdown date={prop.dateUntil}/>
                             </h3>
-                            : <h3 style={{color: prop.dateUntilColor}}>{prop.dateUntil}</h3>
+                            : <h3 style={{color: prop.dateUntilColor}}>{formatTimestamp(prop.dateUntil, "dd.MM.yyyy HH:mm")}</h3>
                         }
                     </div>
                     : null
@@ -154,22 +157,18 @@ export default function HighlightView({prop, presentingProduct, editViewMode}) {
                         <div style={{background: hexToRgba(prop.buttonAreaBackground, prop.buttonAreaBackgroundOpacity)}} className={highlightViewStyles.buttonSector}>
                             {
                                 !prop.disableButtonToProduct ?
-                                    <button>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
+                                    <button style={{background: hexToRgba(prop.buttonToProductBackground, prop.buttonToProductBackgroundOpacity), color: prop.buttonToProductTextColor}}>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
                                     : null
                             }
                             {
                                 !prop.disableButtonCart ?
-                                    <button><FontAwesomeIcon icon={faCartShopping} color={"black"}/>&nbsp;Add to Cart</button>
+                                    <button style={{background: hexToRgba(prop.buttonCartBackground, prop.buttonCartBackgroundOpacity), color: prop.buttonCartTextColor}}><FontAwesomeIcon icon={faCartShopping} color={prop.buttonCartIconColor}/>&nbsp;Add to Cart</button>
                                     : null
                             }
-
-
                         </div>
                         : null
                 }
-
             </div>
-
         </div>
     )
 }

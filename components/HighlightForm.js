@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {getAllImagesByUsage, getAllProducts} from "@lib/api";
 import HighlightView from "@components/HighlightView";
 import {hexToRgba} from "@components/Utils";
+import FormContext from "react-bootstrap/FormContext";
 
 export default function HighlightForm(session) {
 
@@ -57,6 +58,12 @@ export default function HighlightForm(session) {
     ]
 
     const defaultModel = {
+        //Information About Highlight
+        designation: "",
+        description: "",
+        isDraft: true,
+        archived: false,
+
         //Event Type
         eventType: "Choose type",
         enableCustomEventType: false,
@@ -72,7 +79,7 @@ export default function HighlightForm(session) {
         showProductPrice: false,
         showProductPriceInclusiveDiscount: false,
         productPriceColor: "#FFFFFF",
-        productPriceFontFamily: "Arial, sans-serif",
+        productPriceFontFamily: "Nunito, sans-serif",
         enableProductPriceBackground: false,
         originalPriceColor: "#FFFFFF",
         originalPriceAlignment: "flex-start",
@@ -92,16 +99,22 @@ export default function HighlightForm(session) {
 
         // Title area
         title: "",
-        titleFontFamily: "Arial, sans-serif",
+        titleFontFamily: "Nunito, sans-serif",
         titleColor: "#FFFFFF",
+        showTitleBackground: false,
+        titleBackgroundColor: "#5e5e5e",
+        titleBackgroundOpacity: "1",
         showTitleShadow: false,
         titleShadowColor: "#ff00f7",
         titleShadowStyle: "2px 2px",
 
         // Text area
         text: "",
-        textFontFamily: "Arial, sans-serif",
+        textFontFamily: "Nunito, sans-serif",
         textColor: "#FFFFFF",
+        showTextBackground: false,
+        textBackgroundColor: "#5e5e5e",
+        textBackgroundOpacity: "1",
         showTextShadow: false,
         textShadowColor: "#ff00f7",
         textShadowStyle: "2px 2px",
@@ -122,7 +135,14 @@ export default function HighlightForm(session) {
 
         // Button area
         buttonToProductText: "",
+        buttonToProductTextColor: "#FFFFFF",
+        buttonToProductBackground: "#5e5e5e",
+        buttonToProductBackgroundOpacity: "1",
         disableButtonToProduct: false,
+        buttonCartTextColor: "#FFFFFF",
+        buttonCartIconColor: "#FFFFFF",
+        buttonCartBackground: "#5e5e5e",
+        buttonCartBackgroundOpacity: "1",
         disableButtonCart: false,
         buttonAreaBackground: "#5e5e5e",
         buttonAreaBackgroundOpacity: "1"
@@ -131,13 +151,30 @@ export default function HighlightForm(session) {
 
     function validateModel(model) {
         const errors = {
+            designation: "",
+            description: "",
             eventType: "",
             customEventTypeText: "",
             productId: "",
             dateFrom: "",
             dateUntil: "",
+            additionalUntilText: "",
             title: "",
             text: "",
+            backgroundImg: "",
+            buttonToProductText: "",
+        }
+        let isValid = true
+        if (model.designation.trim().length === 0) {
+            errors.designation = "Designation is required"
+            isValid = false
+        }
+        if (model.designation.length > 30) {
+            errors.designation = "Text too long (Max. 30 Character)"
+            isValid = false
+        }
+        if (model.description.length > 100) {
+            errors.description = "Description too long (Max. 100 Character)"
         }
     }
 
@@ -225,8 +262,14 @@ export default function HighlightForm(session) {
         })
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        /*
+        e.preventDefault()
+        setLoadHighlight(true)
+        const result = validateModel(model)
 
+         */
+        alert("Submitted")
     }
 
     return (
@@ -236,8 +279,30 @@ export default function HighlightForm(session) {
             <div className={highlightFormStyles.highlightPreview} style={{background: !disableEditorBackground ? editorBackground : "transparent"}}>
                 <HighlightView prop={model} presentingProduct={productForPresentation} editViewMode={true}/>
             </div>
-            <Form onSubmit={handleSubmit} className={highlightFormStyles.highlightEditorForm}>
+            <Form id={"highlight-form"} onSubmit={handleSubmit} className={highlightFormStyles.highlightEditorForm}>
                 <div className={highlightFormStyles.highlightEditorFormInputs}>
+                    <h2 className={defaultStyles.formSubtitle}>Highlight Information</h2>
+                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
+
+                    {/*designation*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Designation</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formInputFieldSmall}
+                            onChange={onModelChange}
+                            name={"designation"}
+                        />
+                    </Form.Group>
+                    {/*description*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Description</Form.Label>
+                        <Form.Control
+                            className={defaultStyles.formInputFieldSmall}
+                            onChange={onModelChange}
+                            name={"description"}
+                        />
+                    </Form.Group>
+
                     <h2 className={defaultStyles.formSubtitle}>Event type</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
@@ -346,7 +411,7 @@ export default function HighlightForm(session) {
                                         <Form.Label className={defaultStyles.formLabelSmall}>Image Variant</Form.Label>
                                         <Form.Select name={"productImageIndex"} className={defaultStyles.formInputFieldSmall} onChange={onModelChange}>
                                             {productImageIndexOptions.map(index => {
-                                                return <option key={index} value={index}>Image {index}</option>
+                                                return <option key={index} value={index}>Image {index + 1}</option>
                                             })}
                                         </Form.Select>
                                     </Form.Group>
@@ -426,48 +491,47 @@ export default function HighlightForm(session) {
                                             }
                                         </> : null
                                     }
-                                </> : null
-                            }
-
-                            {/*enableProductPriceBackground*/}
-                            <Form.Group className={highlightFormStyles.multiInputsLine}>
-                                <Form.Control
-                                    className={defaultStyles.formCheckbox}
-                                    name={"enableProductPriceBackground"}
-                                    type={"checkbox"}
-                                    onChange={onModelCheckboxChange}/>
-                                <Form.Label className={defaultStyles.formLabelSmall}>Enable Backgrounding Product Price</Form.Label>
-                            </Form.Group>
-
-                            {model.enableProductPriceBackground ?
-                                <>
-                                    {/*productPriceBackground, productPriceBackgroundOpacity*/}
-                                    <Form.Group className={defaultStyles.formGroupSmall}>
-                                        <Form.Label className={defaultStyles.formLabelSmall}>Product Price Background</Form.Label>
-                                        <div className={highlightFormStyles.multiInputsLine}>
-                                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
-                                            <Form.Control
-                                                className={defaultStyles.formColorPicker}
-                                                name="productPriceBackground"
-                                                type="color"
-                                                onChange={onModelChange}
-                                                value={model.productPriceBackground}
-                                            />
-                                            <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
-                                            <input
-                                                className={highlightFormStyles.colorOpacityRange}
-                                                style={{
-                                                    background: `linear-gradient(to left, ${model.productPriceBackground}, ${hexToRgba(model.productPriceBackground, 0)})`
-                                                }}
-                                                name="productPriceBackgroundOpacity"
-                                                type="range"
-                                                min="0"
-                                                max="1"
-                                                step="0.01"
-                                                onChange={onModelChange}
-                                            />
-                                        </div>
+                                    {/*enableProductPriceBackground*/}
+                                    <Form.Group className={highlightFormStyles.multiInputsLine}>
+                                        <Form.Control
+                                            className={defaultStyles.formCheckbox}
+                                            name={"enableProductPriceBackground"}
+                                            type={"checkbox"}
+                                            onChange={onModelCheckboxChange}/>
+                                        <Form.Label className={defaultStyles.formLabelSmall}>Enable Backgrounding Product Price</Form.Label>
                                     </Form.Group>
+
+                                    {model.enableProductPriceBackground ?
+                                        <>
+                                            {/*productPriceBackground, productPriceBackgroundOpacity*/}
+                                            <Form.Group className={defaultStyles.formGroupSmall}>
+                                                <Form.Label className={defaultStyles.formLabelSmall}>Product Price Background</Form.Label>
+                                                <div className={highlightFormStyles.multiInputsLine}>
+                                                    <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                                    <Form.Control
+                                                        className={defaultStyles.formColorPicker}
+                                                        name="productPriceBackground"
+                                                        type="color"
+                                                        onChange={onModelChange}
+                                                        value={model.productPriceBackground}
+                                                    />
+                                                    <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
+                                                    <input
+                                                        className={highlightFormStyles.colorOpacityRange}
+                                                        style={{
+                                                            background: `linear-gradient(to left, ${model.productPriceBackground}, ${hexToRgba(model.productPriceBackground, 0)})`
+                                                        }}
+                                                        name="productPriceBackgroundOpacity"
+                                                        type="range"
+                                                        min="0"
+                                                        max="1"
+                                                        step="0.01"
+                                                        onChange={onModelChange}
+                                                    />
+                                                </div>
+                                            </Form.Group>
+                                        </> : null
+                                    }
                                 </> : null
                             }
                         </> : null
@@ -504,7 +568,7 @@ export default function HighlightForm(session) {
 
                     {/*showDateUntil, additionalUntilText, dateUntilColor, dateUntilBackground, dateUntilBackgroundOpacity, runningCountdown*/}
                     {
-                        model.dateFrom !== "" && model.dateUntil !== "" ?
+                        model.dateUntil !== "" ?
                         <div>
                             {/*showUntilDate*/}
                             <Form.Group className={highlightFormStyles.multiInputsLine}>
@@ -577,10 +641,10 @@ export default function HighlightForm(session) {
                                         <Form.Label className={defaultStyles.formLabelSmall}>Countdown To End</Form.Label>
                                     </Form.Group>
                                 </div>
-                                : <div/>
+                                : null
                             }
                         </div>
-                        : <div/>
+                        : null
                     }
 
                     <h2 className={defaultStyles.formSubtitle}>Title area</h2>
@@ -619,6 +683,46 @@ export default function HighlightForm(session) {
                             />
                         </div>
                     </Form.Group>
+
+                    {/*showTitleBackground, titleBackgroundColor, titleBackgroundOpacity*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Control
+                                className={defaultStyles.formCheckbox}
+                                name="showTitleBackground"
+                                onChange={onModelCheckboxChange}
+                                type="checkbox"
+                            />
+                            <Form.Label className={defaultStyles.formLabelSmall}>Title Background</Form.Label>
+                        </div>
+                        {model.showTitleBackground ?
+                            <div className={highlightFormStyles.multiInputsLine}>
+                                <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                <Form.Control
+                                    className={defaultStyles.formColorPicker}
+                                    name="titleBackgroundColor"
+                                    type="color"
+                                    onChange={onModelChange}
+                                    value={model.titleBackgroundColor}
+                                />
+                                <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
+                                <input
+                                    className={highlightFormStyles.colorOpacityRange}
+                                    style={{
+                                        background: `linear-gradient(to left, ${model.titleBackgroundColor}, ${hexToRgba(model.titleBackgroundColor, 0)})`
+                                    }}
+                                    name="titleBackgroundOpacity"
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    onChange={onModelChange}
+                                />
+                            </div> : null
+                        }
+                    </Form.Group>
+
+
 
                     {/*showTitleShadow, titleShadowStyle, titleShadowColor*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
@@ -691,6 +795,44 @@ export default function HighlightForm(session) {
                                 value={model.textColor}
                             />
                         </div>
+                    </Form.Group>
+
+                    {/*showTextBackground, textBackgroundColor, textBackgroundOpacity*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <Form.Control
+                                className={defaultStyles.formCheckbox}
+                                name="showTextBackground"
+                                onChange={onModelCheckboxChange}
+                                type="checkbox"
+                            />
+                            <Form.Label className={defaultStyles.formLabelSmall}>Text Background</Form.Label>
+                        </div>
+                        {model.showTextBackground ?
+                            <div className={highlightFormStyles.multiInputsLine}>
+                                <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                <Form.Control
+                                    className={defaultStyles.formColorPicker}
+                                    name="textBackgroundColor"
+                                    type="color"
+                                    onChange={onModelChange}
+                                    value={model.textBackgroundColor}
+                                />
+                                <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
+                                <input
+                                    className={highlightFormStyles.colorOpacityRange}
+                                    style={{
+                                        background: `linear-gradient(to left, ${model.textBackgroundColor}, ${hexToRgba(model.textBackgroundColor, 0)})`
+                                    }}
+                                    name="textBackgroundOpacity"
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    onChange={onModelChange}
+                                />
+                            </div> : null
+                        }
                     </Form.Group>
 
                     {/*showTextShadow, textShadowStyle, textShadowColor*/}
@@ -827,6 +969,7 @@ export default function HighlightForm(session) {
                                     className={defaultStyles.formInputFieldSmall}
                                     name="backgroundImg"
                                     onChange={onModelChange}>
+                                    <option>Select Background</option>
                                     {backgroundImages.map((opt, index) => {
                                         return (
                                             <option key={index} value={opt.img}>{opt.designation}</option>
@@ -879,18 +1022,9 @@ export default function HighlightForm(session) {
                     <h2 className={defaultStyles.formSubtitle}>Buttons area</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
-                    {/*ButtonToProductText*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Button Text</Form.Label>
-                        <Form.Control
-                            className={defaultStyles.formInputFieldSmall}
-                            name="buttonToProductText"
-                            onChange={onModelChange}/>
-                    </Form.Group>
-
                     {/*buttonAreaBackground, buttonAreaBackgroundOpacity*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Backgronding</Form.Label>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Area Backgronding</Form.Label>
                         <div className={highlightFormStyles.multiInputsLine}>
                             <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                             <Form.Control
@@ -907,6 +1041,105 @@ export default function HighlightForm(session) {
                                     background: `linear-gradient(to left, ${model.buttonAreaBackground}, ${hexToRgba(model.buttonAreaBackground, 0)})`
                                 }}
                                 name="buttonAreaBackgroundOpacity"
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                onChange={onModelChange}
+                            />
+                        </div>
+                    </Form.Group>
+
+                    {/*buttonToProductText, buttonToProductTextColor*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Button to Product Text</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p>Text: </p>
+                            <Form.Control
+                                className={defaultStyles.formInputFieldSmall}
+                                name="buttonToProductText"
+                                onChange={onModelChange}/>
+                            <p>Color: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                type={"color"}
+                                name={"buttonToProductTextColor"}
+                                onChange={onModelChange}
+                                value={model.buttonToProductTextColor}
+                            />
+                        </div>
+                    </Form.Group>
+
+                    {/*buttonToProductBackground, buttonToProductBackgroundOpacity*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Button to Product Background</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                type={"color"}
+                                name={"buttonToProductBackground"}
+                                onChange={onModelChange}
+                                value={model.buttonToProductBackground}
+                            />
+                            <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
+                            <input
+                                className={highlightFormStyles.colorOpacityRange}
+                                style={{
+                                    background: `linear-gradient(to left, ${model.buttonToProductBackground}, ${hexToRgba(model.buttonToProductBackground, 0)})`
+                                }}
+                                name="buttonToProductBackgroundOpacity"
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                onChange={onModelChange}
+                            />
+                        </div>
+                    </Form.Group>
+
+                    {/*buttonToCartTextColor, buttonToCartIconColor*/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Button Cart Text</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Color Text: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                type={"color"}
+                                name={"buttonCartTextColor"}
+                                onChange={onModelChange}
+                                value={model.buttonCartTextColor}
+                            />
+                            <p className={defaultStyles.formSubLabelSmall}>Color Icon: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                type={"color"}
+                                name={"buttonCartIconColor"}
+                                onChange={onModelChange}
+                                value={model.buttonCartIconColor}
+                            />
+                        </div>
+                    </Form.Group>
+
+                    {/**/}
+                    <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Button Cart Background</Form.Label>
+                        <div className={highlightFormStyles.multiInputsLine}>
+                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                            <Form.Control
+                                className={defaultStyles.formColorPicker}
+                                type={"color"}
+                                name={"buttonCartBackground"}
+                                onChange={onModelChange}
+                                value={model.buttonCartBackground}
+                            />
+                            <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
+                            <input
+                                className={highlightFormStyles.colorOpacityRange}
+                                style={{
+                                    background: `linear-gradient(to left, ${model.buttonCartBackground}, ${hexToRgba(model.buttonCartBackground, 0)})`
+                                }}
+                                name="buttonCartBackgroundOpacity"
                                 type="range"
                                 min="0"
                                 max="1"
@@ -938,10 +1171,6 @@ export default function HighlightForm(session) {
                             <Form.Label className={defaultStyles.formSubLabelSmall}>Hide Add-to-Cart-button</Form.Label>
                         </div>
                     </Form.Group>
-
-                    <h2 className={defaultStyles.formSubtitle}>Preferences</h2>
-                    <div className={defaultStyles.formSubtitleSeparatorLine}/>
-
                 </div>
             </Form>
 
@@ -963,7 +1192,7 @@ export default function HighlightForm(session) {
                     <button className={`${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>Reset draft</button>
                 </div>
                 <div className={highlightFormStyles.buttonGroup}>
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>Save Highlight</button>
+                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"} form={"highlight-form"}>Save Highlight</button>
                     <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `}>Discard</button>
                 </div>
 

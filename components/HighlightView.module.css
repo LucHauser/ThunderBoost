@@ -41,7 +41,8 @@
 }
 
 .contentArea > h1 {
-    margin-bottom: 15px
+    margin-bottom: 15px;
+    width: fit-content;
 }
 
 .contentArea > #productPrice {
@@ -59,7 +60,8 @@
 }
 
 .contentArea > #highlightText {
-    margin-top: 15px
+    margin-top: 15px;
+    width: fit-content;
 }
 
 .footerArea {
