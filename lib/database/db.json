@@ -1,5 +1,5 @@
 {
-  "product": [
+  "products": [
     {
       "name": "Thunderboost Smirnoff Shot",
       "price": "50",
@@ -223,7 +223,7 @@
       "description": "7vsWild Booster Edition Release Announcement",
       "isDraft": false,
       "active": true,
-      "created": "12.13.2022T9:13",
+      "created": "2022-12-13T09:13",
       "edited": "",
       "eventType": "Announcement",
       "enableCustomEventType": false,
@@ -232,7 +232,7 @@
       "eventTypeBackgroundOpacity": "1",
       "eventTypeTextColor": "#FFFFFF",
       "eventTypeTextRgbAnimation": false,
-      "productId": 1,
+      "productId": "1",
       "productImageIndex": "0",
       "showProductPrice": true,
       "showProductPriceInclusiveDiscount": false,
@@ -401,7 +401,7 @@
       "designation": "Forest Theme",
       "description": "Forest with trees and a lake",
       "usage": "Highlights Background",
-      "uploaded": "12.11.2022T21:13",
+      "uploaded": "12-11-2022T21:13",
       "active": true,
       "id": 11
     }

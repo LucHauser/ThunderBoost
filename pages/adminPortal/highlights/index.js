@@ -3,13 +3,15 @@ import highlightManagementStyles from "../../stylesheet/highlightManagement.modu
 import AdminPortalHeader from "@components/AdminPortalNav";
 import {useEffect, useState} from "react";
 import {getAllHighlights} from "@lib/api";
-import {Form, Table} from "react-bootstrap";
+import {AccordionButton, Form, Table} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faPlus, faX} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import HighlightView from "@components/HighlightView";
 import formatTimestamp from "@components/Utils";
+import {Accordion, AccordionItem, AccordionItemPanel} from "react-accessible-accordion";
+import AccordionHeader from "react-bootstrap/AccordionHeader";
 
 export default function HighlightManagementPage({session}) {
 
@@ -26,6 +28,7 @@ export default function HighlightManagementPage({session}) {
     const [allHighlights, setAllHighlights] = useState([])
     const [filteredHighlights, setFilteredHighlights] = useState([])
     const [tableViewMode, setTableViewMode] = useState("")
+    const [openedItem, setOpenedHighlight] = useState(null)
     const [showHighlightView, setShowHighlightView] = useState(false)
     const [selectedHighlight, setSelectedHighlight] = useState({})
     const [productToSelectedHighlight, setProductToSelectedHighlight] = useState({})
@@ -55,54 +58,45 @@ export default function HighlightManagementPage({session}) {
     return (
         <div className={defaultStyles.adminPageWrapper}>
             <AdminPortalHeader session={session} currentPage={2}/>
-            <Table responsive className={defaultStyles.tableContainer}>
-                <thead className={defaultStyles.tableHeader}>
-                    <tr>
-                        <th colSpan={5} className={highlightManagementStyles.filterActions}>
-                            View Mode:&nbsp;
-                            <Form.Select className={highlightManagementStyles.dropdownFilter} onChange={changeViewMode}>
-                                {viewModeOptions.map((opt, index) => {
-                                    return (
-                                        <option key={index} value={index}>{opt}</option>
-                                    )
-                                })}
-                            </Form.Select>
-                        </th>
-                        <th className={highlightManagementStyles.addBtn}>
-                            <button onClick={() => router.push("./highlights/create")}>
-                                <FontAwesomeIcon
-                                    style={{marginRight: 10}}
-                                    icon={faPlus}
-                                    color={"white"}
-                                />
-                                New
-                            </button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>Designation</th>
-                        <th>Description</th>
-                        <th>Created At</th>
-                        <th>Edited</th>
-                        <th>Active</th>
-                        <th>View & Edit</th>
-                    </tr>
-                </thead>
-                <tbody className={defaultStyles.tableBody}>
+            <div className={`${defaultStyles.tableHeader} ${highlightManagementStyles.tableHeader}`}>
+                <div className={highlightManagementStyles.filterActions}>
+                    <p>View Mode:&nbsp;</p>
+                    <Form.Select className={highlightManagementStyles.dropdownFilter} onChange={changeViewMode}>
+                        {viewModeOptions.map((opt, index) => {
+                            return (
+                                <option key={index} value={index}>{opt}</option>
+                            )
+                        })}
+                    </Form.Select>
+                </div>
+                <button className={highlightManagementStyles.addBtn} onClick={() => router.push("./highlights/create")}>
+                    <FontAwesomeIcon
+                        style={{marginRight: 10}}
+                        icon={faPlus}
+                        color={"white"}
+                    />
+                    New
+                </button>
+            </div>
+            Test
+            <Accordion>
                 {allHighlights.map((highlight, index) => {
                     return (
-                        <tr key={index}>
-                            <td>{highlight.designation}</td>
-                            <td>{highlight.description}</td>
-                            <td>{formatTimestamp(highlight.created, "dd.MM.yyyy HH:mm")}</td>
-                            <td>{formatTimestamp(highlight.edited, "dd.MM.yyyy HH:mm")}</td>
-                            <td><FontAwesomeIcon icon={highlight.active ? faCheck : faX}/></td>
-                            <td></td>
-                        </tr>
+                        <AccordionItem key={index}>
+                            <AccordionHeader>
+                                <AccordionButton>
+                                    <p>Hello</p>
+                                </AccordionButton>
+                            </AccordionHeader>
+                            <AccordionItemPanel>
+
+                            </AccordionItemPanel>
+                        </AccordionItem>
                     )
                 })}
-                </tbody>
-            </Table>
+
+            </Accordion>
+
         </div>
     )
 }

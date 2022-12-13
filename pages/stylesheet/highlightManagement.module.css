@@ -9,10 +9,11 @@
 }
 
 .filterActions {
-    text-align: center;
+    display: flex;
     font-size: 20px;
     gap: 15px;
-    height: 40px
+    height: 40px;
+    align-items: center;
 }
 
 .dropdownFilter {
@@ -29,13 +30,6 @@
 }
 
 .addBtn {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    height: 50px;
-}
-
-.addBtn > button {
     height: 40px;
     font-size: 20px;
     font-family: "Nunito", sans-serif;
