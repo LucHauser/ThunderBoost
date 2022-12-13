@@ -4,11 +4,12 @@ import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
 import {createHighlight, getAllImagesByUsage, getAllProducts} from "@lib/api";
 import HighlightView from "@components/HighlightView";
-import {checkIfEndDateIsGreaterThanStartDate, hexToRgba} from "@components/Utils";
+import formatTimestamp, {checkIfEndDateIsGreaterThanStartDate, hexToRgba} from "@components/Utils";
 import FormContext from "react-bootstrap/FormContext";
 import ImageUploadForm from "@components/ImageUploadForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUpload} from "@fortawesome/free-solid-svg-icons";
+import {useRouter} from "next/router";
 
 export default function HighlightForm(session) {
 
@@ -65,7 +66,9 @@ export default function HighlightForm(session) {
         designation: "",
         description: "",
         isDraft: false,
-        archived: false,
+        active: false,
+        created: "",
+        edited: "",
 
         //Event Type
         eventType: "Choose type",
@@ -251,6 +254,8 @@ export default function HighlightForm(session) {
     const [editorBackground, setEditorBackground] = useState("#FFFFFF")
     const [disableEditorBackground, setDisableEditorBackground] = useState(false)
 
+    const router = useRouter()
+
     useEffect(() => {
         const loadProducts = async () => {
             try {
@@ -328,19 +333,24 @@ export default function HighlightForm(session) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoadHighlight(true)
-        if (!model.isDraft) {
+        if (model.isDraft) {
             const result = validateModel(model)
             setErrors(result.errors)
             setLoadHighlight(false)
             return
         } else {
+            model.created = formatTimestamp(new Date().toString(), "dd.MM.yyyyTHH:mm")
             try {
                 await createHighlight(model, session.accessToken)
+                navigateBack()
             } catch (e) {
                 console.log(e)
             }
         }
+    }
 
+    const navigateBack = () => {
+        router.push("../highlights")
     }
 
     return (
@@ -945,57 +955,6 @@ export default function HighlightForm(session) {
                     <h2 className={defaultStyles.formSubtitle}>Highlighting Backgrounding</h2>
                     <div className={defaultStyles.formSubtitleSeparatorLine}/>
 
-                    {/*primaryBackgroundColor, primaryBackgroundColorOpacity, secondaryBackgroundColor, secondaryBackgroundColorOpacity*/}
-                    <Form.Group className={defaultStyles.formGroupSmall}>
-                        <Form.Label className={defaultStyles.formLabelSmall}>Background Colors</Form.Label>
-                        <div className={highlightFormStyles.multiInputsLine}>
-                            <p className={defaultStyles.formSubLabelSmall}>Primary: </p>
-                            <Form.Control
-                                className={`${defaultStyles.formColorPicker}`}
-                                name="primaryBackgroundColor"
-                                onChange={onModelChange}
-                                type="color"
-                                value={model.primaryBackgroundColor}
-                            />
-                            <p className={defaultStyles.formSubLabelSmall}>Opacity:  </p>
-                            <input
-                                className={highlightFormStyles.colorOpacityRange}
-                                style={{
-                                    background: `linear-gradient(to left, ${model.primaryBackgroundColor}, ${hexToRgba(model.primaryBackgroundColor, 0)})`
-                                }}
-                                name="primaryBackgroundColorOpacity"
-                                type="range"
-                                min="0"
-                                max="1"
-                                step="0.01"
-                                onChange={onModelChange}
-                            />
-                        </div>
-                        <div className={highlightFormStyles.multiInputsLine}>
-                            <p className={defaultStyles.formSubLabelSmall}>Secondary: </p>
-                            <Form.Control
-                                className={`${defaultStyles.formColorPicker}`}
-                                name="secondaryBackgroundColor"
-                                type="color"
-                                onChange={onModelChange}
-                                value={model.secondaryBackgroundColor}
-                            />
-                            <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
-                            <input
-                                className={highlightFormStyles.colorOpacityRange}
-                                style={{
-                                    background: `linear-gradient(to left, ${model.secondaryBackgroundColor}, ${hexToRgba(model.secondaryBackgroundColor, 0)})`
-                                }}
-                                name="secondaryBackgroundColorOpacity"
-                                type="range"
-                                min="0"
-                                max="1"
-                                step="0.01"
-                                onChange={onModelChange}
-                            />
-                        </div>
-                    </Form.Group>
-
                     {/*Background Style*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Backgrund Style</Form.Label>
@@ -1011,24 +970,84 @@ export default function HighlightForm(session) {
                         </Form.Select>
                     </Form.Group>
 
+                    {/*primaryBackgroundColor, primaryBackgroundColorOpacity, secondaryBackgroundColor, secondaryBackgroundColorOpacity*/}
+                    {model.backgroundStyle === "0" || model.backgroundStyle === "1" ?
+                        <>
+                            <Form.Group className={defaultStyles.formGroupSmall}>
+                                <Form.Label className={defaultStyles.formLabelSmall}>Background Colors</Form.Label>
+                                <div className={highlightFormStyles.multiInputsLine}>
+                                    <p className={defaultStyles.formSubLabelSmall}>Primary: </p>
+                                    <Form.Control
+                                        className={`${defaultStyles.formColorPicker}`}
+                                        name="primaryBackgroundColor"
+                                        onChange={onModelChange}
+                                        type="color"
+                                        value={model.primaryBackgroundColor}
+                                    />
+                                    <p className={defaultStyles.formSubLabelSmall}>Opacity:  </p>
+                                    <input
+                                        className={highlightFormStyles.colorOpacityRange}
+                                        style={{
+                                            background: `linear-gradient(to left, ${model.primaryBackgroundColor}, ${hexToRgba(model.primaryBackgroundColor, 0)})`
+                                        }}
+                                        name="primaryBackgroundColorOpacity"
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.01"
+                                        onChange={onModelChange}
+                                    />
+                                </div>
+                                {
+                                    model.backgroundStyle === "1" ?
+                                        <>
+                                            <div className={highlightFormStyles.multiInputsLine}>
+                                                <p className={defaultStyles.formSubLabelSmall}>Secondary: </p>
+                                                <Form.Control
+                                                    className={`${defaultStyles.formColorPicker}`}
+                                                    name="secondaryBackgroundColor"
+                                                    type="color"
+                                                    onChange={onModelChange}
+                                                    value={model.secondaryBackgroundColor}
+                                                />
+                                                <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
+                                                <input
+                                                    className={highlightFormStyles.colorOpacityRange}
+                                                    style={{
+                                                        background: `linear-gradient(to left, ${model.secondaryBackgroundColor}, ${hexToRgba(model.secondaryBackgroundColor, 0)})`
+                                                    }}
+                                                    name="secondaryBackgroundColorOpacity"
+                                                    type="range"
+                                                    min="0"
+                                                    max="1"
+                                                    step="0.01"
+                                                    onChange={onModelChange}
+                                                />
+                                            </div>
+                                        </>
+                                    : null
+                                }
+                            </Form.Group>
+                        </> : null
+                    }
                     {/*gradientStyle*/}
                     {
                         model.backgroundStyle === "1" ?
 
-                            <Form.Group className={defaultStyles.formGroupSmall}>
-                                <Form.Label className={defaultStyles.formLabelSmall}>Gradient Style</Form.Label>
-                                <Form.Select
-                                    name="gradientStyle"
-                                    onChange={onModelChange}
-                                    className={defaultStyles.formInputFieldSmall}>
-                                    {gradientBgOptions.map((opt, index) => {
-                                        return (
-                                            <option key={index} value={opt.value}>{opt.text}</option>
-                                        )
-                                    })}
-                                </Form.Select>
-                            </Form.Group>
-                            : <div/>
+                        <Form.Group className={defaultStyles.formGroupSmall}>
+                        <Form.Label className={defaultStyles.formLabelSmall}>Gradient Style</Form.Label>
+                        <Form.Select
+                        name="gradientStyle"
+                        onChange={onModelChange}
+                        className={defaultStyles.formInputFieldSmall}>
+                    {gradientBgOptions.map((opt, index) => {
+                        return (
+                        <option key={index} value={opt.value}>{opt.text}</option>
+                        )
+                    })}
+                        </Form.Select>
+                        </Form.Group>
+                        : <div/>
                     }
 
                     {/*backgroundImg*/}
@@ -1278,7 +1297,7 @@ export default function HighlightForm(session) {
 
 
                     }} type={"submit"} form={"highlight-form"}>Save as Draft</button>
-                    <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `}>Discard</button>
+                    <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => navigateBack()}>Discard</button>
                 </div>
 
             </div>
