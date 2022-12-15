@@ -2,16 +2,21 @@ import defaultStyles from "../../stylesheet/global.module.css"
 import highlightManagementStyles from "../../stylesheet/highlightManagement.module.css"
 import AdminPortalHeader from "@components/AdminPortalNav";
 import {useEffect, useState} from "react";
-import {getAllHighlights} from "@lib/api";
-import {AccordionButton, Form, Table} from "react-bootstrap";
+import {getAllHighlights, getAllHighligtsInclusiveProduct} from "@lib/api";
+import {Form} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faPlus, faX} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faCircle, faPlus, faX} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import HighlightView from "@components/HighlightView";
 import formatTimestamp from "@components/Utils";
-import {Accordion, AccordionItem, AccordionItemPanel} from "react-accessible-accordion";
-import AccordionHeader from "react-bootstrap/AccordionHeader";
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemPanel,
+    AccordionItemButton,
+    AccordionItemHeading
+} from "react-accessible-accordion";
 
 export default function HighlightManagementPage({session}) {
 
@@ -28,7 +33,7 @@ export default function HighlightManagementPage({session}) {
     const [allHighlights, setAllHighlights] = useState([])
     const [filteredHighlights, setFilteredHighlights] = useState([])
     const [tableViewMode, setTableViewMode] = useState("")
-    const [openedItem, setOpenedHighlight] = useState(null)
+    const [collapsedItem, setCollapsedItem] = useState(null)
     const [showHighlightView, setShowHighlightView] = useState(false)
     const [selectedHighlight, setSelectedHighlight] = useState({})
     const [productToSelectedHighlight, setProductToSelectedHighlight] = useState({})
@@ -38,7 +43,7 @@ export default function HighlightManagementPage({session}) {
     useEffect(() => {
         const loadHighlights = async () => {
             try {
-                const highlights = await getAllHighlights()
+                const highlights = await getAllHighligtsInclusiveProduct()
                 setAllHighlights(highlights)
             } catch (e) {
                 console.log(e)
@@ -51,7 +56,10 @@ export default function HighlightManagementPage({session}) {
         setTableViewMode(e.target.value)
     }
 
-    const createHighlight = () => {
+    const collapseItem = (index) => {
+        setCollapsedItem(index)
+    }
+    function HighlightStatusText({dateFrom, dateUntil}) {
 
     }
 
@@ -78,23 +86,21 @@ export default function HighlightManagementPage({session}) {
                     New
                 </button>
             </div>
-            Test
-            <Accordion>
-                {allHighlights.map((highlight, index) => {
+            <Accordion className={highlightManagementStyles.accordionContainer}>
+                { allHighlights.map((highlight, index) => {
                     return (
-                        <AccordionItem key={index}>
-                            <AccordionHeader>
-                                <AccordionButton>
-                                    <p>Hello</p>
-                                </AccordionButton>
-                            </AccordionHeader>
-                            <AccordionItemPanel>
+                        <AccordionItem key={index} eventKey={highlight.id} className={highlightManagementStyles.accordionItem}>
+                            <AccordionItemHeading>
+                                <AccordionItemButton className={highlightManagementStyles.accordionListElement}>
+                                    {highlight.designation}
+                                </AccordionItemButton>
+                            </AccordionItemHeading>
+                            <AccordionItemPanel className={highlightManagementStyles.accordionPanel}>
 
                             </AccordionItemPanel>
                         </AccordionItem>
                     )
                 })}
-
             </Accordion>
 
         </div>

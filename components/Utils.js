@@ -85,6 +85,26 @@ export function checkIfProductIsNowDiscount(start, end, active) {
     }
 }
 
+export function checkIfEventIsNowBetweenStartTime(start, end) {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    const now = new Date()
+    return startDate <= now && endDate >= now
+}
+
+export function checkIfNowIsPendingBeforeStart(start) {
+    const startDate = new Date(start)
+    const now = new Date()
+    return now <= startDate
+}
+
+export function checkIfNowHasEndedAnEvent(start, end) {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    const now = new Date()
+    return startDate <= now && endDate <= now
+}
+
 export function checkIfEndDateIsGreaterThanStartDate(start, end) {
     const startDate = new Date(start)
     const endDate = new Date(end)

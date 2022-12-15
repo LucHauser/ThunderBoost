@@ -1,4 +1,11 @@
 import {useEffect, useReducer, useState} from "react";
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemButton,
+    AccordionItemHeading,
+    AccordionItemPanel
+} from "react-accessible-accordion";
 
 export default function Sandbox() {
 
@@ -39,6 +46,33 @@ export default function Sandbox() {
             <input onChange={e => setInput(e.target.value)}/>
             <p style={{color: "#FFFFFF"}}>{input}</p>
             <OutputInComp prop={input}/>
+            <div style={{height: 200}}/>
+            <Accordion>
+                <AccordionItem style={{background: "#FF00FF"}}>
+                    <AccordionItemHeading>
+                        <AccordionItemButton>Accordion 1</AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel style={{background: "#FF0000"}}>
+                        Content in Panel 1
+                    </AccordionItemPanel>
+                </AccordionItem>
+                <AccordionItem style={{background: "#FF00FF"}}>
+                    <AccordionItemHeading>
+                        <AccordionItemButton>Accordion 1</AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel style={{background: "#FF0000"}}>
+                        Content in Panel 1
+                    </AccordionItemPanel>
+                </AccordionItem>
+                <AccordionItem style={{background: "#FF00FF"}}>
+                    <AccordionItemHeading>
+                        <AccordionItemButton>Accordion 1</AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel style={{background: "#FF0000"}}>
+                        Content in Panel 1
+                    </AccordionItemPanel>
+                </AccordionItem>
+            </Accordion>
         </>
     )
 }
