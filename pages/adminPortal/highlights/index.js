@@ -9,7 +9,7 @@ import {faCheck, faCircle, faPlus, faX} from "@fortawesome/free-solid-svg-icons"
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import HighlightView from "@components/HighlightView";
-import formatTimestamp from "@components/Utils";
+import formatTimestamp, {checkIfEventIsNowBetweenStartTime} from "@components/Utils";
 import {
     Accordion,
     AccordionItem,
@@ -86,23 +86,41 @@ export default function HighlightManagementPage({session}) {
                     New
                 </button>
             </div>
-            <Accordion className={highlightManagementStyles.accordionContainer}>
-                { allHighlights.map((highlight, index) => {
-                    return (
-                        <AccordionItem key={index} eventKey={highlight.id} className={highlightManagementStyles.accordionItem}>
-                            <AccordionItemHeading>
-                                <AccordionItemButton className={highlightManagementStyles.accordionListElement}>
-                                    {highlight.designation}
+            <Accordion allowZeroExpanded={true}>
+                {
+                    allHighlights.map((highlight, index) => (
+                        <AccordionItem key={index} className={highlightManagementStyles.accordionItem}>
+                            <AccordionItemHeading className={highlightManagementStyles.accordionItemHeading}>
+                                <AccordionItemButton className={highlightManagementStyles.accordionItemButton}>
+                                    <p>{highlight.designation}</p>
+                                    <div>
+                                        {
+                                            !highlight.isDraft ?
+                                                <>
+                                                    <p>Active: </p>
+                                                    <FontAwesomeIcon
+                                                        icon={faCircle}
+                                                        color={
+                                                            highlight.isActive ? "#6aa84f" : "#cc0000"
+                                                        }
+                                                    />
+                                                    <p>On Air: </p>
+                                                    <FontAwesomeIcon
+                                                        icon={faCircle}
+                                                        color={checkIfEventIsNowBetweenStartTime(highlight.dateFrom, highlight.dateUntil) ? "green" : "red"}
+                                                    />
+                                                </> : <p className={highlightManagementStyles.draftHighlightText}>Draft</p>
+                                        }
+                                    </div>
                                 </AccordionItemButton>
                             </AccordionItemHeading>
-                            <AccordionItemPanel className={highlightManagementStyles.accordionPanel}>
-
+                            <AccordionItemPanel>
+                                <p>{highlight.description}</p>
                             </AccordionItemPanel>
                         </AccordionItem>
-                    )
-                })}
+                    ))
+                }
             </Accordion>
-
         </div>
     )
 }
