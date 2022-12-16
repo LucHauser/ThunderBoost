@@ -6,7 +6,9 @@ import {getAllHighlights, getAllHighligtsInclusiveProduct} from "@lib/api";
 import {Form} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faCheck,
+    faCaretDown,
+    faCaretUp,
+    faCheck, faChevronDown, faChevronUp,
     faCircle,
     faCopy,
     faEye,
@@ -101,7 +103,7 @@ export default function HighlightManagementPage({session}) {
                     allHighlights.map((highlight, index) => (
                         <AccordionItem key={index} className={highlightManagementStyles.accordionItem}>
                             <AccordionItemHeading className={highlightManagementStyles.accordionItemHeading}>
-                                <AccordionItemButton className={highlightManagementStyles.accordionItemButton}>
+                                <AccordionItemButton className={highlightManagementStyles.accordionItemButton} onClick={() => collapseItem(index)}>
                                     <p>{highlight.designation}</p>
                                     <div>
                                         {
@@ -121,6 +123,7 @@ export default function HighlightManagementPage({session}) {
                                                     />
                                                 </> : <p className={highlightManagementStyles.draftHighlightText}>Draft</p>
                                         }
+                                        <FontAwesomeIcon icon={collapsedItem === index ? faChevronUp : faChevronDown} color={"white"}/>
                                     </div>
                                 </AccordionItemButton>
                             </AccordionItemHeading>
@@ -150,7 +153,7 @@ export default function HighlightManagementPage({session}) {
                                             }
                                             <tr>
                                                 <th>Attached Product:</th>
-                                                <td>{highlight.product.name}</td>
+                                                <td>{highlight?.product?.name ? highlight.product.name : "-"}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -173,7 +176,7 @@ export default function HighlightManagementPage({session}) {
                                             <FontAwesomeIcon icon={faCopy} color={"black"} style={{marginRight: 5}}/>
                                             Create Copy
                                         </button>
-                                        <button>
+                                        <button className={`${defaultStyles.buttonRed} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilled}`}>
                                             <FontAwesomeIcon icon={faTrash} color={"white"} style={{marginRight: 5}}/>
                                             Delete
                                         </button>

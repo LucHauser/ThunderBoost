@@ -352,7 +352,7 @@ export default function HighlightForm(session) {
         if (modelToFetch.eventType === "Choose type") {
             modelToFetch.eventType = "unknown"
         }
-        modelToFetch.productId = 1
+        modelToFetch.productId = 0
         modelToFetch.isDraft = true
         fetchHighlight(modelToFetch)
     }
