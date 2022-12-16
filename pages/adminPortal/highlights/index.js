@@ -5,7 +5,17 @@ import {useEffect, useState} from "react";
 import {getAllHighlights, getAllHighligtsInclusiveProduct} from "@lib/api";
 import {Form} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faCircle, faPlus, faX} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCheck,
+    faCircle,
+    faCopy,
+    faEye,
+    faLock,
+    faLockOpen,
+    faPencil,
+    faPlus, faTrash,
+    faX
+} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import HighlightView from "@components/HighlightView";
@@ -101,7 +111,7 @@ export default function HighlightManagementPage({session}) {
                                                     <FontAwesomeIcon
                                                         icon={faCircle}
                                                         color={
-                                                            highlight.isActive ? "#6aa84f" : "#cc0000"
+                                                            highlight.active ? "#6aa84f" : "#cc0000"
                                                         }
                                                     />
                                                     <p>On Air: </p>
@@ -115,7 +125,60 @@ export default function HighlightManagementPage({session}) {
                                 </AccordionItemButton>
                             </AccordionItemHeading>
                             <AccordionItemPanel>
-                                <p>{highlight.description}</p>
+                                <div className={highlightManagementStyles.accordionPanel}>
+                                    <div>
+                                        <h3>Information</h3>
+                                        <table className={highlightManagementStyles.highlightInformation}>
+                                            <tr>
+                                                <th>Description:</th>
+                                                <td>{highlight.description}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Event Type:</th>
+                                                <td>{highlight.eventType}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Created:</th>
+                                                <td>{formatTimestamp(highlight.created, "dd.MMMM.yyyy HH:mm")}</td>
+                                            </tr>
+                                            {
+                                                highlight.edited ?
+                                                    <tr>
+                                                        <th>Edited:</th>
+                                                        <td>{formatTimestamp(highlight.edited, "dd.MMMM.yyyy HH.mm")}</td>
+                                                    </tr> : null
+                                            }
+                                            <tr>
+                                                <th>Attached Product:</th>
+                                                <td>{highlight.product.name}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div className={highlightManagementStyles.buttonSection}>
+                                        <h3>Edit & View</h3>
+                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+                                            <FontAwesomeIcon icon={faEye} color={"black"} style={{marginRight: 5}}/>
+                                            View
+                                        </button>
+                                        <div className={highlightManagementStyles.buttonGroup}>
+                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+                                                <FontAwesomeIcon icon={faPencil} color={"black"} style={{marginRight: 5}}/>
+                                                Edit
+                                            </button>
+                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${highlight.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}>
+                                                <FontAwesomeIcon icon={highlight.active ? faLockOpen : faLock} color={"white"}/>
+                                            </button>
+                                        </div>
+                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+                                            <FontAwesomeIcon icon={faCopy} color={"black"} style={{marginRight: 5}}/>
+                                            Create Copy
+                                        </button>
+                                        <button>
+                                            <FontAwesomeIcon icon={faTrash} color={"white"} style={{marginRight: 5}}/>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
                             </AccordionItemPanel>
                         </AccordionItem>
                     ))

@@ -422,11 +422,7 @@ export default function ProductManagementPage({session}) {
                                                     </button>
                                                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${product.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}
                                                             onClick={() => handleProductActivation(product)}>
-                                                        {
-                                                            product.active ?
-                                                                <><FontAwesomeIcon icon={faLockOpen}/></>
-                                                                : <><FontAwesomeIcon icon={faLock}/></>
-                                                        }
+                                                        <FontAwesomeIcon icon={product.active ? faLockOpen : faLock}/>
                                                     </button>
                                                 </div>
 

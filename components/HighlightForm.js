@@ -2,10 +2,9 @@ import {Form, FormGroup} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
-import {createHighlight, getAllImagesByUsage, getAllProducts} from "@lib/api";
+import {createHighlight, getAllImagesByUsage, getAllProducts, updateHighlight} from "@lib/api";
 import HighlightView from "@components/HighlightView";
 import formatTimestamp, {checkIfEndDateIsGreaterThanStartDate, hexToRgba} from "@components/Utils";
-import FormContext from "react-bootstrap/FormContext";
 import ImageUploadForm from "@components/ImageUploadForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUpload} from "@fortawesome/free-solid-svg-icons";
@@ -253,6 +252,7 @@ export default function HighlightForm(session) {
     const [productForPresentation, setProductForPresentation] = useState(null)
     const [editorBackground, setEditorBackground] = useState("#FFFFFF")
     const [disableEditorBackground, setDisableEditorBackground] = useState(false)
+    const [showCreateDraftDialog, setShowCreateDraftDialog] = useState(false)
 
     const router = useRouter()
 
@@ -330,16 +330,44 @@ export default function HighlightForm(session) {
         })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         setLoadHighlight(true)
-        if (model.isDraft) {
-            const result = validateModel(model)
+        const result = validateModel(model)
+        if (!result.isValid) {
             setErrors(result.errors)
             setLoadHighlight(false)
+            setShowCreateDraftDialog(true)
             return
         } else {
-            model.created = formatTimestamp(new Date().toString(), "dd.MM.yyyyTHH:mm")
+            fetchHighlight(model)
+        }
+    }
+
+    const handleSaveHighlightAsDraft = () => {
+        let modelToFetch = model
+        if (modelToFetch.designation.trim().length === 0) {
+            modelToFetch.designation = "Draft --- New Highlight --- Draft"
+        }
+        if (modelToFetch.eventType === "Choose type") {
+            modelToFetch.eventType = "unknown"
+        }
+        modelToFetch.productId = 1
+        modelToFetch.isDraft = true
+        fetchHighlight(modelToFetch)
+    }
+
+    const fetchHighlight = async (model) => {
+        if (model.id) {
+            model.edited = formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")
+            try {
+                await updateHighlight(model, session.accessToken)
+                navigateBack()
+            } catch (e) {
+                console.log(e)
+            }
+        } else {
+            model.created = formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")
             try {
                 await createHighlight(model, session.accessToken)
                 navigateBack()
@@ -373,6 +401,7 @@ export default function HighlightForm(session) {
                             onChange={onModelChange}
                             name={"designation"}
                         />
+                        {errors.designation && <p>{errors.designation}</p>}
                     </Form.Group>
                     {/*description*/}
                     <Form.Group className={defaultStyles.formGroupSmall}>
@@ -382,6 +411,7 @@ export default function HighlightForm(session) {
                             onChange={onModelChange}
                             name={"description"}
                         />
+                        {errors.description && <p>{errors.description}</p>}
                     </Form.Group>
 
                     <h2 className={defaultStyles.formSubtitle}>Event type</h2>
@@ -411,12 +441,19 @@ export default function HighlightForm(session) {
                                 name="enableCustomEventType"
                             />
                         </div>
+                        {errors.eventType && <p>{errors.eventType}</p>}
                     </Form.Group>
 
                     {/*customEventTypeText*/}
                     <Form.Group className={defaultStyles.formGroupSmall} style={{display: !model.enableCustomEventType ? "none": null}}>
                         <Form.Label className={defaultStyles.formLabelSmall}>Custom Event Type Text</Form.Label>
-                        <Form.Control className={defaultStyles.formInputFieldSmall} onChange={onModelChange} name="customEventTypeText" placeholder="Enter a custom text"/>
+                        <Form.Control
+                            className={defaultStyles.formInputFieldSmall}
+                            onChange={onModelChange}
+                            name="customEventTypeText"
+                            placeholder="Enter a custom text"
+                        />
+                        {errors.customEventTypeText && <p>{errors.customEventTypeText}</p>}
                     </Form.Group>
 
                     {/*eventTypeBackground, eventTypeBackgroundOpacity*/}
@@ -481,6 +518,7 @@ export default function HighlightForm(session) {
                                 })
                             }
                         </Form.Select>
+                        {errors.productId && <p>{errors.productId}</p>}
                     </Form.Group>
 
                     { model.productId ?
@@ -633,6 +671,7 @@ export default function HighlightForm(session) {
                             name="dateFrom"
                             className={defaultStyles.formInputFieldSmall}
                         />
+                        {errors.dateFrom && <p>{errors.dateFrom}</p>}
                     </Form.Group>
 
                     {/*dateUntil*/}
@@ -645,6 +684,7 @@ export default function HighlightForm(session) {
                             onChange={onModelChange}
                             placeholder="End date for highlight end"
                         />
+                        {errors.dateUntil && <p>{errors.dateUntil}</p>}
                     </Form.Group>
 
                     {/*showDateUntil, additionalUntilText, dateUntilColor, dateUntilBackground, dateUntilBackgroundOpacity, runningCountdown*/}
@@ -681,6 +721,7 @@ export default function HighlightForm(session) {
                                                 onChange={onModelChange}
                                             />
                                         </div>
+                                        {errors.additionalUntilText && <p>{errors.additionalUntilText}</p>}
                                     </FormGroup>
 
                                     {/*dateUntilBackground, dateUntilBackgroundOpacity*/}
@@ -740,6 +781,7 @@ export default function HighlightForm(session) {
                             onChange={onModelChange}
                             placeholder="Give your Highlight a title"
                         />
+                        {errors.title && <p>{errors.title}</p>}
                     </Form.Group>
 
                     {/*titleFontFamily, titleColor*/}
@@ -853,6 +895,7 @@ export default function HighlightForm(session) {
                             placeholder={"Tell something about this Highlight"}
                             name="text"
                         />
+                        {errors.text && <p>{errors.text}</p>}
                     </Form.Group>
 
                     {/*textFontFamily, textColor*/}
@@ -1071,7 +1114,7 @@ export default function HighlightForm(session) {
                                         <FontAwesomeIcon icon={faUpload}/>
                                     </button>
                                 </div>
-
+                                {errors.backgroundImg && <p>{errors.backgroundImg}</p>}
                             </Form.Group>
                             : <div/>
                     }
@@ -1164,6 +1207,7 @@ export default function HighlightForm(session) {
                                 value={model.buttonToProductTextColor}
                             />
                         </div>
+                        {errors.buttonToProductText && <p>{errors.buttonToProductText}</p>}
                     </Form.Group>
 
                     {/*buttonToProductBackground, buttonToProductBackgroundOpacity*/}
@@ -1289,24 +1333,30 @@ export default function HighlightForm(session) {
                 </div>
                 <div className={highlightFormStyles.buttonGroup}>
                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"} form={"highlight-form"}>Save Highlight</button>
-                    <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => {
-                        setModel({
-                            ...model,
-                            isDraft: true
-                        })
-
-
-                    }} type={"submit"} form={"highlight-form"}>Save as Draft</button>
+                    <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>
                     <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => navigateBack()}>Discard</button>
                 </div>
 
             </div>
             {showImageUploaderDialog ?
-                <div className={highlightFormStyles.imageUploadDialog}>
+                <div className={highlightFormStyles.dialog}>
                     <div>
                         <ImageUploadForm session={session} staticImageUsage={"Highlights Background"} onDialogMode={true} toggleDialog={() => setShowImageUploaderDialog(false)} onImageUploaded={(newImage) => setBackgroundImages(backgroundImages => [...backgroundImages, newImage])}/>
                     </div>
 
+                </div> : null
+            }
+
+            {showCreateDraftDialog ?
+                <div className={highlightFormStyles.dialog}>
+                    <div className={highlightFormStyles.saveAsDraftDialog}>
+                        <h3>Inputs are not valid!</h3>
+                        <p>Do you want save the Highlight as Draft?</p>
+                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>
+                            <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => setShowCreateDraftDialog(false)}>Cancel</button>
+                        </div>
+                    </div>
                 </div> : null
             }
 

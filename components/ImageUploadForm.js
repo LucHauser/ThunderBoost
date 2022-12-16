@@ -152,7 +152,7 @@ export default function ImageUploadForm({session, onImageUploaded, onDialogMode,
         if (!base64Image) return
         model.img = await uploadImageToPublic(base64Image)
         if (model.uploaded === "") {
-            model.uploaded = formatTimestamp(new Date().toString(), "dd.MM.yyyyTHH:mm")
+            model.uploaded = formatTimestamp(new Date().toString(), "yyyy-MM-ddTHH:mm")
         }
         try {
             const response = await uploadImageData(model, session.accessToken)

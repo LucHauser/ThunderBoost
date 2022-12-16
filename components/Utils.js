@@ -30,8 +30,8 @@ export default function formatTimestamp(timeToConvert, format) {
         case "dd.MMMM.yyyy HH:mm":
             converted = `${getMonthDay(date)}. ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${minuteFormat(date.getMinutes())}`
             break
-        case "dd.MM.yyyyTHH:mm":
-            converted = `${getMonthDay(date)}. ${months[date.getMonth()]} ${date.getFullYear()}T${date.getHours()}:${minuteFormat(date.getMinutes())}`
+        case "yyyy-MM-ddTHH:mm":
+            converted = `${date.getFullYear()}-${date.getMonth()}-${getMonthDay(date)}T${date.getHours()}:${minuteFormat(date.getMinutes())}`
             break
         case "HH.mm":
             converted = `${date.getHours()}:${date.getMinutes()}`
