@@ -2,7 +2,7 @@ import defaultStyles from "../../stylesheet/global.module.css"
 import highlightManagementStyles from "../../stylesheet/highlightManagement.module.css"
 import AdminPortalHeader from "@components/AdminPortalNav";
 import {useEffect, useState} from "react";
-import {getAllHighlights, getAllHighligtsInclusiveProduct} from "@lib/api";
+import {deleteHighlight, getAllHighlights, getAllHighligtsInclusiveProduct, updateHighlight} from "@lib/api";
 import {Form} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
@@ -29,6 +29,7 @@ import {
     AccordionItemButton,
     AccordionItemHeading
 } from "react-accessible-accordion";
+import CloneHighlightDialog from "@components/CloneHighlightForm";
 
 export default function HighlightManagementPage({session}) {
 
@@ -45,8 +46,9 @@ export default function HighlightManagementPage({session}) {
     const [allHighlights, setAllHighlights] = useState([])
     const [filteredHighlights, setFilteredHighlights] = useState([])
     const [tableViewMode, setTableViewMode] = useState("")
-    const [collapsedItem, setCollapsedItem] = useState(null)
+    const [collapsedItem, setCollapsedItem] = useState("")
     const [showHighlightView, setShowHighlightView] = useState(false)
+    const [showCloneHighlightDialog, setShowCloneHighlightDialog] = useState(false)
     const [selectedHighlight, setSelectedHighlight] = useState({})
     const [productToSelectedHighlight, setProductToSelectedHighlight] = useState({})
 
@@ -68,9 +70,46 @@ export default function HighlightManagementPage({session}) {
         setTableViewMode(e.target.value)
     }
 
-    const collapseItem = (index) => {
-        setCollapsedItem(index)
+    function openHighlightView(id) {
+        const highlightToSelect = allHighlights.filter(h => h.id === id)[0]
+        setProductToSelectedHighlight(highlightToSelect?.product)
+        delete highlightToSelect?.product
+        setSelectedHighlight(highlightToSelect)
+        setShowHighlightView(true)
     }
+
+    function cloneHighlight(id) {
+        const highlightToSelect = allHighlights.filter(h => h.id === id)[0]
+        setSelectedHighlight(highlightToSelect)
+        setShowCloneHighlightDialog(true)
+    }
+
+    const handleActivateHighlight = async (highlight) => {
+        const relatedProduct = highlight?.product
+        highlight.active = !highlight.active;
+        delete highlight?.product
+        try {
+            const updatedHighlight = await updateHighlight(highlight, session.accessToken)
+            updatedHighlight.product = relatedProduct
+            setAllHighlights(allHighlights => {
+                return allHighlights.map(h => {
+                    if (h.id === updatedHighlight.id) {
+                        return {...h, ...updatedHighlight}
+                    } else {
+                        return h
+                    }
+                })
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const handleDeleteHighlight = async (id) => {
+        await deleteHighlight(id, session.accessToken)
+        setAllHighlights((prevState) => prevState.filter(h => h.id !== id))
+    }
+
     function HighlightStatusText({dateFrom, dateUntil}) {
 
     }
@@ -103,7 +142,7 @@ export default function HighlightManagementPage({session}) {
                     allHighlights.map((highlight, index) => (
                         <AccordionItem key={index} className={highlightManagementStyles.accordionItem}>
                             <AccordionItemHeading className={highlightManagementStyles.accordionItemHeading}>
-                                <AccordionItemButton className={highlightManagementStyles.accordionItemButton} onClick={() => collapseItem(index)}>
+                                <AccordionItemButton className={highlightManagementStyles.accordionItemButton} onClick={() => setCollapsedItem(highlight.id)}>
                                     <p>{highlight.designation}</p>
                                     <div>
                                         {
@@ -123,7 +162,6 @@ export default function HighlightManagementPage({session}) {
                                                     />
                                                 </> : <p className={highlightManagementStyles.draftHighlightText}>Draft</p>
                                         }
-                                        <FontAwesomeIcon icon={collapsedItem === index ? faChevronUp : faChevronDown} color={"white"}/>
                                     </div>
                                 </AccordionItemButton>
                             </AccordionItemHeading>
@@ -152,31 +190,31 @@ export default function HighlightManagementPage({session}) {
                                                     </tr> : null
                                             }
                                             <tr>
-                                                <th>Attached Product:</th>
+                                                <th>Related Product:</th>
                                                 <td>{highlight?.product?.name ? highlight.product.name : "-"}</td>
                                             </tr>
                                         </table>
                                     </div>
                                     <div className={highlightManagementStyles.buttonSection}>
                                         <h3>Edit & View</h3>
-                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => openHighlightView(highlight.id)}>
                                             <FontAwesomeIcon icon={faEye} color={"black"} style={{marginRight: 5}}/>
                                             View
                                         </button>
                                         <div className={highlightManagementStyles.buttonGroup}>
-                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => router.push(`./highlights/${highlight.id}/edit`)}>
                                                 <FontAwesomeIcon icon={faPencil} color={"black"} style={{marginRight: 5}}/>
                                                 Edit
                                             </button>
-                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${highlight.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`}>
+                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${highlight.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`} onClick={() => handleActivateHighlight(highlight)}>
                                                 <FontAwesomeIcon icon={highlight.active ? faLockOpen : faLock} color={"white"}/>
                                             </button>
                                         </div>
-                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>
+                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => cloneHighlight(highlight.id)}>
                                             <FontAwesomeIcon icon={faCopy} color={"black"} style={{marginRight: 5}}/>
                                             Create Copy
                                         </button>
-                                        <button className={`${defaultStyles.buttonRed} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilled}`}>
+                                        <button className={`${defaultStyles.buttonRed} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilled}`} onClick={() => handleDeleteHighlight(highlight.id)}>
                                             <FontAwesomeIcon icon={faTrash} color={"white"} style={{marginRight: 5}}/>
                                             Delete
                                         </button>
@@ -187,6 +225,26 @@ export default function HighlightManagementPage({session}) {
                     ))
                 }
             </Accordion>
+            {
+                showHighlightView ?
+                    <div className={highlightManagementStyles.dialog}>
+                        <div className={highlightManagementStyles.highlightView}>
+                            <HighlightView editorViewMode={true} presentingProduct={productToSelectedHighlight} prop={selectedHighlight}/>
+                        </div>
+                        <button className={highlightManagementStyles.closeDialogBtn} onClick={() => setShowHighlightView(false)}>
+                            <FontAwesomeIcon icon={faX} color={"white"} size={"2xl"}/>
+                        </button>
+                    </div> : null
+            }
+            {
+                showCloneHighlightDialog ?
+                    <div className={highlightManagementStyles.dialog}>
+                        <div className={highlightManagementStyles.highlightCloneForm}>
+                            <CloneHighlightDialog session={session} highlightToClone={selectedHighlight}/>
+                        </div>
+                    </div> : null
+            }
+
         </div>
     )
 }

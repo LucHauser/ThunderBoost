@@ -64,6 +64,10 @@
     gap: 10px
 }
 
+.accordionItemButton:focus {
+    outline: none;
+}
+
 .draftHighlightText {
     height: 30px;
     background: #8DF3E8;
@@ -98,4 +102,38 @@
 .buttonGroup {
     display: flex;
     gap: 5px
+}
+
+.dialog {
+    width: 100%;
+    height: 100vh;
+    background: rgba(20, 49, 140, 0.32);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.highlightCloneForm {
+    width: 500px;
+    height: 80%
+}
+
+.highlightView {
+    width: 80%;
+    height: 80%;
+}
+
+.closeDialogBtn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    background: transparent;
+    color: #FFFFFF;
+    outline: none;
+    border: none
 }

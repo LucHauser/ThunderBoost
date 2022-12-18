@@ -3,9 +3,9 @@
 export const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 export function hexToRgba(hex, alpha) {
-    let r = parseInt(hex.slice(1, 3), 16),
-        g = parseInt(hex.slice(3, 5), 16),
-        b = parseInt(hex.slice(5, 7), 16)
+    let r = parseInt(hex?.slice(1, 3), 16),
+        g = parseInt(hex?.slice(3, 5), 16),
+        b = parseInt(hex?.slice(5, 7), 16)
     if (alpha) {
         return `rgba(${r}, ${g}, ${b}, ${alpha})`
     } else {

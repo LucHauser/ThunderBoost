@@ -1,0 +1,17 @@
+.dialogWrapper {
+    display: grid;
+    gap: 10px;
+    background: #060525;
+    border: solid 2px #8DF3E8;
+    border-radius: 6px;
+    padding: 10px
+}
+
+.form {
+    display: grid;
+    gap: 5px
+}
+
+.buttonGroup {
+
+}
