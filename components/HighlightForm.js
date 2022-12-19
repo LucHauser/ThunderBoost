@@ -4,7 +4,11 @@ import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useState} from "react";
 import {createHighlight, getAllImagesByUsage, getAllProducts, updateHighlight} from "@lib/api";
 import HighlightView from "@components/HighlightView";
-import formatTimestamp, {checkIfEndDateIsGreaterThanStartDate, hexToRgba} from "@components/Utils";
+import formatTimestamp, {
+    checkIfDate1IsGreaterThanDate2,
+    checkIfEndDateIsGreaterThanStartDate,
+    hexToRgba
+} from "@components/Utils";
 import ImageUploadForm from "@components/ImageUploadForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUpload} from "@fortawesome/free-solid-svg-icons";
@@ -201,12 +205,12 @@ export default function HighlightForm({session, highlightToEdit}) {
                 isValid = false
             }
         }
-        if (model.productId === null) {
+        if (model.productId === 0) {
             errors.productId = "Please select a product"
             isValid = false
         }
         if (model.dateFrom && model.dateUntil) {
-            if (checkIfEndDateIsGreaterThanStartDate(model.dateFrom, model.dateUntil)) {
+            if (checkIfDate1IsGreaterThanDate2(model.dateFrom, model.dateUntil)) {
                 errors.dateUntil = "End Date cannot be greater than start date"
                 isValid = false
             }

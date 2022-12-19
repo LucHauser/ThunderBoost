@@ -111,6 +111,18 @@ export function checkIfEndDateIsGreaterThanStartDate(start, end) {
     return endDate > startDate
 }
 
+export function checkIfDate1IsLowerThanDate2(date1, date2) {
+    const date_1 = new Date(date1)
+    const date_2 = new Date(date2)
+    return date_1 > date_2
+}
+
+export function checkIfDate1IsGreaterThanDate2(date1, date2) {
+    const date_1 = new Date(date1)
+    const date_2 = new Date(date2)
+    return date_1 < date_2
+}
+
 export function getDate(date) {
     return new Date(date).toString()
 }

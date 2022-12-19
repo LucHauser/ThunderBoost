@@ -198,6 +198,7 @@
 .buttonSm {
     height: 30px;
     font-size: 15px;
+    font-family: Nunito, sans-serif;
 }
 
 .buttonRed {
@@ -222,7 +223,7 @@
     border: solid #FFFFFF 2px;
     border-radius: 6px;
     padding: 0 15px;
-    font-family: Arial, sans-serif;
+    font-family: Nunito, sans-serif;
     font-size: 20px;
     color: #FFFFFF;
 }

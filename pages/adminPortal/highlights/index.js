@@ -6,6 +6,7 @@ import {deleteHighlight, getAllHighlights, getAllHighligtsInclusiveProduct, upda
 import {Form} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
+    faCalendarCheck, faCalendarXmark,
     faCaretDown,
     faCaretUp,
     faCheck, faChevronDown, faChevronUp,
@@ -14,8 +15,8 @@ import {
     faEye,
     faLock,
     faLockOpen,
-    faPencil,
-    faPlus, faTrash,
+    faPencil, faPenToSquare,
+    faPlus, faSquarePlus, faT, faTag, faTrash, faWineBottle,
     faX
 } from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
@@ -80,8 +81,18 @@ export default function HighlightManagementPage({session}) {
 
     function cloneHighlight(id) {
         const highlightToSelect = allHighlights.filter(h => h.id === id)[0]
+        setProductToSelectedHighlight(highlightToSelect?.product)
+        console.log(highlightToSelect)
         setSelectedHighlight(highlightToSelect)
         setShowCloneHighlightDialog(true)
+    }
+
+    function addNewCloneToState(newHighlight, navigateToEditAfterClone) {
+        newHighlight.product = productToSelectedHighlight
+        setAllHighlights(allHighlights => [...allHighlights, newHighlight])
+        if (navigateToEditAfterClone) {
+            router.push(`./highlights/${newHighlight.id}/edit`)
+        }
     }
 
     const handleActivateHighlight = async (highlight) => {
@@ -171,28 +182,49 @@ export default function HighlightManagementPage({session}) {
                                         <h3>Information</h3>
                                         <table className={highlightManagementStyles.highlightInformation}>
                                             <tr>
+                                                <th><FontAwesomeIcon icon={faT}/>&nbsp;&nbsp;&nbsp;</th>
                                                 <th>Description:</th>
                                                 <td>{highlight.description}</td>
                                             </tr>
                                             <tr>
+                                                <th><FontAwesomeIcon icon={faTag}/></th>
                                                 <th>Event Type:</th>
                                                 <td>{highlight.eventType}</td>
                                             </tr>
                                             <tr>
+                                                <th><FontAwesomeIcon icon={faSquarePlus}/></th>
                                                 <th>Created:</th>
                                                 <td>{formatTimestamp(highlight.created, "dd.MMMM.yyyy HH:mm")}</td>
                                             </tr>
                                             {
                                                 highlight.edited ?
                                                     <tr>
+                                                        <th><FontAwesomeIcon icon={faPenToSquare}/></th>
                                                         <th>Edited:</th>
                                                         <td>{formatTimestamp(highlight.edited, "dd.MMMM.yyyy HH.mm")}</td>
                                                     </tr> : null
                                             }
                                             <tr>
+                                                <th><FontAwesomeIcon icon={faWineBottle}/></th>
                                                 <th>Related Product:</th>
                                                 <td>{highlight?.product?.name ? highlight.product.name : "-"}</td>
                                             </tr>
+                                            {
+                                                highlight.dateFrom && highlight.dateUntil ? <>
+                                                    <th colSpan={3}>Presentation start and end</th>
+                                                    <tr>
+                                                        <th><FontAwesomeIcon icon={faCalendarCheck}/></th>
+                                                        <th>Start</th>
+                                                        <td>{formatTimestamp(highlight.dateFrom, "dd.MMMM.yyyy HH:mm")}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><FontAwesomeIcon icon={faCalendarXmark}/></th>
+                                                        <th>End</th>
+                                                        <td>{formatTimestamp(highlight.dateUntil, "dd.MMMM.yyyy HH:mm")}</td>
+                                                    </tr>
+                                                </> : null
+                                            }
+
                                         </table>
                                     </div>
                                     <div className={highlightManagementStyles.buttonSection}>
@@ -227,20 +259,23 @@ export default function HighlightManagementPage({session}) {
             </Accordion>
             {
                 showHighlightView ?
-                    <div className={highlightManagementStyles.dialog}>
+                    <div className={highlightManagementStyles.dialog} onClick={() => setShowHighlightView(false)}>
                         <div className={highlightManagementStyles.highlightView}>
                             <HighlightView editorViewMode={true} presentingProduct={productToSelectedHighlight} prop={selectedHighlight}/>
                         </div>
-                        <button className={highlightManagementStyles.closeDialogBtn} onClick={() => setShowHighlightView(false)}>
-                            <FontAwesomeIcon icon={faX} color={"white"} size={"2xl"}/>
-                        </button>
                     </div> : null
             }
             {
                 showCloneHighlightDialog ?
                     <div className={highlightManagementStyles.dialog}>
                         <div className={highlightManagementStyles.highlightCloneForm}>
-                            <CloneHighlightDialog session={session} highlightToClone={selectedHighlight}/>
+                            <CloneHighlightDialog
+                                session={session}
+                                highlightToClone={selectedHighlight}
+                                toggleDialog={() =>
+                                    setShowCloneHighlightDialog(false)
+                                }
+                                onHighlightCloned={(newHighlight, goEditAfterClone) => addNewCloneToState(newHighlight, goEditAfterClone)}/>
                         </div>
                     </div> : null
             }

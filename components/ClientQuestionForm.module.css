@@ -1,0 +1,21 @@
+.wrapper {
+    display: grid;
+    gap: 5px
+}
+
+.formGroupRow {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 10px
+}
+
+.justifyContent {
+    display: flex;
+    gap: 10px
+}
+
+.btnGroup {
+    display: flex;
+    justify-content: right;
+    gap: 10px
+}

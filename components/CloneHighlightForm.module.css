@@ -13,5 +13,10 @@
 }
 
 .buttonGroup {
+    display: flex;
+    gap: 5px
+}
 
+.buttonGroup:last-child {
+    margin-left: auto;
 }

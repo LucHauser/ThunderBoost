@@ -1,6 +1,7 @@
 import Header from "@components/Header"
 import useSession from "@lib/session"
 import "./_app.css"
+import Footer from "@components/Footer";
 
 export default function App({ Component, pageProps }) {
     const session = useSession()
@@ -15,6 +16,7 @@ export default function App({ Component, pageProps }) {
             <main className="page">
                 <Component {...newPageProps} />
             </main>
+            {/*<Footer/>*/}
         </>
     )
 }
