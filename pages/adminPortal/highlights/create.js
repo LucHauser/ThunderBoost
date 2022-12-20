@@ -25,7 +25,7 @@ export default function createHighlight({session}) {
                 &nbsp;&nbsp;&nbsp;Back
             </button>
             <h1>Plan a new Highlight</h1>
-            <HighlightForm/>
+            <HighlightForm session={session}/>
         </div>
     )
 }

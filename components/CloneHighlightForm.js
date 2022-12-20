@@ -2,7 +2,11 @@ import {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
 import defaultStyles from "../pages/stylesheet/global.module.css"
 import cloneHighlightStyles from "./CloneHighlightForm.module.css"
-import formatTimestamp, {checkIfDate1IsLowerThanDate2, checkIfEndDateIsGreaterThanStartDate} from "@components/Utils";
+import formatTimestamp, {
+    checkIfDate1IsGreaterThanDate2,
+    checkIfDate1IsLowerThanDate2,
+    checkIfEndDateIsGreaterThanStartDate
+} from "@components/Utils";
 import {createHighlight} from "@lib/api";
 
 export default function CloneHighlightDialog({session, highlightToClone, onHighlightCloned, toggleDialog}) {
@@ -11,7 +15,7 @@ export default function CloneHighlightDialog({session, highlightToClone, onHighl
 
     const [previousHighlight, setPreviousHighlight] = useState({})
     const [highlight, setHighlight] = useState({})
-    const [errors, setErrors] = useState(null)
+    const [errors, setErrors] = useState({})
     const [loadCloneHighlight, setLoadCloneHighlight] = useState(false)
 
     useEffect(() => {
@@ -56,13 +60,13 @@ export default function CloneHighlightDialog({session, highlightToClone, onHighl
         }
         if (!isDraft) {
             if (previousHighlight.dateFrom) {
-                if (checkIfDate1IsLowerThanDate2(highlight.dateFrom, previousHighlight.dateFrom) && checkIfDate1IsLowerThanDate2(highlight.dateFrom, previousHighlight.dateUntil)) {
+                if (checkIfDate1IsGreaterThanDate2(highlight.dateFrom, previousHighlight.dateFrom) && checkIfDate1IsGreaterThanDate2(highlight.dateFrom, previousHighlight.dateUntil)) {
                     errors.dateFrom = "Start Date must be greater than start and end date of actual highlight"
                     isValid = false
                 }
             }
             if (previousHighlight.dateUntil) {
-                if (checkIfDate1IsLowerThanDate2(highlight.dateUntil, previousHighlight.dateFrom) && checkIfDate1IsLowerThanDate2(highlight.dateUntil, previousHighlight.dateUntil)) {
+                if (!checkIfDate1IsLowerThanDate2(highlight.dateUntil, previousHighlight.dateFrom) && !checkIfDate1IsLowerThanDate2(highlight.dateUntil, previousHighlight.dateUntil)) {
                     errors.dateUntil = "End Date must be greater than start and end date of actual highlight"
                     isValid = false
                 }

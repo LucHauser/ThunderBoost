@@ -4,11 +4,12 @@ import AdminPortalHeader from "@components/AdminPortalNav";
 import {useState} from "react";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
-import {getAllBaseDataVariety} from "@lib/api";
+import {deleteBaseDataVariety, getAllBaseDataVariety} from "@lib/api";
 import {Form, Table} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faMagnifyingGlass, faPen, faPlus, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faMagnifyingGlass, faPen, faPlus, faTrash, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {checkVarietyToProductBeforeDelete} from "@lib/dataCascader";
 
 export default function BaseDataVarietyPage({session}) {
 
@@ -37,16 +38,19 @@ export default function BaseDataVarietyPage({session}) {
         loadVarieties()
     }, [])
 
-    function ActiveData(active) {
-        return
-    }
-
     const handleChange = (e) => {
         setFilterVariety(e.target.value)
     }
 
-    const editVariety = (id) => {
-        router.push("/baseDataVariety/" + id + "/edit")
+    const handleDeleteVariety = async (id, variety) => {
+        console.log(variety)
+        const res = await checkVarietyToProductBeforeDelete(variety)
+        if (!res) {
+            await deleteBaseDataVariety(id, session.accessToken)
+            setVarieties(prevState => prevState.filter(p => p.id !== id))
+        } else {
+            alert("err")
+        }
     }
 
     return (
@@ -90,9 +94,13 @@ export default function BaseDataVarietyPage({session}) {
                                             <FontAwesomeIcon icon={faCheck} color={"white"}/>
                                             : <FontAwesomeIcon icon={faXmark} color={"white"}/>}</td>
                                     <td className={baseDataVarietyStyles.tableAction}>
-                                        <button className={baseDataVarietyStyles.editBtn} onClick={() => router.push(`./baseDataVariety/${variety.id}/edit`)} title={`Edit ${variety.name}`}>
-                                            Edit&nbsp;&nbsp;&nbsp;
+                                        <button className={baseDataVarietyStyles.tblRowBtn} onClick={() => router.push(`./baseDataVariety/${variety.id}/edit`)} title={`Edit ${variety.name}`}>
                                             <FontAwesomeIcon icon={faPen} size={"1x"} color={"white"}/>
+                                            &nbsp;&nbsp;&nbsp;Edit
+                                        </button>
+                                        <button className={baseDataVarietyStyles.tblRowBtn} style={{marginLeft: 15}} onClick={() => handleDeleteVariety(variety.id, variety.name)}>
+                                            <FontAwesomeIcon icon={faTrash}/>
+                                            &nbsp;&nbsp;&nbsp;Delete
                                         </button>
                                     </td>
                                 </tr>

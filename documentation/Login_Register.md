@@ -105,8 +105,8 @@ Bei der Registrierung erfolgt das gleiche wie bei Login. Dadurch wird der Errorm
 
 ### T-04 - Darstellung in der Desktopansicht und in der Mobile Ansicht
 
-Die Login Page soll auf der Deskop- sowie in der Mobile-Ansicht bedienungsfreundlich sein. Es soll getestet werden, ob die Responsive Seite gut ersichtbar
-ist und nach Vorgaben entspricht
+Die Login Page soll auf der Deskop- sowie in der Mobile-Ansicht bedienungsfreundlich sein. Es soll getestet werden, ob die Responsive Seite gut ersichtlich
+ist und nach Vorgaben entsprechen
 
 #### Beschreibung
 

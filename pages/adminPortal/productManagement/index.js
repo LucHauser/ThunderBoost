@@ -72,6 +72,11 @@ export default function ProductManagementPage({session}) {
         loadProducts()
     }, [])
 
+    useEffect(() => {
+        handleChangeFilter()
+        setNumberOfProducts(products.length)
+    }, [filterProduct, filterActivable, filterStockAmount, products])
+
     const switchItem = (id) =>  {
         setOpenedItem(id)
     }
@@ -168,7 +173,6 @@ export default function ProductManagementPage({session}) {
                         <FontAwesomeIcon icon={faFilter} size={"xl"} color={"white"} style={{marginRight: 10}}/>
                         <Form.Control className={productManagementStyles.filterInput} placeholder={"Filter Product"} value={filterProduct} onChange={(e) => {
                             setFilterProduct(e.target.value)
-                            handleChangeFilter()
                         }}/>
                         <FontAwesomeIcon icon={faXmark} size={"xl"} onClick={() => setFilterProduct("")} color={"white"} title={"Clear filter"}/>
                     </div>
@@ -178,7 +182,6 @@ export default function ProductManagementPage({session}) {
                             className={productManagementStyles.dropDownFilter}
                             onChange={(e) => {
                                 setFilterActivable(e.target.value)
-                                handleChangeFilter()
                             }}
                             defaultValue={filterActivable}>
                             <option disabled>select</option>
@@ -193,7 +196,6 @@ export default function ProductManagementPage({session}) {
                         <FontAwesomeIcon icon={faWarehouse} size={"1x"} color={"white"} style={{marginRight: 10}}/>
                         <Form.Select className={productManagementStyles.dropDownFilter} onChange={(e) => {
                             setFilterStockAmount(e.target.value)
-                            handleChangeFilter()
                         }}>
                             <option disabled>select</option>
                             {selectFilterStockAmountOptions.map((selectOption, index) => {

@@ -1,0 +1,31 @@
+.tableFilterInput {
+    width: 400px;
+    height: 40px;
+    background: none;
+    border: none;
+    border-bottom: solid 2px #FFFFFF;
+    margin-top: 10px;
+    padding: 10px 0;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    margin-right: 10px;
+}
+
+.tableFilterInput:focus {
+    outline: none
+}
+
+.tableAction {
+    display: flex;
+    justify-content: right;
+    gap: 10px
+}
+
+.tblRowBtn {
+    background: transparent;
+    border: none;
+    font-family: "Nunito", sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+}

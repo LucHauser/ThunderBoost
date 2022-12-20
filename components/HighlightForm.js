@@ -210,7 +210,7 @@ export default function HighlightForm({session, highlightToEdit}) {
             isValid = false
         }
         if (model.dateFrom && model.dateUntil) {
-            if (checkIfDate1IsGreaterThanDate2(model.dateFrom, model.dateUntil)) {
+            if (!checkIfDate1IsGreaterThanDate2(model.dateFrom, model.dateUntil)) {
                 errors.dateUntil = "End Date cannot be greater than start date"
                 isValid = false
             }
@@ -379,7 +379,7 @@ export default function HighlightForm({session, highlightToEdit}) {
             model.edited = formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")
             try {
                 await updateHighlight(model, session.accessToken)
-                router.push("../../highlights")
+                await router.push("../../highlights")
             } catch (e) {
                 console.log(e)
             }
@@ -570,7 +570,7 @@ export default function HighlightForm({session, highlightToEdit}) {
 
                     { model.productId ?
                         <>
-                            {productForPresentation.images && productImageIndexOptions.length > 1 ?
+                            {productForPresentation?.images && productImageIndexOptions.length > 1 ?
                                 <>
                                     {/*productImageIndex*/}
                                     <Form.Group className={defaultStyles.formGroupSmall}>
