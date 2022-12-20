@@ -5,11 +5,11 @@
 }
 
 body {
-    background: #060525;
+    background: #000000;
 }
 
 .page {
-    background: #060525;
+    background: linear-gradient(to bottom, #4F2A59, #000000);
 }
 
 

@@ -3,7 +3,7 @@
 }
 
 .navbar {
-    background: #14318C;
+    background: linear-gradient(to right, #C5416F, #6D49A7);
     height: 50px;
     display: flex;
     align-items: center;

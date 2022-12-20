@@ -5,7 +5,7 @@ import productFormStyles from "./ProductForm.module.css"
 import markdownElements from "./MarkdownReview.module.css"
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import ReactMarkdown from "react-markdown";
-import {faFilePen, faFileLines, faCircleInfo, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faFilePen, faFileLines, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {getAllBaseDataVariety} from "@lib/api";
 import {createProduct, updateProduct} from "@lib/api";
@@ -15,8 +15,6 @@ import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import ImageSelectionList from "@components/ImageSelectionList";
 import VarietySelectionList from "@components/VarietySelectionList";
-
-
 
 export default function ProductForm({session, productToEdit}) {
 
@@ -30,16 +28,16 @@ export default function ProductForm({session, productToEdit}) {
 
     const usages = ["Gaming", "Office", "Students & Pupils"]
 
-    function validateProductModel(product, selectedVarieties) {
+    function validateProductModel(product) {
         const errors = {
             name: "",
-            price: null,
-            servings: null,
+            price: "",
+            servings: "",
             description: "",
-            stockAmount: null,
+            stockAmount: "",
             usage: "",
             releaseDate: "",
-            varieties: null,
+            varieties: "",
             images: ""
         }
 
@@ -93,11 +91,11 @@ export default function ProductForm({session, productToEdit}) {
             errors.releaseDate = "Release Date must be set"
             isValid = false
         }
-        /* if (product.img === "") {
-            errors.img = "Image is required"
+        if (product.images.length === 0) {
+            errors.images = "Image is required"
             isValid = false
-        } */
-        if (!product.varieties > 0) {
+        }
+        if (product.varieties.length === 0) {
             errors.varieties = "Please choose one Variety or more"
             isValid = false
         }
@@ -234,11 +232,11 @@ export default function ProductForm({session, productToEdit}) {
     return (
         <div className={productFormStyles.component}>
             <Form className={productFormStyles.formWrapper}
-                onSubmit={handleSubmit}>
+                onSubmit={handleSubmit} autoComplete={"off"}>
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputName}`}>
-                    <Form.Label className={defaultStyles.formLabel}>Name</Form.Label>
+                    <Form.Label className={defaultStyles.formLabel}>Name*</Form.Label>
                     <Form.Control
-                        className={defaultStyles.formInputField}
+                        className={`${defaultStyles.formInputField} ${errors.name && defaultStyles.formInputError}`}
                         type={"text"}
                         name={"name"}
                         onChange={onProductChange}
@@ -248,9 +246,9 @@ export default function ProductForm({session, productToEdit}) {
                     {errors.name && <p>{errors.name}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Price</Form.Label>
+                    <Form.Label className={defaultStyles.formLabel}>Price*</Form.Label>
                     <Form.Control
-                        className={defaultStyles.formInputField}
+                        className={`${defaultStyles.formInputField} ${errors.price && defaultStyles.formInputError}`}
                         type="number"
                         step="0.01"
                         name="price"
@@ -261,9 +259,9 @@ export default function ProductForm({session, productToEdit}) {
                     {errors.price && <p>{errors.price}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Servings</Form.Label>
+                    <Form.Label className={defaultStyles.formLabel}>Servings*</Form.Label>
                     <Form.Control
-                        className={defaultStyles.formInputField}
+                        className={`${defaultStyles.formInputField} ${errors.servings && defaultStyles.formInputError}`}
                         type="number"
                         name="servings"
                         onChange={onProductChange}
@@ -273,9 +271,9 @@ export default function ProductForm({session, productToEdit}) {
                     {errors.servings && <p>{errors.servings}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Stock Amount</Form.Label>
+                    <Form.Label className={defaultStyles.formLabel}>Stock Amount*</Form.Label>
                     <Form.Control
-                        className={defaultStyles.formInputField}
+                        className={`${defaultStyles.formInputField} ${errors.stockAmount && defaultStyles.formInputError}`}
                         type="number"
                         name="stockAmount"
                         onChange={onProductChange}
@@ -285,9 +283,9 @@ export default function ProductForm({session, productToEdit}) {
                     {errors.stockAmount && <p>{errors.stockAmount}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyles.formGroup}>
-                    <Form.Label className={defaultStyles.formLabel}>Usage</Form.Label>
+                    <Form.Label className={defaultStyles.formLabel}>Usage*</Form.Label>
                     <Form.Select
-                        className={defaultStyles.formInputField}
+                        className={`${defaultStyles.formInputField} ${errors.usage && defaultStyles.formInputError}`}
                         onChange={onProductChange}
                         name="usage"
                         defaultValue={productModel.usage}>
@@ -305,13 +303,7 @@ export default function ProductForm({session, productToEdit}) {
                 <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputDescription}`}>
                     <Tabs>
                         <div className={productFormStyles.labelSwitchFlex}>
-                            <Form.Label className={`${defaultStyles.formLabel} ${productFormStyles.labelDescription}`}>Description
-                                <FontAwesomeIcon
-                                    icon={faCircleInfo}
-                                    size={"1x"}
-                                    color={"white"}
-                                    title={"Info: Use optional Markdown Syntax to write a clear description, you can switch to Markdown to see the review"}/>
-                            </Form.Label>
+                            <Form.Label className={`${defaultStyles.formLabel} ${productFormStyles.labelDescription}`}>Description <i style={{fontSize: 10}}>(markdown supported)</i></Form.Label>
                             <TabList className={productFormStyles.markdownSwitcher}>
                                 <Tab
                                     className={productFormStyles.markdownSwitchButton}
@@ -337,7 +329,7 @@ export default function ProductForm({session, productToEdit}) {
                         </div>
                         <TabPanel>
                             <textarea
-                                className={`${defaultStyles.formInputField} ${productFormStyles.textareaMarkdown}`}
+                                className={`${defaultStyles.formInputField} ${productFormStyles.textareaMarkdown} ${errors.description && defaultStyles.formInputError}`}
                                 defaultValue={productModel.description}
                                 onChange={onDescriptionChange}
                                 placeholder="Enter your description, Markdown is supported"
@@ -379,7 +371,7 @@ export default function ProductForm({session, productToEdit}) {
                     <Form.Label className={defaultStyles.formLabel}>Release Date</Form.Label>
                     <div className={productFormStyles.inputReleaseDateGroup}>
                         <Form.Control
-                            className={`${defaultStyles.formInputField}`}
+                            className={`${defaultStyles.formInputField} ${errors.releaseDate && defaultStyles.formInputError}`}
                             type="datetime-local"
                             name="releaseDate"
                             onChange={onProductChange}
@@ -393,7 +385,7 @@ export default function ProductForm({session, productToEdit}) {
                 </Form.Group>
                 <FormGroup className={`${defaultStyles.formGroup} ${productFormStyles.multiSelectVariety}`}>
                     <Form.Label className={defaultStyles.formLabel}>Varieties</Form.Label>
-                    <div className={`${productFormStyles.varietyList}`}>
+                    <div className={`${productFormStyles.varietyList} ${errors.varieties && productFormStyles.varietyListError}`}>
                         <div>
                             {
                                 productModel.varieties.map(v => {
@@ -404,8 +396,9 @@ export default function ProductForm({session, productToEdit}) {
                                 })
                             }
                         </div>
-                        <button className={`${productFormStyles.addVarietyBtn}`} onClick={() => setShowVarietySelectDialog(true)} type={"button"}>{productModel.varieties.length > 0 ? "Edit varieties" : "Add variety"}</button>
+                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`} onClick={() => setShowVarietySelectDialog(true)} type={"button"}>{productModel.varieties.length > 0 ? "Edit varieties" : "Add variety"}</button>
                     </div>
+                    {errors.varieties && <p>{errors.varieties}</p>}
                 </FormGroup>
                 <i className={productFormStyles.formNotice}>* Required field</i>
                 <div className={productFormStyles.btnGroup}>
@@ -415,7 +408,6 @@ export default function ProductForm({session, productToEdit}) {
                 </div>
 
             </Form>
-            <button onClick={() => console.log(productModel)}>Print</button>
             {
                 showImageSelectionDialog ?
                     <div className={productFormStyles.selectionDialog}>
