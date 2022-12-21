@@ -1,5 +1,6 @@
 import adminPortalNavStyles from "./AdminPortalNav.module.css"
 import {useRouter} from "next/router";
+import {useEffect, useState} from "react";
 
 export default function AdminPortalHeader({session, currentPage}) {
 
@@ -22,13 +23,16 @@ export default function AdminPortalHeader({session, currentPage}) {
     return (
         <div className={adminPortalNavStyles.container}>
             <h1 className={adminPortalNavStyles.mainTitle}>Admin Portal</h1>
-            <div className={adminPortalNavStyles.nav}>
-                {pagesInNav.map((page, index) => {
-                    return (
-                        <div key={index} className={`${currentPage === index ? adminPortalNavStyles.activeNavElement : null} ${adminPortalNavStyles.navElement}`} onClick={() => navigateToTargetPath(page.routerTo)}>{page.name}</div>
-                    )
-                })}
+            <div className={adminPortalNavStyles.tabWrapper}>
+                <ul className={adminPortalNavStyles.nav}>
+                    {pagesInNav.map((page, index) => {
+                        return (
+                            <li key={index} className={`${currentPage === index ? adminPortalNavStyles.activeNavElement : null} ${adminPortalNavStyles.navElement}`} onClick={() => navigateToTargetPath(page.routerTo)}>{page.name}</li>
+                        )
+                    })}
+                </ul>
             </div>
+
             <h2 className={adminPortalNavStyles.currentPageTitle}>{pagesInNav[currentPage].name}</h2>
         </div>
     )

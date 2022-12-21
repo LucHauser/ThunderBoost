@@ -84,12 +84,12 @@ export default function LoginForm({session}) {
                 }
                 <Form.Group className={defaultStyle.formGroup}>
                     <Form.Label className={defaultStyle.formLabel}>Email-Address</Form.Label>
-                    <Form.Control className={defaultStyle.formInputField} type="text" name="email" onChange={handleLoginChange} placeholder="Enter your Email-Address"/>
+                    <Form.Control className={`${defaultStyle.formInputField} ${loginErrors.email && defaultStyle.formInputError}`} type="text" name="email" onChange={handleLoginChange} placeholder="Enter your Email-Address"/>
                     {loginErrors.email && <p>{loginErrors.email}</p>}
                 </Form.Group>
                 <Form.Group className={defaultStyle.formGroup}>
                     <Form.Label className={defaultStyle.formLabel}>Password</Form.Label>
-                    <Form.Control className={defaultStyle.formInputField} type="password" name="password" onChange={handleLoginChange} placeholder="Enter your password"/>
+                    <Form.Control className={`${defaultStyle.formInputField} ${loginErrors.password  && defaultStyle.formInputError}`} type="password" name="password" onChange={handleLoginChange} placeholder="Enter your password"/>
                     {loginErrors.password && <p>{loginErrors.password}</p>}
                 </Form.Group>
                 <button className={defaultStyle.buttonFilled} type="submit">Login</button>

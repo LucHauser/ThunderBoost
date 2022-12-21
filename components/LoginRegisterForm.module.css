@@ -13,7 +13,7 @@
 }
 
 .userBenefitsContainer {
-    background-color: #14318C;
+    background-color: #3C306D;
     width: 100%;
     padding: 15px;
     color: white;
@@ -31,10 +31,9 @@
 }
 
 .formGroupTerms {
-    display: grid;
-    grid-template-columns: 25px auto;
+    display: flex;
     align-items: center;
-    grid-gap: 20px
+    gap: 20px
 }
 
 .errorText {
