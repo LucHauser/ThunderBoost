@@ -71,7 +71,7 @@ export function checkIfProductIsNowDiscount(start, end, active) {
         if (start !== "" && end !== "") {
             startDate = new Date(start)
             endDate = new Date(end)
-            return (startDate <= now && endDate >= now)
+            return startDate < now && endDate > now
         } else if (end === "") {
             startDate = new Date(start)
             return startDate < now

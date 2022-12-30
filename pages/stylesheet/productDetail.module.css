@@ -1,0 +1,135 @@
+.page {
+    padding: 90px 140px;
+    display: grid;
+    row-gap: 90px;
+}
+
+.articleInformationContainer {
+    display: grid;
+    grid-template-columns: 10% 40% 50%;
+    gap: 15px;
+    font-family: Nunito, sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+.imagesList {
+    background: rgba(255, 255, 255, 9%);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    height: fit-content;
+    border-radius: 5px;
+}
+
+.imageItem {
+    width: 100%;
+    padding: 50%;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    background-size: cover;
+}
+
+.actualImage {
+    width: 100%;
+    padding: 50%;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    background-size: cover;
+}
+
+.productInformation {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 10px;
+}
+
+.productName {
+    font-size: 30px;
+    color: #8DF3E8;
+}
+
+.productServings {
+    background: rgba(255, 255, 255, 9%);
+    font-weight: bold;
+    padding: 5px 10px;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 10px;
+}
+
+.productPriceBox {
+    padding: 5px 10px;
+    width: fit-content;
+    background: rgba(255, 255, 255, 9%);
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+}
+
+.productPriceBox > p:last-child {
+    font-style: italic;
+}
+
+.productPriceSign {
+    font-size: 30px;
+    color: #EB3E7A;
+    display: flex;
+    align-items: end;
+}
+
+.productPriceSign > p {
+    font-size: 12px;
+    color: #FFFFFF;
+    margin-left: 10px;
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
+.descriptionArea {
+    max-height: 300px;
+}
+
+.stockAmountInformation {
+    width: fit-content;
+    height: fit-content;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.addToCartContainer {
+    margin-top: 20px
+}
+
+.addToCart {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px
+}
+
+.quantityToCart {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 25px;
+}
+
+.quantityToCart > button {
+    outline: none;
+    width: 45px;
+    height: 45px;
+    background: #7C4296;
+    border: solid 2px #FFFFFF;
+    border-radius: 50%;
+}
+
+.reviewTitle {
+    display: flex;
+    justify-content: space-between;
+}

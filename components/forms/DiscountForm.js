@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import discountSettingsFormStyles from "./DiscountSettingsForm.module.css"
 import {updateProduct} from "@lib/api";
-import discountSettingsStyles from "@components/DiscountSettingsForm.module.css";
+import discountSettingsStyles from "@components/forms/DiscountSettingsForm.module.css";
 import {Form, FormGroup} from "react-bootstrap";
-import defaultStyles from "../pages/stylesheet/global.module.css";
+import defaultStyles from "../../pages/stylesheet/global.module.css";
 import {useRouter} from "next/router";
 import {getDiscountPrice} from "@components/Utils";
 

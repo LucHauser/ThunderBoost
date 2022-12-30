@@ -1,5 +1,5 @@
 import defaultStyles from "../../stylesheet/global.module.css"
-import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
+import BaseDataVarietyForm from "@components/forms/BaseDataVarietyForm";
 import {useRouter} from "next/router";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

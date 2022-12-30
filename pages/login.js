@@ -3,8 +3,8 @@ import loginStyle from "./stylesheet/login.module.css"
 import defaultStyle from "./stylesheet/global.module.css"
 import {useRedirectToHome} from "@lib/session";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
-import LoginForm from "@components/LoginForm";
-import RegisterForm from "@components/RegisterForm";
+import LoginForm from "@components/forms/LoginForm";
+import RegisterForm from "@components/forms/RegisterForm";
 
 export default function LoginPage({session}) {
 

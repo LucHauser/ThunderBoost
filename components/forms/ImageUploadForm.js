@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Form} from "react-bootstrap";
 import imageUploadFormStyles from "./ImageUploadForm.module.css"
-import defaultStyles from "../pages/stylesheet/global.module.css"
+import defaultStyles from "../../pages/stylesheet/global.module.css"
 import {uploadImageData} from "@lib/api";
 import {useRouter} from "next/router";
 import formatTimestamp from "@components/Utils";

@@ -4,18 +4,17 @@
 
 .tabWrapper {
     background: #4F2A59;
-    max-width: 1200px;
-    overflow-x: scroll;
+
 }
 
 .nav {
     list-style-type: none;
-    display: flex;
-    gap: 10px
+    overflow: scroll;
+    white-space: nowrap;
 }
 
 .nav li {
-    width: 150px
+    display: inline-block;
 }
 
 .navElement:hover {

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
-import defaultStyles from "../pages/stylesheet/global.module.css"
+import defaultStyles from "../../pages/stylesheet/global.module.css"
 import cloneHighlightStyles from "./CloneHighlightForm.module.css"
 import formatTimestamp, {
     checkIfDate1IsGreaterThanDate2,

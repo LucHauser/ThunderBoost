@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import clientQuestionFormStyles from "./ClientQuestionForm.module.css"
-import defaultStyles from "../pages/stylesheet/global.module.css"
+import defaultStyles from "../../pages/stylesheet/global.module.css"
 import {Form, FormGroup} from "react-bootstrap";
 import {postCustomerQuestion} from "@lib/api";
 

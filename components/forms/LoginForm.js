@@ -1,5 +1,5 @@
 import loginStyles from "./LoginRegisterForm.module.css";
-import defaultStyle from "../pages/stylesheet/global.module.css";
+import defaultStyle from "../../pages/stylesheet/global.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExclamation} from "@fortawesome/free-solid-svg-icons";
 import {Form} from "react-bootstrap";

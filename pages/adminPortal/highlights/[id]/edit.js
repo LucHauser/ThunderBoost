@@ -5,7 +5,7 @@ import {getHighlightById} from "@lib/api";
 import defaultStyles from "../../../stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
-import HighlightForm from "@components/HighlightForm";
+import HighlightForm from "@components/forms/HighlightForm";
 
 export default function editHighlight({session}) {
 

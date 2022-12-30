@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {getBaseDataVariertyById} from "@lib/api";
 import defaultStyles from "../../../stylesheet/global.module.css"
-import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
+import BaseDataVarietyForm from "@components/forms/BaseDataVarietyForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";

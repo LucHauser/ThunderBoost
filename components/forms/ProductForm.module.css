@@ -24,6 +24,7 @@
 .labelSwitchFlex {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .labelDescription {
@@ -38,8 +39,8 @@
     height: auto;
     width: 80px;
     padding: 5px;
-    border: solid 2px #FFFFFF;
-    border-bottom: none;
+    border-radius: 6px;
+    border: solid 2px #FFFFFF
 }
 
 .markdownSwitchButton {
@@ -123,14 +124,20 @@
     align-items: center;
 }
 
+.checkboxReleaseDate {
+    display: flex !important;
+    align-items: center !important;
+    margin-top: 7.5%
+}
+
 .varietyList {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 50px;
     border: solid 2px #FFFFFF;
-    padding: 0 5px;
     border-radius: 5px;
+    padding: 6px 12px;
 }
 
 .varietyListError {
@@ -146,12 +153,14 @@
 .varietyList > div > p {
     font-size: 20px;
     color: #000000;
-    padding: 3px 5px;
+    padding: 3px 12px;
     background: #8DF3E8;
     border-radius: 5px;
     display: flex;
     text-align: center;
     width: auto;
+    height: fit-content;
+    margin-bottom: 0;
 }
 
 .formNotice {
@@ -177,17 +186,6 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: repeat(9, auto);
         column-gap: 15px;
-    }
-
-    .formWrapper > h2,
-    .formSeparatorLine,
-    .inputName,
-    .inputDescription,
-    .multiSelectVariety,
-    .imageSelectionForm,
-    .inputReleaseDate,
-    .btnGroup {
-        grid-column: 1 / span 2
     }
 
     .hideThis {

@@ -9,7 +9,8 @@
       "stockAmount": "10",
       "images": [
         "/8785a4d6-8a71-4479-adf6-c3b3f542cea1.jpeg",
-        "/8849fd0d-e315-4a0e-8554-bc51e3057ea8.jpeg"
+        "/8849fd0d-e315-4a0e-8554-bc51e3057ea8.jpeg",
+        "/f59147b0-d6f2-4dd5-9d28-3ef672ad7e42.jpeg"
       ],
       "releaseDate": "2022-12-08T18:10",
       "showProductBeforeRelease": false,
@@ -20,8 +21,8 @@
       "active": true,
       "discountActive": true,
       "discountPercent": "24",
-      "discountFrom": "2022-12-05T15:11",
-      "discountUntil": "2022-12-13T15:11",
+      "discountFrom": "2022-12-27T15:11",
+      "discountUntil": "2022-12-31T15:11",
       "showDiscountUntilDate": true,
       "discountUntilText": "Breaks in",
       "enableCountdown": false,

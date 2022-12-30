@@ -1,5 +1,5 @@
 import defaultStyles from "../../stylesheet/global.module.css"
-import ProductForm from "@components/ProductForm";
+import ProductForm from "@components/forms/ProductForm";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";

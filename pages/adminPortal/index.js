@@ -1,4 +1,4 @@
-import AdminPortalHeader from "@components/AdminPortalNav";
+import AdminPortalHeader from "@components/pageUtils/AdminPortalNav";
 import adminPortalStyles from "../stylesheet/adminPortal.module.css"
 import defaultStyles from "../stylesheet/global.module.css"
 

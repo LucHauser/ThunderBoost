@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
-import defaultStyles from "../pages/stylesheet/global.module.css"
+import defaultStyles from "../../pages/stylesheet/global.module.css"
 import baseDataVarietyStyles from "./BaseDataVarietyForm.module.css"
 import {createBaseDataVariety, updateBaseDataVariety} from "@lib/api"
 import {useRouter} from "next/router";

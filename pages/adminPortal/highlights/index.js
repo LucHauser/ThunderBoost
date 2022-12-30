@@ -1,6 +1,6 @@
 import defaultStyles from "../../stylesheet/global.module.css"
 import highlightManagementStyles from "../../stylesheet/highlightManagement.module.css"
-import AdminPortalHeader from "@components/AdminPortalNav";
+import AdminPortalHeader from "@components/pageUtils/AdminPortalNav";
 import {useEffect, useState} from "react";
 import {deleteHighlight, getAllHighlights, getAllHighligtsInclusiveProduct, updateHighlight} from "@lib/api";
 import {Form} from "react-bootstrap";
@@ -21,7 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
-import HighlightView from "@components/HighlightView";
+import HighlightView from "@components/views/HighlightView";
 import formatTimestamp, {checkIfEventIsNowBetweenStartTime} from "@components/Utils";
 import {
     Accordion,
@@ -30,7 +30,7 @@ import {
     AccordionItemButton,
     AccordionItemHeading
 } from "react-accessible-accordion";
-import CloneHighlightDialog from "@components/CloneHighlightForm";
+import CloneHighlightDialog from "@components/forms/CloneHighlightForm";
 
 export default function HighlightManagementPage({session}) {
 

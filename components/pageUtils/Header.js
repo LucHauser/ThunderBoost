@@ -1,5 +1,5 @@
 import headerStyles from "./Header.module.css"
-import defaultStyles from "../pages/stylesheet/global.module.css"
+import defaultStyles from "../../pages/stylesheet/global.module.css"
 import Image from "next/image";
 import logo from "resources/assets/Thunderboost_Logo_Nav.jpg"
 import {Form, NavLink, Offcanvas} from "react-bootstrap";
@@ -85,7 +85,7 @@ export default function Header({session}) {
                     </div>
 
                     <div className={headerStyles.navbarLinks}>
-                        <NavLink href="#" className={headerStyles.navLink}>Boosters</NavLink>
+                        <NavLink href="/boosters" className={headerStyles.navLink}>Boosters</NavLink>
                         <NavLink onClick={handleShowSubNavShopBy} className={headerStyles.navLink}>Shop
                             <FontAwesomeIcon icon={faCaretDown} size={"1x"} color={"white"} className={headerStyles.caretDown}/>
                         </NavLink>
@@ -128,7 +128,7 @@ export default function Header({session}) {
                     <button onClick={handleCloseNavOffcanvas} className={headerStyles.offcanvasBtn}><FontAwesomeIcon icon={faClose} size={"2x"} color={"white"}/></button>
                 </Offcanvas.Header>
                 <div className={headerStyles.navOffcanvasSeparator}/>
-                <NavLink href="#" className={headerStyles.navLink}>Boosters</NavLink>
+                <NavLink href="/boosters" className={headerStyles.navLink}>Boosters</NavLink>
                 <NavLink onClick={handleShowSubNavShopBy} className={headerStyles.navLink}>Shop
                     <FontAwesomeIcon icon={faCaretDown} size={"1x"} color={"white"} className={headerStyles.caretDown}/>
                 </NavLink>

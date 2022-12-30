@@ -1,47 +1,9 @@
-.accordionTblActions {
-    background: #14318C;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px
+#productManagementPageLayout > div:not(:first-child) {
+    margin-top: 10px;
 }
 
-.accordionTblActions > .filterGroup {
-    display: flex;
-    gap: 30px
-}
-
-.filterInput {
-    height: 40px;
-    background: none;
-    border: none;
-    border-bottom: solid 2px #FFFFFF;
-    padding: 10px;
-    font-family: Arial, sans-serif;
-    font-size: 20px;
-    color: #FFFFFF;
-    margin-right: 10px;
-}
-
-.dropDownFilter {
-    background: transparent;
-    width: 100px;
-    height: 40px;
-    outline: none;
-    border: none;
-    font-family: "Nunito", sans-serif;
-    font-size: 20px;
-    color: #FFFFFF;
-    appearance: none;
-}
-
-.dropDownFilter > option {
-    background: #060525;
-}
-
-.filterInput:focus {
-    outline: none
+.numberOfProduct {
+    margin-bottom: 0 !important;
 }
 
 .addBtn {
@@ -53,33 +15,20 @@
     border: none;
 }
 
-.accordionContainer {
+.headerContents {
     width: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-right: 10px !important;
 }
 
-.accordionItem {
-    font-size: 20px;
-    margin-bottom: 4px;
-    color: white
+.headerContents > p, .headerContents > div > p {
+    margin: 0 !important;
 }
 
-.accordionHeader {
-    height: 50px;
-    background: #14318C;
-    width: 100%;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.accordionPanel {
-    padding: 10px 0 30px;
-}
-
-.accordionPanel > div {
-    display: grid;
-    grid-template-columns: 350px auto 225px;
+.imageCol {
+    padding-left: 0 !important;
 }
 
 .productImagesCollection {
@@ -87,12 +36,19 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    gap: 5px
+    gap: 6px
+}
+
+.productImagesCollection > img:first-child {
+    width: 100%;
+    height: calc(50% - 16px);
+    box-sizing: border-box;
+    border: solid 2px #8DF3E8;
 }
 
 .productImagesCollection > img {
-    width: 150px;
-    height: 150px;
+    width: calc(50% - 3px);
+    height: calc(50% - 3px);
 }
 
 .productSpecs {
@@ -124,6 +80,10 @@
     color: black;
     padding: 5px;
     border-radius: 5px;
+}
+
+.btnGroupCol {
+    padding-right: 0 !important;
 }
 
 .productCrudBtnGroup {

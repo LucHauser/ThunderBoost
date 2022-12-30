@@ -1,5 +1,5 @@
 import styles from "./stylesheet/index.module.css"
-import ClientQuestionForm from "@components/ClientQuestionForm";
+import ClientQuestionForm from "@components/forms/ClientQuestionForm";
 
 export default function IndexPage({session}) {
     return (

@@ -1,6 +1,6 @@
 import {useEffect, useReducer, useState} from "react";
 import defaultStyles from "./stylesheet/global.module.css"
-import AdminPortalHeader from "@components/AdminPortalNav";
+import AdminPortalHeader from "@components/pageUtils/AdminPortalNav";
 export default function Sandbox({session}) {
 
     const initialCount = 0;

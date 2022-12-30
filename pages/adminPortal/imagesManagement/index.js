@@ -1,6 +1,6 @@
 import defaultStyles from "../../stylesheet/global.module.css"
 import imagesManagementStyles from "../../stylesheet/imageManagement.module.css"
-import AdminPortalHeader from "@components/AdminPortalNav";
+import AdminPortalHeader from "@components/pageUtils/AdminPortalNav";
 import {useEffect, useState} from "react";
 import {editImage, getAllImages} from "@lib/api";
 import {Form, Table} from "react-bootstrap";

@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {getAllUsers} from "@lib/api";
 import defaultStyles from "../../stylesheet/global.module.css"
 import userAndPrivilegesStyles from "../../stylesheet/usersAndPrivileges.module.css"
-import AdminPortalHeader from "@components/AdminPortalNav";
+import AdminPortalHeader from "@components/pageUtils/AdminPortalNav";
 import {Form, Table} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGear, faInfo, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";

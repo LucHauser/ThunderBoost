@@ -4,7 +4,7 @@ import {getProductById, updateProduct} from "@lib/api";
 import defaultStyles from "../../../stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
-import DiscountSettingsForm from "@components/DiscountForm";
+import DiscountSettingsForm from "@components/forms/DiscountForm";
 
 export default function ProductDiscountManager({session}) {
 

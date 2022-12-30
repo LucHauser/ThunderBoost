@@ -1,6 +1,6 @@
 import defaultStyles from "../../stylesheet/global.module.css"
 import baseDataVarietyStyles from "../../stylesheet/baseDataVariety.module.css"
-import AdminPortalHeader from "@components/AdminPortalNav";
+import AdminPortalHeader from "@components/pageUtils/AdminPortalNav";
 import {useState} from "react";
 import {useRouter} from "next/router";
 import {useEffect} from "react";

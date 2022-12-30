@@ -1,0 +1,41 @@
+.container {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    display: grid;
+    grid-template-rows: auto 20px 50px 50px 50px;
+    background: rgba(255, 255, 255, 9%);
+    font-family: Nunito, sans-serif;
+    color: #FFFFFF;
+}
+
+.productImage {
+    width: 100%;
+    padding: 50%;
+    grid-row: 1 / 1;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    background-size: cover;
+
+}
+
+.productName {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 16px;
+    grid-row: 2 / 2;
+}
+
+.productPrice {
+    font-size: 20px;
+    font-weight: bold;
+    grid-row: 4 / 4;
+    text-align: center;
+}
+
+.productPrice > sub {
+    font-weight: normal;
+    font-style: italic;
+    color: #EB3E7A;
+    margin-left: 5px;
+}

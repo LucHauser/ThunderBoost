@@ -5,7 +5,7 @@ import varietySelectionListStyles from "./VarietySelectionList.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass, faX} from "@fortawesome/free-solid-svg-icons";
 import {Form} from "react-bootstrap";
-import BaseDataVarietyForm from "@components/BaseDataVarietyForm";
+import BaseDataVarietyForm from "@components/forms/BaseDataVarietyForm";
 
 export default function VarietySelectionList({session, onEditVarieties, onSelectedVarieties, toggleDialog}) {
 

@@ -16,7 +16,7 @@
 
 .pageTitle {
     color: #8DF3E8;
-    font-size: 30px;
+    font-size: 20px;
     font-family: 'HKModular-Bold', sans-serif;
     text-align: center;
     margin-bottom: 30px;
@@ -31,8 +31,7 @@
 
 .adminPageWrapper {
     padding: 30px;
-    gap: 15px;
-    display: grid;
+    gap: 15px !important;
     font-family: "Nunito", sans-serif;
     color: white
 }
@@ -41,6 +40,12 @@
     display: grid;
     grid-gap: 8px;
     margin-bottom: 20px;
+}
+
+.formGroupHorizontal {
+    display: flex !important;
+    gap: 10px;
+    align-items: center !important;
 }
 
 .formGroupSmall {
@@ -79,12 +84,13 @@
 .formInputField {
     width: auto;
     height: 50px;
-    background: rgba(13, 13, 13, 50%);
-    border: solid 2px #D9D9D9;
-    border-radius: 6px;
+    background: rgba(13, 13, 13, 50%) !important;
+    border: solid 2px #D9D9D9 !important;
+    border-radius: 6px !important;
     padding: 10px;
-    color: white;
-    font-size: 20px;
+    color: white !important;
+    font-size: 20px !important;
+    box-shadow: none !important;
 }
 
 .formInputField::-webkit-input-placeholder, .formInputFieldSmall::-webkit-input-placeholder {
@@ -94,14 +100,14 @@
 }
 
 .formInputFieldSmall {
-    height: 30px;
-    width: 100%;
-    padding: 5px;
-    background: rgba(13, 13, 13, 50%);
-    border: solid 2px #D9D9D9;
-    border-radius: 4px;
+    height: 30px !important;
+    width: 100% !important;
+    padding: 0 0 0 5px !important;
+    background: rgba(13, 13, 13, 50%) !important;
+    border: solid 2px #D9D9D9 !important;
+    border-radius: 4px !important;
     font-size: 15px;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
 }
 
 .formInputField > option, .formInputFieldSmall > option {
@@ -124,49 +130,92 @@
 }
 
 .formInputField:focus, .formInputFieldSmall:focus {
+    outline: none !important;
+    border: solid 2px #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+.formColorPicker:focus {
     outline: none;
-    border-color: #FFFFFF;
+    box-shadow: none !important;
 }
 
 .formInputError {
-    border-color: #EB3E7A;
+    border-color: #EB3E7A !important;
 }
 
 .formColorPicker {
-    min-width: 30px;
-    min-height: 34px;
-    background-color: transparent;
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-    outline: none;
-    border: none;
+    padding: 0;
+    min-width: 30px !important;
+    min-height: 34px !important;
+    background-color: transparent !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    cursor: pointer !important;
+    outline: none !important;
+    border: none !important;
+}
+
+.formColorPicker > input {
+    padding: 0 !important;
 }
 
 .formColorPicker::-webkit-color-swatch {
-    padding: 0;
-    border-radius: 5px;
+    padding: 0 !important;
+    border-radius: 5px !important;
+    border: none !important;
+}
+
+.formColorPicker:focus {
     border: none
 }
 
 .formCheckbox {
-    width: 25px;
-    height: 25px;
-    border-radius: 6px;
+    font-size: 20px !important;
 }
 
-.formCheckbox:checked {
-    accent-color: #8DF3E8;
+.formCheckbox > input {
+    border-radius: 6px !important;
+}
+
+.formCheckbox > input:focus {
+    box-shadow: none !important;
+}
+
+.formCheckbox > input:checked {
+    accent-color: #8DF3E8 !important;
 }
 
 .formInputRange {
     height: 30px
 }
 
+.filterInputField {
+    height: 40px;
+    background: none !important;
+    border: none !important;
+    border-bottom: solid 2px #FFFFFF !important;
+    border-radius: 0 !important;
+    padding-left: 0 !important;
+    font-family: Nunito, sans-serif;
+    font-size: 20px !important;
+    color: #FFFFFF !important;
+}
+
+.filterInputField:focus {
+    box-shadow: none !important;
+    background: none !important;
+}
+
+.filterInputField::-webkit-input-placeholder {
+    font-size: 20px;
+}
+
 .formLabel {
     color: white;
     font-family: "Nunito", sans-serif;
     font-size: 20px;
+    margin-bottom: 0 !important;
 }
 
 .formLabelSmall {
@@ -174,6 +223,7 @@
     font-family: "Nunito", sans-serif;
     font-size: 15px;
     font-weight: bold;
+    margin-bottom: 0 !important;
 }
 
 .formSubLabelSmall {
@@ -196,13 +246,15 @@
     color: #EB3E7A;
     font-size: 15px;
     font-family: "Nunito", sans-serif;
+    margin-bottom: 0
 }
 
 .buttonFilled {
-    background-color: #8DF3E8;
+    background: linear-gradient(to right, #EB3E7A, #764DE8);
+    color: #FFFFFF;
     height: 50px;
     width: 100%;
-    border: solid #8DF3E8 2px;
+    border: none;
     border-radius: 6px;
     font-size: 20px;
 }
@@ -232,6 +284,7 @@
 
 .defaultTransparentButton {
     width: auto;
+    height: 50px;
     border: solid #FFFFFF 2px;
     border-radius: 6px;
     padding: 0 15px;
@@ -248,6 +301,78 @@
     width: auto;
     padding: 0 15px;
 }
+
+.accordionTblActions {
+    background: rgba(255, 255, 255, 9%);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.accordionTblActions > .filterGroup {
+    display: flex;
+    gap: 30px
+}
+
+.dropDownFilter {
+    background: transparent !important;
+    width: 100px !important;
+    height: 40px !important;
+    border: none !important;
+    font-family: "Nunito", sans-serif;
+    font-size: 20px !important;
+    color: #FFFFFF !important;
+    appearance: none !important;
+}
+
+.dropDownFilter > option {
+    background: #060525;
+}
+
+/* Default Accordion Settings*/
+
+.accordionContainer {
+    width: 100%;
+    background: none;
+}
+
+.accordionItem {
+    border: none !important;
+}
+
+.accordionItem, .accordionItem > div, .accordionItem > h2 > button {
+    font-size: 20px !important;
+    margin-bottom: 4px;
+    color: white !important;
+    background: none !important;
+
+}
+
+.accordionHeader {
+    height: 50px !important;
+    background: rgba(255, 255, 255, 9%) !important;
+    border-radius: 6px;
+}
+
+.accordionHeader > button {
+    width: 100%;
+    padding: 0 10px !important;
+    height: 50px !important;
+}
+
+.accordionHeader > button:focus {
+    box-shadow: none !important;
+}
+
+.accordionBody {
+    padding: 10px 0 !important;
+    background: transparent !important;
+}
+
+/* Default Table Settings*/
 
 .tableContainer {
     color: white;
@@ -288,7 +413,7 @@
 
 @media (min-width: 850px) {
     .pageTitle {
-        font-size: 60px;
+        font-size: 40px;
         margin-bottom: 60px;
     }
 }

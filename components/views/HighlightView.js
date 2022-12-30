@@ -1,9 +1,9 @@
 import highlightViewStyles from "./HighlightView.module.css"
-import defaultStyles from "../pages/stylesheet/global.module.css"
+import defaultStyles from "../../pages/stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import formatTimestamp, {getDiscountPrice, hexToRgba} from "@components/Utils";
 import {faBullhorn, faCartShopping} from "@fortawesome/free-solid-svg-icons";
-import markdownElements from "@components/MarkdownReview.module.css";
+import markdownElements from "@components/views/MarkdownReview.module.css";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";

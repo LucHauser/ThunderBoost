@@ -1,5 +1,5 @@
 import defaultStyles from "../../stylesheet/global.module.css"
-import HighlightForm from "@components/HighlightForm";
+import HighlightForm from "@components/forms/HighlightForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
@@ -25,7 +25,10 @@ export default function createHighlight({session}) {
                 &nbsp;&nbsp;&nbsp;Back
             </button>
             <h1>Plan a new Highlight</h1>
-            <HighlightForm session={session}/>
+            <div>
+                <HighlightForm session={session}/>
+            </div>
+
         </div>
     )
 }

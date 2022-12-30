@@ -1,0 +1,40 @@
+.page {
+    padding: 90px 140px;
+}
+
+.pageTitle {
+    grid-row: 1 / 1;
+    grid-column: 1 / span 2;
+}
+
+@media (min-width: 850px) {
+    .page {
+        padding: 45px 70px;
+        display: grid;
+        grid-template-columns: 300px auto;
+    }
+
+    .articles {
+        display: flex;
+        flex-wrap: wrap;
+        grid-column: 2 / 2;
+        grid-row: 2 / 2;
+    }
+
+    .article {
+        width: 50%;
+        padding: 5px
+    }
+}
+
+@media (min-width: 1000px) {
+    .article {
+        width: 33.3%
+    }
+}
+
+@media (min-width: 1400px) {
+    .article {
+        width: 20%
+    }
+}
