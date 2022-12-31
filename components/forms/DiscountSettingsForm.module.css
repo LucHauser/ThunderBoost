@@ -1,51 +1,7 @@
-.formWrapper {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    column-gap: 10px;
-}
-
-#discountActive {
-    display: flex;
-    grid-row: 1 / 1;
-    grid-column: 1 / span 2;
-}
-
-#discountPercent {
-    grid-row: 2 / 2;
-    grid-column: 1 / 1;
-}
-
 #discountInformation {
     display: flex;
     align-items: center;
-    margin-top: 15px;
-}
-
-#dateFrom {
-    grid-row: 3 / 3;
-    grid-column: 1 / 1;
-}
-
-#dateUntil {
-    grid-row: 3 / 3;
-    grid-column: 2 / 2
-}
-
-#showDiscountUntilDate {
-    grid-row: 4 / 4;
-    grid-column: 1 / 1;
-    display: flex;
-}
-
-#discountUntilText {
-    grid-row: 5 / 5;
-    grid-column: 1 / 1;
-}
-
-#enableCountdown {
-    grid-row: 6 / 6;
-    grid-column: 1 / 1;
-    display: flex;
+    margin-top: 45px;
 }
 
 .buttonGroup {

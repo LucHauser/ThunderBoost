@@ -31,7 +31,7 @@ function validateLogin(login) {
     return { errors, isValid }
 }
 
-export default function LoginForm({session}) {
+export default function LoginForm({session, host}) {
 
     const defaultLoginModel = {
         email: "",
@@ -63,7 +63,7 @@ export default function LoginForm({session}) {
             setIsLoading(false)
             return
         } try {
-            const response = await login(loginModel.email, loginModel.password)
+            const response = await login(host, loginModel.email, loginModel.password)
             await session.login(response)
             router.push("/")
         } catch (e) {

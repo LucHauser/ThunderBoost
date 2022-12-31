@@ -6,7 +6,7 @@ import {Form} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
-export default function ImageSelectionList({usage, selectedImage, toggleDialog}) {
+export default function ImageSelectionList({usage, selectedImage, toggleDialog, host}) {
 
     const [images, setImages] = useState([])
     const [filterImage, setFilterImage] = useState("")
@@ -15,14 +15,14 @@ export default function ImageSelectionList({usage, selectedImage, toggleDialog})
         if (!usage) return
         const loadImages = async () => {
             try {
-                const images = await getAllImagesByUsage(usage)
+                const images = await getAllImagesByUsage(host, usage)
                 setImages(images)
             } catch (e) {
                 console.log(e)
             }
         }
         loadImages()
-    }, [usage])
+    }, [usage, host])
 
     const onChooseImage = (imagePath) => {
         selectedImage(imagePath)

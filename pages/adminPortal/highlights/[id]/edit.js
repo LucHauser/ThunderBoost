@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import HighlightForm from "@components/forms/HighlightForm";
 
-export default function editHighlight({session}) {
+export default function editHighlight({session, host}) {
 
     if (session.user) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -32,7 +32,7 @@ export default function editHighlight({session}) {
     }, [id])
 
     async function getHighlight(id) {
-        const res = await getHighlightById(id)
+        const res = await getHighlightById(host, id)
         console.log(res)
         setHighlightForEdit(res)
     }
@@ -48,7 +48,7 @@ export default function editHighlight({session}) {
             </button>
             <h1>Edit {highlightForEdit?.designation}</h1>
             <div className={defaultStyles.formSeparatorLine} style={{marginTop: 10}}/>
-            <HighlightForm session={session} highlightToEdit={highlightForEdit}/>
+            <HighlightForm session={session} highlightToEdit={highlightForEdit} host={host}/>
         </div>
     )
 }

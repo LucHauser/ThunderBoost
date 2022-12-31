@@ -5,7 +5,7 @@ import boosterPageStyles from "../stylesheet/boostersPage.module.css"
 import ProductArticle from "@components/views/ProductCollectionItem";
 import {useRouter} from "next/router";
 
-export default function BoostersPage({session}) {
+export default function BoostersPage({session, host}) {
 
     const [products, setProducts] = useState([])
     const [filterProduct, setFilterProduct] = useState("")
@@ -16,7 +16,7 @@ export default function BoostersPage({session}) {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const products = await getAllProductByFilterParameter("active=true")
+                const products = await getAllProductByFilterParameter(host, "active=true")
                 setProducts(products)
                 setFilteredProduct(products)
             } catch (e) {
@@ -24,7 +24,7 @@ export default function BoostersPage({session}) {
             }
         }
         loadProducts()
-    }, [])
+    }, [host])
 
     const router = useRouter()
 

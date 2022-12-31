@@ -6,8 +6,9 @@ import BaseDataVarietyForm from "@components/forms/BaseDataVarietyForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {Col, Container, Row} from "react-bootstrap";
 
-export default function editVariety({session}) {
+export default function editVariety({session, host}) {
 
     if (session.user) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -29,24 +30,38 @@ export default function editVariety({session}) {
         if (!id) return
         const loadVariety = async () => {
             try {
-                const variety = await getBaseDataVariertyById(id)
+                const variety = await getBaseDataVariertyById(host, id)
                 setVarietyToEdit(variety)
             } catch (e) {
                 console.log(e)
             }
         }
         loadVariety()
-    }, [id])
+    }, [id, host])
 
     return (
         <div className={defaultStyles.adminPageWrapper}>
-            <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() =>router.push("../../baseDataVariety")}>
-                <FontAwesomeIcon icon={faLeftLong}/>
-                &nbsp;&nbsp;&nbsp;Back
-            </button>
-            <h1>{varietyToEdit?.name}</h1>
-            <div className={defaultStyles.formSeparatorLine}/>
-            <BaseDataVarietyForm session={session} varietyToEdit={varietyToEdit}/>
+            <Container fluid={true} className={defaultStyles.pageContentGap15}>
+                <Row>
+                    <Col>
+                        <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() =>router.push("../../baseDataVariety")}>
+                            <FontAwesomeIcon icon={faLeftLong}/>
+                            &nbsp;&nbsp;&nbsp;Back
+                        </button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <h1>Edit {varietyToEdit?.name}</h1>
+                        <div className={defaultStyles.formSeparatorLine}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <BaseDataVarietyForm session={session} varietyToEdit={varietyToEdit} host={host}/>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     )
 }

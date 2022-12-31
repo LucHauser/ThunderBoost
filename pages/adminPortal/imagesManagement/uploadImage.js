@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 
-export default function UploadImage({session}) {
+export default function UploadImage({session, host}) {
 
     const router = useRouter()
 

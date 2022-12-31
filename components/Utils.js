@@ -125,3 +125,7 @@ export function checkIfDate1IsGreaterThanDate2(date1, date2) {
 export function getDate(date) {
     return new Date(date).toString()
 }
+
+export function formatServerUrl(host) {
+    return "http://" + host + ":3001"
+}

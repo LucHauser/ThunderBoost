@@ -7,7 +7,7 @@
     "build": "next build",
     "lint": "next lint",
     "lint-watch": "nodemon --watch . --exec npm run lint",
-    "server": "json-server-auth --watch ./lib/database/db.json -r ./lib/database/routes.json --port 3001"
+    "server": "json-server-auth --watch ./lib/database/db.json -r ./lib/database/routes.json --port 3001 -H 0.0.0.0"
   },
   "keywords": [],
   "author": "",

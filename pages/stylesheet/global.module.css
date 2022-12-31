@@ -12,7 +12,7 @@
 
 /* TODO fix ttf, converter from https://onlinefontconverter.com/ */
 
-
+/*Page Config*/
 
 .pageTitle {
     color: #8DF3E8;
@@ -36,16 +36,32 @@
     color: white
 }
 
+.pageContentGap15 > div:not(:first-child) {
+    margin-top: 15px;
+}
+
+/*Lagout & Margins*/
+
+.margin10Bottom {
+    margin-bottom: 10px !important;
+}
+
+/*Forms*/
+
 .formGroup {
     display: grid;
     grid-gap: 8px;
     margin-bottom: 20px;
 }
 
-.formGroupHorizontal {
+.formGroupHorizontal, .flexHorizontal {
     display: flex !important;
     gap: 10px;
     align-items: center !important;
+}
+
+.formGroupHorizontal > .paragraphs {
+    margin-bottom: 0 !important;
 }
 
 .formGroupSmall {
@@ -91,6 +107,7 @@
     color: white !important;
     font-size: 20px !important;
     box-shadow: none !important;
+    appearance: menulist-button;
 }
 
 .formInputField::-webkit-input-placeholder, .formInputFieldSmall::-webkit-input-placeholder {
@@ -108,6 +125,7 @@
     border-radius: 4px !important;
     font-size: 15px;
     color: #FFFFFF !important;
+    appearance: menulist-button;
 }
 
 .formInputField > option, .formInputFieldSmall > option {
@@ -135,7 +153,7 @@
     box-shadow: none !important;
 }
 
-.formColorPicker:focus {
+.formColorPicker:focus, .dropDownFilter:focus {
     outline: none;
     box-shadow: none !important;
 }
@@ -190,27 +208,6 @@
     height: 30px
 }
 
-.filterInputField {
-    height: 40px;
-    background: none !important;
-    border: none !important;
-    border-bottom: solid 2px #FFFFFF !important;
-    border-radius: 0 !important;
-    padding-left: 0 !important;
-    font-family: Nunito, sans-serif;
-    font-size: 20px !important;
-    color: #FFFFFF !important;
-}
-
-.filterInputField:focus {
-    box-shadow: none !important;
-    background: none !important;
-}
-
-.filterInputField::-webkit-input-placeholder {
-    font-size: 20px;
-}
-
 .formLabel {
     color: white;
     font-family: "Nunito", sans-serif;
@@ -248,6 +245,8 @@
     font-family: "Nunito", sans-serif;
     margin-bottom: 0
 }
+
+/*Buttons*/
 
 .buttonFilled {
     background: linear-gradient(to right, #EB3E7A, #764DE8);
@@ -302,8 +301,16 @@
     padding: 0 15px;
 }
 
-.accordionTblActions {
-    background: rgba(255, 255, 255, 9%);
+.formBtnGroup {
+    display: flex;
+    gap: 15px;
+    justify-content: end;
+}
+
+/*Actions on Table for Filter and Create etc*/
+
+.filterActionBar {
+    background: rgba(255, 255, 255, 15%);
     height: 50px;
     display: flex;
     align-items: center;
@@ -312,9 +319,30 @@
     border-radius: 6px;
 }
 
-.accordionTblActions > .filterGroup {
+.filterActionBar > .filterGroup {
     display: flex;
     gap: 30px
+}
+
+.filterInputField {
+    height: 40px;
+    background: none !important;
+    border: none !important;
+    border-bottom: solid 2px #FFFFFF !important;
+    border-radius: 0 !important;
+    padding-left: 0 !important;
+    font-family: Nunito, sans-serif;
+    font-size: 20px !important;
+    color: #FFFFFF !important;
+}
+
+.filterInputField:focus {
+    box-shadow: none !important;
+    background: none !important;
+}
+
+.filterInputField::-webkit-input-placeholder {
+    font-size: 20px;
 }
 
 .dropDownFilter {
@@ -325,11 +353,24 @@
     font-family: "Nunito", sans-serif;
     font-size: 20px !important;
     color: #FFFFFF !important;
-    appearance: none !important;
+    appearance: menulist-button;
 }
 
 .dropDownFilter > option {
     background: #060525;
+}
+
+.createBtn {
+    height: 40px;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+}
+
+.createBtn:hover {
+    cursor: pointer;
 }
 
 /* Default Accordion Settings*/
@@ -382,29 +423,60 @@
     border-collapse: collapse;
 }
 
-.tableHeader {
-    background: #14318C;
-}
-
 .tableHeader > tr {
-    height: 50px;
+    height: fit-content !important;
+    background: rgba(255, 255, 255, 15%);
+    color: #FFFFFF;
 }
 
-.tableHeader > tr > th {
-    text-align: left;
+.tableHeader > tr > th:first-child {
+    border-top-left-radius: 6px !important;
+}
+
+.tableHeader > tr > th:last-child {
+    border-top-right-radius: 6px !important;
 }
 
 .tableHeader > tr > th, .tableBody > tr > td {
-    padding: 0 15px;
+    padding: 10px 15px !important;
 }
 
 .tableBody > tr {
-    background: #060525;
-    border-bottom: solid 1px #FFFFFF;
+    background: rgba(255, 255, 255, 9%);
+    color: #FFFFFF;
+    height: 50px !important;
 }
 
 .tableBody > tr > td {
-    height: 50px;
+    height: 50px !important;
+}
+
+.tableBody > tr:last-child {
+    border-bottom-color:transparent !important;
+}
+
+.tableBody > tr:last-child > td:first-child {
+    border-bottom-left-radius: 6px;
+}
+
+.tableBody > tr:last-child > td:last-child {
+    border-bottom-right-radius: 6px;
+}
+
+.tableRowActions {
+    display: flex;
+    justify-content: right;
+    max-width: fit-content;
+    margin-left: auto;
+    gap: 10px
+}
+
+.tblRowBtn {
+    background: transparent;
+    border: none;
+    font-family: "Nunito", sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
 }
 
 .hideElement {

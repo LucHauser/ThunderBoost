@@ -15,8 +15,12 @@ import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import ImageSelectionList from "@components/ImageSelectionList";
 import VarietySelectionList from "@components/VarietySelectionList";
+import {
+    actualizeVarietyListAfterCreatedProduct,
+    actualizeVarietyListAfterEditedProduct
+} from "@lib/baseDataVarietyUtils";
 
-export default function ProductForm({session, productToEdit}) {
+export default function ProductForm({session, productToEdit, host}) {
 
     if (session.user) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -128,6 +132,8 @@ export default function ProductForm({session, productToEdit}) {
     const [errors, setErrors] = useState({})
     const [loadProduct, setLoadProduct] = useState(false)
     const [varieties, setVarieties] = useState([])
+    const [allVarieties, setAllVarieties] = useState([])
+    const [varietiesBeforeEdit, setVarietiesBeforeEdit] = useState([])
     const [images, setImages] = useState([])
     const [markdownReview, setMarkdownReview] = useState("")
     const [markdownMode, setMarkdownMode] = useState(false)
@@ -139,7 +145,8 @@ export default function ProductForm({session, productToEdit}) {
     useEffect(() => {
         const loadVarieties = async () => {
             try {
-                const fetchedVarieties = await getAllBaseDataVariety()
+                const fetchedVarieties = await getAllBaseDataVariety(host)
+                setAllVarieties(fetchedVarieties)
                 let varietyListString = []
                 for (let i = 0; i < fetchedVarieties.length; i++) {
                     if (fetchedVarieties[i].active) {
@@ -152,11 +159,12 @@ export default function ProductForm({session, productToEdit}) {
             }
         }
         loadVarieties()
-    }, [])
+    }, [host])
 
     useEffect(() => {
         if (productToEdit) {
             setProductModel(productToEdit)
+            setVarietiesBeforeEdit(productModel.varieties)
             setMarkdownReview(productModel.description)
             const imagesOfProductToEdit = productToEdit.images
             setImages(imagesOfProductToEdit)
@@ -211,13 +219,15 @@ export default function ProductForm({session, productToEdit}) {
         }
         if (productModel.id) {
             try {
-                await updateProduct(productModel, session.accessToken)
+                const edited = await updateProduct(host, productModel, session.accessToken)
+                actualizeVarietyListAfterEditedProduct(session, host, varietiesBeforeEdit, edited.varieties, allVarieties)
             } catch (e) {
                 console.log(e)
             }
         } else {
             try {
-                await createProduct(productModel, session.accessToken)
+                const created = await createProduct(host, productModel, session.accessToken)
+                actualizeVarietyListAfterCreatedProduct(session, host, created.varieties, allVarieties)
             } catch (e) {
                 console.log(e)
             }
@@ -233,10 +243,10 @@ export default function ProductForm({session, productToEdit}) {
         <div className={productFormStyles.component}>
             <Form
                 onSubmit={handleSubmit} autoComplete={"off"}>
-                <Container>
+                <Container fluid={true}>
                     <Row>
                         <Col>
-                            <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.inputName}`}>
+                            <Form.Group className={`${defaultStyles.formGroup}`}>
                                 <Form.Label className={defaultStyles.formLabel}>Name*</Form.Label>
                                 <Form.Control
                                     className={`${defaultStyles.formInputField} ${errors.name && defaultStyles.formInputError}`}
@@ -370,7 +380,7 @@ export default function ProductForm({session, productToEdit}) {
                     </Row>
                     <Row>
                         <Col>
-                            <Form.Group className={`${defaultStyles.formGroup} ${productFormStyles.imageSelectionForm}`}>
+                            <Form.Group className={`${defaultStyles.formGroup}`}>
                                 <Form.Label className={defaultStyles.formLabel}>Product Image</Form.Label>
                                 <div className={productFormStyles.selectedProductImages}>
                                     {
@@ -454,7 +464,7 @@ export default function ProductForm({session, productToEdit}) {
                     </Row>
                     <Row>
                         <Col>
-                            <div className={productFormStyles.btnGroup}>
+                            <div className={defaultStyles.formBtnGroup}>
                                 <button
                                     className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"}>Submit</button>
                                 <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.defaultTransparentButton}`} onClick={navigateBack}>Cancel</button>
@@ -466,14 +476,14 @@ export default function ProductForm({session, productToEdit}) {
             {
                 showImageSelectionDialog ?
                     <div className={productFormStyles.selectionDialog}>
-                        <ImageSelectionList usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => addImageToList(image)}/>
+                        <ImageSelectionList host={host} usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => addImageToList(image)}/>
                     </div>
                     : null
             }
             {
                 showVarietySelectionDialog ?
                     <div className={productFormStyles.selectionDialog}>
-                        <VarietySelectionList session={session} onSelectedVarieties={(selectedVarieties) => setProductModel({...productModel, varieties: selectedVarieties})} toggleDialog={() => setShowVarietySelectDialog(false)} onEditVarieties={productModel.varieties}/>
+                        <VarietySelectionList session={session} host={host} onSelectedVarieties={(selectedVarieties) => setProductModel({...productModel, varieties: selectedVarieties})} toggleDialog={() => setShowVarietySelectDialog(false)} onEditVarieties={productModel.varieties}/>
                     </div> :
                     null
 

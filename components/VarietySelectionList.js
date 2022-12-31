@@ -7,7 +7,7 @@ import {faMagnifyingGlass, faX} from "@fortawesome/free-solid-svg-icons";
 import {Form} from "react-bootstrap";
 import BaseDataVarietyForm from "@components/forms/BaseDataVarietyForm";
 
-export default function VarietySelectionList({session, onEditVarieties, onSelectedVarieties, toggleDialog}) {
+export default function VarietySelectionList({session, host, onEditVarieties, onSelectedVarieties, toggleDialog}) {
 
     const [selectedVarieties, setSelectedVarieties] = useState([])
     const [choiceVarieties, setChoiceVarieties] = useState([])
@@ -17,7 +17,7 @@ export default function VarietySelectionList({session, onEditVarieties, onSelect
     useEffect(() => {
         const loadVarieties = async () => {
             try {
-                const allVarieties = await getAllBaseDataVariety()
+                const allVarieties = await getAllBaseDataVariety(host)
                 const allActiveVarieties = allVarieties.filter(v => v.active)
                 let allNames = allActiveVarieties.map(v => v.name)
                 if (onEditVarieties.length > 0) {
@@ -32,7 +32,7 @@ export default function VarietySelectionList({session, onEditVarieties, onSelect
             }
         }
         loadVarieties()
-    }, [])
+    }, [host])
 
 
     function selectVariety(name){

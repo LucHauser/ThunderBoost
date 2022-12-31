@@ -6,10 +6,12 @@
 
 body {
     background: #000000;
+    width: 100%
 }
 
 .page {
     background: linear-gradient(to bottom, #4F2A59, #000000);
+    min-height: calc(100vh - 75px);
 }
 
 

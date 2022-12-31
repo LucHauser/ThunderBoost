@@ -3,13 +3,10 @@ import highlightManagementStyles from "../../stylesheet/highlightManagement.modu
 import AdminPortalHeader from "@components/pageUtils/AdminPortalNav";
 import {useEffect, useState} from "react";
 import {deleteHighlight, getAllHighlights, getAllHighligtsInclusiveProduct, updateHighlight} from "@lib/api";
-import {Form} from "react-bootstrap";
+import {Col, Container, Form, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faCalendarCheck, faCalendarXmark,
-    faCaretDown,
-    faCaretUp,
-    faCheck, faChevronDown, faChevronUp,
     faCircle,
     faCopy,
     faEye,
@@ -17,22 +14,17 @@ import {
     faLockOpen,
     faPencil, faPenToSquare,
     faPlus, faSquarePlus, faT, faTag, faTrash, faWineBottle,
-    faX
 } from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import HighlightView from "@components/views/HighlightView";
 import formatTimestamp, {checkIfEventIsNowBetweenStartTime} from "@components/Utils";
 import {
-    Accordion,
-    AccordionItem,
-    AccordionItemPanel,
-    AccordionItemButton,
-    AccordionItemHeading
-} from "react-accessible-accordion";
+    Accordion
+} from "react-bootstrap";
 import CloneHighlightDialog from "@components/forms/CloneHighlightForm";
 
-export default function HighlightManagementPage({session}) {
+export default function HighlightManagementPage({session, host}) {
 
     if (session.user) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -58,14 +50,14 @@ export default function HighlightManagementPage({session}) {
     useEffect(() => {
         const loadHighlights = async () => {
             try {
-                const highlights = await getAllHighligtsInclusiveProduct()
+                const highlights = await getAllHighligtsInclusiveProduct(host)
                 setAllHighlights(highlights)
             } catch (e) {
                 console.log(e)
             }
         }
         loadHighlights()
-    }, [])
+    }, [host])
 
     const changeViewMode = (e) => {
         setTableViewMode(e.target.value)
@@ -100,7 +92,7 @@ export default function HighlightManagementPage({session}) {
         highlight.active = !highlight.active;
         delete highlight?.product
         try {
-            const updatedHighlight = await updateHighlight(highlight, session.accessToken)
+            const updatedHighlight = await updateHighlight(host, highlight, session.accessToken)
             updatedHighlight.product = relatedProduct
             setAllHighlights(allHighlights => {
                 return allHighlights.map(h => {
@@ -117,146 +109,165 @@ export default function HighlightManagementPage({session}) {
     }
 
     const handleDeleteHighlight = async (id) => {
-        await deleteHighlight(id, session.accessToken)
+        await deleteHighlight(host, id, session.accessToken)
         setAllHighlights((prevState) => prevState.filter(h => h.id !== id))
-    }
-
-    function HighlightStatusText({dateFrom, dateUntil}) {
-
     }
 
     return (
         <div className={defaultStyles.adminPageWrapper}>
-            <AdminPortalHeader session={session} currentPage={2}/>
-            <div className={`${defaultStyles.tableHeader} ${highlightManagementStyles.tableHeader}`}>
-                <div className={highlightManagementStyles.filterActions}>
-                    <p>View Mode:&nbsp;</p>
-                    <Form.Select className={highlightManagementStyles.dropdownFilter} onChange={changeViewMode}>
-                        {viewModeOptions.map((opt, index) => {
-                            return (
-                                <option key={index} value={index}>{opt}</option>
-                            )
-                        })}
-                    </Form.Select>
-                </div>
-                <button className={highlightManagementStyles.addBtn} onClick={() => router.push("./highlights/create")}>
-                    <FontAwesomeIcon
-                        style={{marginRight: 10}}
-                        icon={faPlus}
-                        color={"white"}
-                    />
-                    New
-                </button>
-            </div>
-            <Accordion allowZeroExpanded={true}>
-                {
-                    allHighlights.map((highlight, index) => (
-                        <AccordionItem key={index} className={highlightManagementStyles.accordionItem}>
-                            <AccordionItemHeading className={highlightManagementStyles.accordionItemHeading}>
-                                <AccordionItemButton className={highlightManagementStyles.accordionItemButton} onClick={() => setCollapsedItem(highlight.id)}>
-                                    <p>{highlight.designation}</p>
-                                    <div>
-                                        {
-                                            !highlight.isDraft ?
-                                                <>
-                                                    <p>Active: </p>
-                                                    <FontAwesomeIcon
-                                                        icon={faCircle}
-                                                        color={
-                                                            highlight.active ? "#6aa84f" : "#cc0000"
-                                                        }
-                                                    />
-                                                    <p>On Air: </p>
-                                                    <FontAwesomeIcon
-                                                        icon={faCircle}
-                                                        color={checkIfEventIsNowBetweenStartTime(highlight.dateFrom, highlight.dateUntil) ? "green" : "red"}
-                                                    />
-                                                </> : <p className={highlightManagementStyles.draftHighlightText}>Draft</p>
-                                        }
-                                    </div>
-                                </AccordionItemButton>
-                            </AccordionItemHeading>
-                            <AccordionItemPanel>
-                                <div className={highlightManagementStyles.accordionPanel}>
-                                    <div>
-                                        <h3>Information</h3>
-                                        <table className={highlightManagementStyles.highlightInformation}>
-                                            <tr>
-                                                <th><FontAwesomeIcon icon={faT}/>&nbsp;&nbsp;&nbsp;</th>
-                                                <th>Description:</th>
-                                                <td>{highlight.description}</td>
-                                            </tr>
-                                            <tr>
-                                                <th><FontAwesomeIcon icon={faTag}/></th>
-                                                <th>Event Type:</th>
-                                                <td>{highlight.eventType}</td>
-                                            </tr>
-                                            <tr>
-                                                <th><FontAwesomeIcon icon={faSquarePlus}/></th>
-                                                <th>Created:</th>
-                                                <td>{formatTimestamp(highlight.created, "dd.MMMM.yyyy HH:mm")}</td>
-                                            </tr>
-                                            {
-                                                highlight.edited ?
-                                                    <tr>
-                                                        <th><FontAwesomeIcon icon={faPenToSquare}/></th>
-                                                        <th>Edited:</th>
-                                                        <td>{formatTimestamp(highlight.edited, "dd.MMMM.yyyy HH.mm")}</td>
-                                                    </tr> : null
-                                            }
-                                            <tr>
-                                                <th><FontAwesomeIcon icon={faWineBottle}/></th>
-                                                <th>Related Product:</th>
-                                                <td>{highlight?.product?.name ? highlight.product.name : "-"}</td>
-                                            </tr>
-                                            {
-                                                highlight.dateFrom && highlight.dateUntil ? <>
-                                                    <th colSpan={3}>Presentation start and end</th>
-                                                    <tr>
-                                                        <th><FontAwesomeIcon icon={faCalendarCheck}/></th>
-                                                        <th>Start</th>
-                                                        <td>{formatTimestamp(highlight.dateFrom, "dd.MMMM.yyyy HH:mm")}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th><FontAwesomeIcon icon={faCalendarXmark}/></th>
-                                                        <th>End</th>
-                                                        <td>{formatTimestamp(highlight.dateUntil, "dd.MMMM.yyyy HH:mm")}</td>
-                                                    </tr>
-                                                </> : null
-                                            }
-
-                                        </table>
-                                    </div>
-                                    <div className={highlightManagementStyles.buttonSection}>
-                                        <h3>Edit & View</h3>
-                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => openHighlightView(highlight.id)}>
-                                            <FontAwesomeIcon icon={faEye} color={"black"} style={{marginRight: 5}}/>
-                                            View
-                                        </button>
-                                        <div className={highlightManagementStyles.buttonGroup}>
-                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => router.push(`./highlights/${highlight.id}/edit`)}>
-                                                <FontAwesomeIcon icon={faPencil} color={"black"} style={{marginRight: 5}}/>
-                                                Edit
-                                            </button>
-                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${highlight.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`} onClick={() => handleActivateHighlight(highlight)}>
-                                                <FontAwesomeIcon icon={highlight.active ? faLockOpen : faLock} color={"white"}/>
-                                            </button>
-                                        </div>
-                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => cloneHighlight(highlight.id)}>
-                                            <FontAwesomeIcon icon={faCopy} color={"black"} style={{marginRight: 5}}/>
-                                            Create Copy
-                                        </button>
-                                        <button className={`${defaultStyles.buttonRed} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilled}`} onClick={() => handleDeleteHighlight(highlight.id)}>
-                                            <FontAwesomeIcon icon={faTrash} color={"white"} style={{marginRight: 5}}/>
-                                            Delete
-                                        </button>
-                                    </div>
+            <Container fluid={true} id={highlightManagementStyles["highlightManagementPageLayout"]}>
+                <Row>
+                    <Col>
+                        <AdminPortalHeader session={session} currentPage={2}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <div className={defaultStyles.filterActionBar}>
+                            <div className={defaultStyles.filterGroup}>
+                                <div className={defaultStyles.formGroupHorizontal}>
+                                    <p style={{fontSize: 20, width: 220}} className={defaultStyles.paragraphs}>Filter Highlight:</p>
+                                    <Form.Control className={defaultStyles.filterInputField} onChange={(e) => setFilteredHighlights(e.target.value)} placeholder={"Filter Highlight"}/>
                                 </div>
-                            </AccordionItemPanel>
-                        </AccordionItem>
-                    ))
-                }
-            </Accordion>
+                                <div className={defaultStyles.formGroupHorizontal}>
+                                    <p className={defaultStyles.paragraphs} style={{fontSize: 20}}>View Mode:</p>
+                                    <Form.Select className={defaultStyles.dropDownFilter} onChange={changeViewMode}>
+                                        {viewModeOptions.map((opt, index) => {
+                                            return (
+                                                <option key={index} value={index}>{opt}</option>
+                                            )
+                                        })}
+                                    </Form.Select>
+                                </div>
+
+                            </div>
+                            <button className={highlightManagementStyles.addBtn} onClick={() => router.push("./highlights/create")}>
+                                <FontAwesomeIcon
+                                    style={{marginRight: 10}}
+                                    icon={faPlus}
+                                    color={"white"}
+                                />
+                                New
+                            </button>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Accordion flush alwaysOpen>
+                            {
+                                allHighlights.map((highlight, index) => (
+                                    <Accordion.Item key={index} className={defaultStyles.accordionItem} eventKey={highlight.id}>
+                                        <Accordion.Header className={defaultStyles.accordionHeader}>
+                                            <div className={highlightManagementStyles.accordionHeadingContent}>
+                                                <p>{highlight.designation}</p>
+                                                <div className={defaultStyles.formGroupHorizontal}>
+                                                    {
+                                                        !highlight.isDraft ?
+                                                            <>
+                                                                <p>Active: </p>
+                                                                <FontAwesomeIcon
+                                                                    icon={faCircle}
+                                                                    color={
+                                                                        highlight.active ? "#6aa84f" : "#cc0000"
+                                                                    }
+                                                                />
+                                                                <p>On Air: </p>
+                                                                <FontAwesomeIcon
+                                                                    icon={faCircle}
+                                                                    color={checkIfEventIsNowBetweenStartTime(highlight.dateFrom, highlight.dateUntil) ? "green" : "red"}
+                                                                />
+                                                            </> : <p className={highlightManagementStyles.draftHighlightText}>Draft</p>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </Accordion.Header>
+                                        <Accordion.Body className={defaultStyles.accordionBody}>
+                                            <Container fluid={true}>
+                                                <Row>
+                                                    <Col md={10}>
+                                                        <h3>Information</h3>
+                                                        <table className={highlightManagementStyles.highlightInformation}>
+                                                            <tr>
+                                                                <th><FontAwesomeIcon icon={faT}/>&nbsp;&nbsp;&nbsp;</th>
+                                                                <th>Description:</th>
+                                                                <td>{highlight.description}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th><FontAwesomeIcon icon={faTag}/></th>
+                                                                <th>Event Type:</th>
+                                                                <td>{highlight.eventType}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th><FontAwesomeIcon icon={faSquarePlus}/></th>
+                                                                <th>Created:</th>
+                                                                <td>{formatTimestamp(highlight.created, "dd.MMMM.yyyy HH:mm")}</td>
+                                                            </tr>
+                                                            {
+                                                                highlight.edited ?
+                                                                    <tr>
+                                                                        <th><FontAwesomeIcon icon={faPenToSquare}/></th>
+                                                                        <th>Edited:</th>
+                                                                        <td>{formatTimestamp(highlight.edited, "dd.MMMM.yyyy HH.mm")}</td>
+                                                                    </tr> : null
+                                                            }
+                                                            <tr>
+                                                                <th><FontAwesomeIcon icon={faWineBottle}/></th>
+                                                                <th>Related Product:</th>
+                                                                <td>{highlight?.product?.name ? highlight.product.name : "-"}</td>
+                                                            </tr>
+                                                            {
+                                                                highlight.dateFrom && highlight.dateUntil ? <>
+                                                                    <th colSpan={3}>Presentation start and end</th>
+                                                                    <tr>
+                                                                        <th><FontAwesomeIcon icon={faCalendarCheck}/></th>
+                                                                        <th>Start</th>
+                                                                        <td>{formatTimestamp(highlight.dateFrom, "dd.MMMM.yyyy HH:mm")}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th><FontAwesomeIcon icon={faCalendarXmark}/></th>
+                                                                        <th>End</th>
+                                                                        <td>{formatTimestamp(highlight.dateUntil, "dd.MMMM.yyyy HH:mm")}</td>
+                                                                    </tr>
+                                                                </> : null
+                                                            }
+
+                                                        </table>
+                                                    </Col>
+                                                    <Col md={2} className={highlightManagementStyles.buttonSection}>
+                                                        <h3>Edit & View</h3>
+                                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => openHighlightView(highlight.id)}>
+                                                            <FontAwesomeIcon icon={faEye} color={"black"} style={{marginRight: 5}}/>
+                                                            View
+                                                        </button>
+                                                        <div className={highlightManagementStyles.buttonGroup}>
+                                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => router.push(`./highlights/${highlight.id}/edit`)}>
+                                                                <FontAwesomeIcon icon={faPencil} color={"black"} style={{marginRight: 5}}/>
+                                                                Edit
+                                                            </button>
+                                                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ${highlight.active ? defaultStyles.buttonGreen: defaultStyles.buttonRed}`} onClick={() => handleActivateHighlight(highlight)}>
+                                                                <FontAwesomeIcon icon={highlight.active ? faLockOpen : faLock} color={"white"}/>
+                                                            </button>
+                                                        </div>
+                                                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => cloneHighlight(highlight.id)}>
+                                                            <FontAwesomeIcon icon={faCopy} color={"black"} style={{marginRight: 5}}/>
+                                                            Create Copy
+                                                        </button>
+                                                        <button className={`${defaultStyles.buttonRed} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilled}`} onClick={() => handleDeleteHighlight(highlight.id)}>
+                                                            <FontAwesomeIcon icon={faTrash} color={"white"} style={{marginRight: 5}}/>
+                                                            Delete
+                                                        </button>
+                                                    </Col>
+                                                </Row>
+                                            </Container>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                ))
+                            }
+                        </Accordion>
+                    </Col>
+                </Row>
+            </Container>
             {
                 showHighlightView ?
                     <div className={highlightManagementStyles.dialog} onClick={() => setShowHighlightView(false)}>

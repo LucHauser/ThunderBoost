@@ -5,8 +5,9 @@ import {useRedirectToHome} from "@lib/session";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import LoginForm from "@components/forms/LoginForm";
 import RegisterForm from "@components/forms/RegisterForm";
+import {formatServerUrl} from "@components/Utils";
 
-export default function LoginPage({session}) {
+export default function LoginPage({session, host}) {
 
     useRedirectToHome(session)
 
@@ -25,15 +26,15 @@ export default function LoginPage({session}) {
                     <Tab className={`${activeTab ? loginStyle.tabListElementActive : loginStyle.tabListNotActiveRight} ${loginStyle.tabListElement}`} onClick={() => setActiveTab(true)}>Register</Tab>
                 </TabList>
                 <TabPanel className={loginStyle.formTabPage}>
-                    <LoginForm session={session}/>
+                    <LoginForm session={session} host={host}/>
                 </TabPanel>
                 <TabPanel>
-                    <RegisterForm session={session}/>
+                    <RegisterForm session={session} host={host}/>
                 </TabPanel>
             </Tabs>
             <div className={loginStyle.formsContainer}>
-                <LoginForm session={session}/>
-                <RegisterForm session={session}/>
+                <LoginForm session={session} host={host}/>
+                <RegisterForm session={session} host={host}/>
             </div>
         </div>
     )

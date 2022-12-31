@@ -4,8 +4,7 @@ import productManagementStyles from "../../stylesheet/productManagement.module.c
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faCalendar, faCalendarCheck, faCalendarXmark,
-    faCheck, faChevronDown,
-    faChevronUp,
+    faCheck,
     faCircle, faDollar,
     faFilter, faFont, faHashtag, faLock, faLockOpen, faPencil, faPercent,
     faPlus, faRocket, faSpoon, faTags, faTrash, faUsers,
@@ -17,11 +16,7 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {getAllProducts, updateProduct, deleteProduct} from "@lib/api";
 import {
-    Accordion,
-    AccordionItem,
-    AccordionItemButton,
-    AccordionItemHeading,
-    AccordionItemPanel
+    Accordion
 } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -29,12 +24,10 @@ import remarkGfm from "remark-gfm";
 import markdownElements from "@components/views/MarkdownReview.module.css";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import formatTimestamp, {
-    checkIfDiscountStartIsFutureOfNow,
-    checkIfProductIsNowDiscount,
-    getDate
+    checkIfProductIsNowDiscount, formatServerUrl
 } from "@components/Utils";
 
-export default function ProductManagementPage({session}) {
+export default function ProductManagementPage({session, host}) {
 
     if (session.user) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -61,7 +54,7 @@ export default function ProductManagementPage({session}) {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const products = await getAllProducts()
+                const products = await getAllProducts(host)
                 setAllProducts(products)
                 setProducts(products)
                 setNumberOfProducts(products.length)
@@ -70,16 +63,12 @@ export default function ProductManagementPage({session}) {
             }
         }
         loadProducts()
-    }, [])
+    }, [host])
 
     useEffect(() => {
         handleChangeFilter()
         setNumberOfProducts(products.length)
     }, [filterProduct, filterActivable, filterStockAmount, products])
-
-    const switchItem = (id) =>  {
-        setOpenedItem(id)
-    }
 
     const handleChangeFilter = () => {
         let filteredProduct
@@ -114,7 +103,7 @@ export default function ProductManagementPage({session}) {
         //delete product.productHasVarieties
         product.active = !product.active;
         try {
-            const updatedProduct = await updateProduct(product, session.accessToken)
+            const updatedProduct = await updateProduct(formatServerUrl(document.location.hostname), product, session.accessToken)
             setProducts(products => {
                 return products.map(p => {
                     if (p.id === updatedProduct.id) {
@@ -132,7 +121,7 @@ export default function ProductManagementPage({session}) {
     const handleDiscountActivation = async (product) => {
         product.discountActive = !product.discountActive
         try {
-            const updatedProduct = await updateProduct(product, session.accessToken)
+            const updatedProduct = await updateProduct(formatServerUrl(document.location.hostname), product, session.accessToken)
             setProducts(products => {
                 return products.map(p => {
                     if (p.id === updatedProduct.id) {
@@ -148,7 +137,7 @@ export default function ProductManagementPage({session}) {
     }
 
     const handleDeleteProduct = async (productId) => {
-        await deleteProduct(productId, session.accessToken)
+        await deleteProduct(formatServerUrl(document.location.hostname), productId, session.accessToken)
         setProducts((prevState) => prevState.filter(p => p.id !== productId))
     }
 
@@ -174,7 +163,7 @@ export default function ProductManagementPage({session}) {
                 </Row>
                 <Row>
                     <Col>
-                        <div className={defaultStyles.accordionTblActions}>
+                        <div className={defaultStyles.filterActionBar}>
                             <div className={defaultStyles.filterGroup}>
                                 <div className={defaultStyles.formGroupHorizontal}>
                                     <FontAwesomeIcon icon={faFilter} size={"xl"} color={"white"} style={{marginRight: 10}}/>
@@ -215,7 +204,7 @@ export default function ProductManagementPage({session}) {
                             </div>
 
                             <button
-                                className={productManagementStyles.addBtn}
+                                className={defaultStyles.createBtn}
                                 onClick={createNewProduct}
                             >
                                 <FontAwesomeIcon

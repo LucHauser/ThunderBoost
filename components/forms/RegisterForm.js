@@ -64,7 +64,7 @@ function validateRegister(register, checkedAgree) {
     return {errors, isValid}
 }
 
-export default function RegisterForm({session}) {
+export default function RegisterForm({session, host}) {
 
     const defaultRegisterModel = {
         title: "Mr",
@@ -106,7 +106,7 @@ export default function RegisterForm({session}) {
         }
         try {
             const now = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`
-            const response = await register(registerModel.title,
+            const response = await register(host, registerModel.title,
                 registerModel.firstName,
                 registerModel.lastName,
                 registerModel.email,

@@ -13,7 +13,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUpload} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 
-export default function HighlightForm({session, highlightToEdit}) {
+export default function HighlightForm({session, highlightToEdit, host}) {
 
     const eventTypeOptions = [
         {text: "Release", value: "Release"},
@@ -264,26 +264,26 @@ export default function HighlightForm({session, highlightToEdit}) {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const products = await getAllProducts()
+                const products = await getAllProducts(host)
                 setProducts(products)
             } catch (e) {
                 console.log(e)
             }
         }
         loadProducts()
-    }, [])
+    }, [host])
 
     useEffect(() => {
         const loadImages = async () => {
             try {
-                const images = await getAllImagesByUsage("Highlights Background")
+                const images = await getAllImagesByUsage(host, "Highlights Background")
                 setBackgroundImages(images)
             } catch (e) {
                 console.log(e)
             }
         }
         loadImages()
-    }, [])
+    }, [host])
 
     useEffect(() => {
         if (highlightToEdit) {
@@ -377,7 +377,7 @@ export default function HighlightForm({session, highlightToEdit}) {
         if (model.id) {
             model.edited = formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")
             try {
-                await updateHighlight(model, session.accessToken)
+                await updateHighlight(host, model, session.accessToken)
                 await router.push("../../highlights")
             } catch (e) {
                 console.log(e)
@@ -385,7 +385,7 @@ export default function HighlightForm({session, highlightToEdit}) {
         } else {
             model.created = formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")
             try {
-                await createHighlight(model, session.accessToken)
+                await createHighlight(host, model, session.accessToken)
                 navigateBack()
             } catch (e) {
                 console.log(e)

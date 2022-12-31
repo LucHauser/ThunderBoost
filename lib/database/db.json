@@ -77,6 +77,32 @@
       "discountUntilText": "",
       "enableCountdown": false,
       "id": 3
+    },
+    {
+      "name": "fdfdsfds",
+      "price": "45",
+      "servings": "45",
+      "usage": "Gaming",
+      "description": "ffdsfdsafds",
+      "stockAmount": "45",
+      "images": [
+        "/9079866a-d397-4c11-8b26-688d8c1ad9ef.jpeg"
+      ],
+      "releaseDate": "2023-01-01T01:03",
+      "showProductBeforeRelease": false,
+      "varieties": [
+        "Papaya",
+        "Grape (Green)"
+      ],
+      "active": true,
+      "discountActive": false,
+      "discountPercent": null,
+      "discountFrom": "",
+      "discountUntil": "",
+      "showDiscountUntilDate": false,
+      "discountUntilText": "",
+      "enableCountdown": false,
+      "id": 4
     }
   ],
   "users": [
@@ -132,104 +158,107 @@
   "baseDataVariety": [
     {
       "active": true,
-      "name": "Strawberry",
-      "description": "My fav Fruit:) yummy",
-      "id": 1
-    },
-    {
-      "active": true,
       "name": "Orange",
       "description": "Orange",
+      "numbersIncludedProducts": 1,
       "id": 2
     },
     {
       "active": true,
       "name": "Banana",
       "description": "Banana",
+      "numbersIncludedProducts": 0,
       "id": 3
     },
     {
       "active": true,
       "name": "Smirnoff Ice",
       "description": "Smirnoff Vodka (4% Vol)",
+      "numbersIncludedProducts": 1,
       "id": 4
-    },
-    {
-      "active": true,
-      "name": "Apple",
-      "description": "",
-      "id": 5
     },
     {
       "active": true,
       "name": "Kiwi",
       "description": "",
+      "numbersIncludedProducts": 0,
       "id": 6
     },
     {
       "active": true,
       "name": "Strawberry Milkshake",
       "description": "",
+      "numbersIncludedProducts": 0,
       "id": 7
     },
     {
       "active": true,
       "name": "Chocolate",
       "description": "Chailler Chocolate",
+      "numbersIncludedProducts": 0,
       "id": 8
     },
     {
       "active": true,
       "name": "Papaya",
       "description": "",
+      "numbersIncludedProducts": 1,
       "id": 9
     },
     {
       "active": true,
       "name": "Cola",
       "description": "Coca Cola Pepsi",
+      "numbersIncludedProducts": 2,
       "id": 10
     },
     {
       "active": true,
       "name": "Cherry",
       "description": "",
+      "numbersIncludedProducts": 0,
       "id": 11
     },
     {
       "active": true,
       "name": "Raspberry",
       "description": "",
+      "numbersIncludedProducts": 1,
       "id": 12
     },
     {
       "active": false,
       "name": "Lemon",
       "description": "",
+      "numbersIncludedProducts": 0,
       "id": 13
     },
     {
       "active": true,
       "name": "Peach",
       "description": "",
+      "numbersIncludedProducts": 0,
       "id": 14
     },
     {
       "active": true,
       "name": "Ingwer",
       "description": "",
+      "numbersIncludedProducts": 0,
       "id": 15
     },
     {
       "active": true,
       "name": "Grape (Green)",
       "description": "Green Grapes",
+      "numbersIncludedProducts": 1,
       "id": 17
     },
     {
       "active": true,
       "name": "Ananas",
       "description": "",
+      "numbersIncludedProducts": 1,
       "id": 18
     }
   ],

@@ -6,7 +6,7 @@ import {uploadImageData} from "@lib/api";
 import {useRouter} from "next/router";
 import formatTimestamp from "@components/Utils";
 
-export default function ImageUploadForm({session, onImageUploaded, onDialogMode, staticImageUsage, toggleDialog}) {
+export default function ImageUploadForm({session, host, onImageUploaded, onDialogMode, staticImageUsage, toggleDialog}) {
 
     const usageOptions = ["Product Image", "Highlights Background", "Diverse"]
 
@@ -155,7 +155,7 @@ export default function ImageUploadForm({session, onImageUploaded, onDialogMode,
             model.uploaded = formatTimestamp(new Date().toString(), "yyyy-MM-ddTHH:mm")
         }
         try {
-            const response = await uploadImageData(model, session.accessToken)
+            const response = await uploadImageData(host, model, session.accessToken)
             if (onDialogMode) {
                 onImageUploaded(response)
                 toggleDialog()

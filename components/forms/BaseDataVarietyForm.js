@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
-import {Form} from "react-bootstrap";
+import {Col, Container, Form, Row} from "react-bootstrap";
 import defaultStyles from "../../pages/stylesheet/global.module.css"
 import baseDataVarietyStyles from "./BaseDataVarietyForm.module.css"
 import {createBaseDataVariety, updateBaseDataVariety} from "@lib/api"
 import {useRouter} from "next/router";
 
-export default function BaseDataVarietyForm({session, varietyToEdit, disableRouting, onVarietyCreated, toggleForm, smallInputs}) {
+export default function BaseDataVarietyForm({session, host, varietyToEdit, disableRouting, onVarietyCreated, toggleForm, smallInputs}) {
 
     function validateVarietyModel(variety) {
 
@@ -34,7 +34,8 @@ export default function BaseDataVarietyForm({session, varietyToEdit, disableRout
     const defaultVarietyModel = {
         active: true,
         name: "",
-        description: ""
+        description: "",
+        numbersIncludedProducts: 0
     }
 
     const [variety, setVariety] = useState(defaultVarietyModel)
@@ -71,14 +72,14 @@ export default function BaseDataVarietyForm({session, varietyToEdit, disableRout
         }
         if (variety.id) {
             try {
-                await updateBaseDataVariety(variety, session.accessToken)
+                await updateBaseDataVariety(host, variety, session.accessToken)
                 navigateBack("../../baseDataVariety")
             } catch (e) {
                 console.log(e)
             }
         } else {
             try {
-                const newVariety = await createBaseDataVariety(variety, session.accessToken)
+                const newVariety = await createBaseDataVariety(host, variety, session.accessToken)
                 if (disableRouting) {
                     console.log("HERE")
                     onVarietyCreated(newVariety.name)
@@ -99,69 +100,87 @@ export default function BaseDataVarietyForm({session, varietyToEdit, disableRout
     return (
         <div>
             <Form className={baseDataVarietyStyles.baseDataVarietyForm} onSubmit={handleSubmit}>
-                <Form.Group
-                    className={!smallInputs ?
-                        defaultStyles.formGroup :
-                        defaultStyles.formGroupSmall}>
-                    <Form.Label
-                        className={!smallInputs ?
-                            defaultStyles.formLabel :
-                            defaultStyles.formLabelSmall}>Designation</Form.Label>
-                    <Form.Control
-                        className={!smallInputs ?
-                            defaultStyles.formInputField :
-                            defaultStyles.formInputFieldSmall}
-                        type={"text"}
-                        name="name"
-                        onChange={handleChange}
-                        defaultValue={variety.name}
-                        placeholder={"Designation of Variety"}
-                    />
-                    { errors.name && <p>{errors.name}</p> }
-                </Form.Group>
-                <Form.Group className={!smallInputs ?
-                    defaultStyles.formGroup :
-                    defaultStyles.formGroupSmall}>
-                    <Form.Label className={!smallInputs ?
-                        defaultStyles.formLabel :
-                        defaultStyles.formLabelSmall}>Description</Form.Label>
-                    <Form.Control
-                        className={!smallInputs ? defaultStyles.formInputField : defaultStyles.formInputFieldSmall}
-                        type={"text"}
-                        name="description"
-                        onChange={handleChange}
-                        defaultValue={variety.description}
-                        placeholder={"Description of Variety"}
-                    />
-                    { errors.description && <p>{errors.description}</p> }
-                </Form.Group>
-                {
-                    variety.id &&
-                    <Form.Group style={
-                        {
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10
-                        }
-                    }>
-                        <Form.Control className={defaultStyles.formCheckbox} onChange={(e) => setVariety({...variety, active: e.target.checked})} type={"checkbox"} defaultChecked={variety.active}/>
-                        <Form.Label className={defaultStyles.formLabel}>Active</Form.Label>
-                    </Form.Group>
-                }
-                <div className={baseDataVarietyStyles.buttonGroup}>
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${smallInputs ? defaultStyles.buttonSm : null}`} type={"submit"}>{variety.id ? "Save changes" : (disableRouting ? "Add Variety" : "Save variety")}</button>
-                    <button type={"button"}
-                            className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth} ${smallInputs ? defaultStyles.buttonSm : null}`}
-                            onClick={() =>
-                                variety.id ?
-                                    navigateBack("../../baseDataVariety")
-                                    : (disableRouting ?
-                                        toggleForm()
-                                        : navigateBack("../baseDataVariety")
-                                    )
-                    }>Cancel</button>
+                <Container fluid={true}>
+                    <Row>
+                        <Col>
+                            <Form.Group
+                                className={!smallInputs ?
+                                    defaultStyles.formGroup :
+                                    defaultStyles.formGroupSmall}>
+                                <Form.Label
+                                    className={!smallInputs ?
+                                        defaultStyles.formLabel :
+                                        defaultStyles.formLabelSmall}>Designation</Form.Label>
+                                <Form.Control
+                                    className={!smallInputs ?
+                                        defaultStyles.formInputField :
+                                        defaultStyles.formInputFieldSmall}
+                                    type={"text"}
+                                    name="name"
+                                    onChange={handleChange}
+                                    defaultValue={variety.name}
+                                    placeholder={"Designation of Variety"}
+                                />
+                                { errors.name && <p>{errors.name}</p> }
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={!smallInputs ?
+                                defaultStyles.formGroup :
+                                defaultStyles.formGroupSmall}>
+                                <Form.Label className={!smallInputs ?
+                                    defaultStyles.formLabel :
+                                    defaultStyles.formLabelSmall}>Description</Form.Label>
+                                <Form.Control
+                                    className={!smallInputs ? defaultStyles.formInputField : defaultStyles.formInputFieldSmall}
+                                    type={"text"}
+                                    name="description"
+                                    onChange={handleChange}
+                                    defaultValue={variety.description}
+                                    placeholder={"Description of Variety"}
+                                />
+                                { errors.description && <p>{errors.description}</p> }
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    {
+                        variety.id &&
+                        <Row>
+                            <Col>
+                                <Form.Group className={defaultStyles.formGroupHorizontal}>
+                                    <Form.Check
+                                        className={defaultStyles.formCheckbox}
+                                        onChange={(e) => setVariety({...variety, active: e.target.checked})}
+                                        defaultChecked={variety.active}
+                                    />
+                                    <Form.Label className={defaultStyles.formLabel}>Active</Form.Label>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    }
+                    <Row>
+                        <Col>
+                            <div className={defaultStyles.formBtnGroup}>
+                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${smallInputs ? defaultStyles.buttonSm : null}`} type={"submit"}>{variety.id ? "Save changes" : (disableRouting ? "Add Variety" : "Save variety")}</button>
+                                <button
+                                    type={"button"}
+                                    className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth} ${smallInputs ? defaultStyles.buttonSm : null}`}
+                                    onClick={() =>
+                                        variety.id ?
+                                            navigateBack("../../baseDataVariety")
+                                            : (disableRouting ?
+                                                    toggleForm()
+                                                    : navigateBack("../baseDataVariety")
+                                            )
+                                    }>Cancel
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
 
-                </div>
 
             </Form>
         </div>

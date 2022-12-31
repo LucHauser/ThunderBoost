@@ -5,7 +5,7 @@ import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 
-export default function createHighlight({session}) {
+export default function createHighlight({session, host}) {
 
     if (session.user) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
