@@ -14,7 +14,7 @@ import {
 import {Col, Container, Form, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {getAllProducts, updateProduct, deleteProduct} from "@lib/api";
+import {getAllProducts, updateProduct, deleteProduct, getAllBaseDataVariety} from "@lib/api";
 import {
     Accordion
 } from "react-bootstrap";
@@ -26,6 +26,7 @@ import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
 import formatTimestamp, {
     checkIfProductIsNowDiscount, formatServerUrl
 } from "@components/Utils";
+import {actualizeVarietyListAfterDeleteProduct} from "@lib/baseDataVarietyUtils";
 
 export default function ProductManagementPage({session, host}) {
 
@@ -42,6 +43,7 @@ export default function ProductManagementPage({session, host}) {
 
     const [products, setProducts] = useState([])
     const [allProducts, setAllProducts] = useState([])
+    const [allVarieties, setAllVarieties] = useState([])
     const [productToEdit, setProductToEdit] = useState({})
     const [numberOfProducts, setNumberOfProducts] = useState(0)
     const [filterProduct, setFilterProduct] = useState("")
@@ -63,6 +65,18 @@ export default function ProductManagementPage({session, host}) {
             }
         }
         loadProducts()
+    }, [host])
+
+    useEffect(() => {
+        const loadVarieties = async () => {
+            try {
+                const varieties = await getAllBaseDataVariety(host)
+                setAllVarieties(varieties)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        loadVarieties()
     }, [host])
 
     useEffect(() => {
@@ -121,7 +135,7 @@ export default function ProductManagementPage({session, host}) {
     const handleDiscountActivation = async (product) => {
         product.discountActive = !product.discountActive
         try {
-            const updatedProduct = await updateProduct(formatServerUrl(document.location.hostname), product, session.accessToken)
+            const updatedProduct = await updateProduct(host, product, session.accessToken)
             setProducts(products => {
                 return products.map(p => {
                     if (p.id === updatedProduct.id) {
@@ -136,8 +150,9 @@ export default function ProductManagementPage({session, host}) {
         }
     }
 
-    const handleDeleteProduct = async (productId) => {
-        await deleteProduct(formatServerUrl(document.location.hostname), productId, session.accessToken)
+    const handleDeleteProduct = async (productId, varieties) => {
+        await deleteProduct(host, productId, session.accessToken)
+        actualizeVarietyListAfterDeleteProduct(session, host, varieties, allVarieties)
         setProducts((prevState) => prevState.filter(p => p.id !== productId))
     }
 
@@ -454,7 +469,7 @@ export default function ProductManagementPage({session, host}) {
 
                                                                         <button
                                                                             className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}
-                                                                            onClick={() => handleDeleteProduct(product.id)}>
+                                                                            onClick={() => handleDeleteProduct(product.id, product.varieties)}>
                                                                             <FontAwesomeIcon icon={faTrash}/>&nbsp;Delete
                                                                         </button>
                                                                     </div>

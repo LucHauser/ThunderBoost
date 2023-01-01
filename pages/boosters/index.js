@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
-import {getAllProductByFilterParameter, getAllProducts} from "@lib/api";
+import {getAllBaseDataVariety, getAllProductByFilterParameter, getAllProducts} from "@lib/api";
 import defaultStyles from "../stylesheet/global.module.css"
 import boosterPageStyles from "../stylesheet/boostersPage.module.css"
 import ProductArticle from "@components/views/ProductCollectionItem";
 import {useRouter} from "next/router";
+import {Col, Container, Row} from "react-bootstrap";
 
 export default function BoostersPage({session, host}) {
 
@@ -26,11 +27,38 @@ export default function BoostersPage({session, host}) {
         loadProducts()
     }, [host])
 
+    useEffect(() => {
+        const loadVarieties = async () => {
+            try {
+                const varieties = await getAllBaseDataVariety(host)
+                setVarietyList(varieties.filter(v => v.numbersIncludedProducts > 0))
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        loadVarieties()
+    }, [host])
+
     const router = useRouter()
 
     return (
         <div className={boosterPageStyles.page}>
-            <h1 className={`${defaultStyles.pageTitle} ${boosterPageStyles.pageTitle}`}>All boosters in assortment</h1>
+            <Container fluid={true} className={defaultStyles.pageContentGap15}>
+                <Row>
+                    <Col>
+                        <h1 className={`${defaultStyles.pageTitle} ${boosterPageStyles.pageTitle}`}>All boosters in assortment</h1>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        
+                    </Col>
+                    <Col>
+
+                    </Col>
+                </Row>
+            </Container>
+
             <div></div>
             <div className={boosterPageStyles.articles}>
                 {
