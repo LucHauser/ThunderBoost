@@ -1,16 +1,12 @@
 .page {
     padding: 90px 140px;
-    display: grid;
-    row-gap: 90px;
 }
 
-.articleInformationContainer {
-    display: grid;
-    grid-template-columns: 10% 40% 50%;
-    gap: 15px;
-    font-family: Nunito, sans-serif;
-    font-size: 20px;
-    color: #FFFFFF;
+@media (max-width: 992px) {
+    .page {
+        padding: 40px 10px;
+    }
+
 }
 
 .imagesList {
@@ -40,10 +36,9 @@
 }
 
 .productInformation {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    gap: 10px;
+    font-family: Nunito, sans-serif;
+    color: #FFFFFF;
+    height: fit-content !important;
 }
 
 .productName {
@@ -91,7 +86,9 @@
 }
 
 .descriptionArea {
+    font-family: Nunito, sans-serif;
     max-height: 300px;
+    color: #FFFFFF;
 }
 
 .stockAmountInformation {
@@ -103,7 +100,7 @@
 }
 
 .addToCartContainer {
-    margin-top: 20px
+    margin-top: auto !important;
 }
 
 .addToCart {
@@ -127,9 +124,4 @@
     background: #7C4296;
     border: solid 2px #FFFFFF;
     border-radius: 50%;
-}
-
-.reviewTitle {
-    display: flex;
-    justify-content: space-between;
 }

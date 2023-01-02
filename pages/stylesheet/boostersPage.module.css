@@ -1,40 +1,74 @@
-.page {
-    padding: 90px 140px;
+.filterTitle {
+    color: white;
+    font-family: Nunito, sans-serif;
 }
 
-.pageTitle {
-    grid-row: 1 / 1;
-    grid-column: 1 / span 2;
+.filterTitle > h2 > button {
+    padding-left: 0 !important;
+}
+
+.filterTitle > h2 > button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+
+.searchBar {
+    background: rgba(255, 255, 255, 9%);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.filterListElement {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 9%);
+    border-radius: 5px !important;
+}
+
+.filterListElement > *:not(:last-child) {
+    margin: 3px 5px !important;
+}
+
+.filterListElement > *:first-child > input {
+    background: rgba(255, 255, 255, 9%);
+    border: solid #FFFFFF 2px !important;
+}
+
+.filterListElement > *:first-child > input:checked {
+}
+
+.filterListElement > p:last-child {
+    margin: 3px 5px 3px auto
 }
 
 @media (min-width: 850px) {
     .page {
-        padding: 45px 70px;
-        display: grid;
-        grid-template-columns: 300px auto;
-    }
-
-    .articles {
-        display: flex;
-        flex-wrap: wrap;
-        grid-column: 2 / 2;
-        grid-row: 2 / 2;
-    }
-
-    .article {
-        width: 50%;
-        padding: 5px
+        padding: 45px
     }
 }
 
-@media (min-width: 1000px) {
-    .article {
-        width: 33.3%
+@media (min-width: 768px) {
+    .searchBar {
+        margin-bottom: 10px;
     }
 }
 
-@media (min-width: 1400px) {
-    .article {
-        width: 20%
+@media (max-width: 768px) {
+
+    .collections {
+        margin-top: 15px !important;
+    }
+
+    .collections > div:nth-child(odd) {
+        padding-left: 0 !important;
+    }
+
+    .collections > div:nth-child(even) {
+        padding-right: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .collections > div {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }

@@ -32,6 +32,7 @@
     "react-dom": "^18.0.0",
     "react-markdown": "^8.0.3",
     "react-select": "^5.5.7",
+    "react-stars": "^2.2.5",
     "react-tabs": "^5.1.0",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",

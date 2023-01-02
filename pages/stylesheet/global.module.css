@@ -26,7 +26,6 @@
     font-size: 40px;
     font-family: 'Nunito', sans-serif;
     color: #8DF3E8;
-    margin-bottom: 28px;
 }
 
 .adminPageWrapper {
@@ -37,13 +36,22 @@
 }
 
 .pageContentGap15 > div:not(:first-child) {
-    margin-top: 15px;
+    margin-top: 15px !important;
 }
 
 /*Lagout & Margins*/
 
 .margin10Bottom {
     margin-bottom: 10px !important;
+}
+
+.margin24Bottom {
+    margin-bottom: 24px !important;
+}
+
+.disableColumnPaddings {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 /*Forms*/
@@ -108,6 +116,10 @@
     font-size: 20px !important;
     box-shadow: none !important;
     appearance: menulist-button;
+}
+
+.formTextfield {
+    height: 150px !important;
 }
 
 .formInputField::-webkit-input-placeholder, .formInputFieldSmall::-webkit-input-placeholder {
@@ -198,10 +210,11 @@
 
 .formCheckbox > input:focus {
     box-shadow: none !important;
+    border: none !important;
 }
 
 .formCheckbox > input:checked {
-    accent-color: #8DF3E8 !important;
+    background-color: #D707F1;
 }
 
 .formInputRange {
@@ -389,13 +402,16 @@
     margin-bottom: 4px;
     color: white !important;
     background: none !important;
-
 }
 
 .accordionHeader {
     height: 50px !important;
     background: rgba(255, 255, 255, 9%) !important;
     border-radius: 6px;
+}
+
+.accordionHeaderTransparent {
+    background: transparent !important;
 }
 
 .accordionHeader > button {
@@ -406,6 +422,7 @@
 
 .accordionHeader > button:focus {
     box-shadow: none !important;
+    border: none !important;
 }
 
 .accordionBody {

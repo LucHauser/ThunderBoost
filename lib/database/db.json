@@ -105,6 +105,17 @@
       "id": 4
     }
   ],
+  "productReviews": [
+    {
+      "title": "Test",
+      "text": "This is a test",
+      "starRate": 4.5,
+      "reviewDate": "2023-0-02T20:52",
+      "productId": "1",
+      "userId": 1,
+      "id": 1
+    }
+  ],
   "users": [
     {
       "email": "admin@admin.ch",

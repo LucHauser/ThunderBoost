@@ -49,7 +49,6 @@ export default function DiscountSettingsForm({session, productToEdit, host}) {
     }
 
     const saveDiscountSettings = async (e) => {
-        console.log(product)
         e.preventDefault()
         setLoadProduct(true)
         const result = validateDiscountSettings(host, product)
