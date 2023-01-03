@@ -15,14 +15,18 @@
     box-sizing: border-box;
     background: #FFFFFF;
     background-size: cover;
+}
 
+.starRating {
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .productName {
     font-size: 16px;
     text-align: center;
-    margin-top: 16px;
-    height: 30px
+    margin-top: 5px;
+    height: 40px !important;
 }
 
 .productPrice {

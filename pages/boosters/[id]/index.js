@@ -12,15 +12,18 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faMinus, faPlus, faShoppingCart, faWarehouse} from "@fortawesome/free-solid-svg-icons";
 import formatTimestamp, {getDiscountPrice} from "@components/Utils";
 import ProductReviewForm from "@components/forms/ProductReviewForm";
-import {Col, Container, Row, Stack} from "react-bootstrap";
+import {Carousel, Col, Container, Row, Stack} from "react-bootstrap";
 import ProductArticle from "@components/views/ProductCollectionItem";
+import ProductReviewItem from "@components/views/ProductReviewItem";
+import ReactStars from "react-stars/dist/react-stars";
 
 export default function ArticleDetail({session, host}) {
 
     const [product, setProduct] = useState({})
     const [reviews, setReviews] = useState([])
+    const [averageStarRate, setAverageStarRate] = useState(0.0)
     const [productSuggestions, setProductSuggestions] = useState([])
-    const [selectedImage, setSelectedImage] = useState("")
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const [amountToCart, setAmountToCart] = useState(1)
     const [showReviewForm, setShowReviewForm] = useState(false)
 
@@ -33,15 +36,20 @@ export default function ArticleDetail({session, host}) {
             try {
                 const response = await getProductById(host, id)
                 setProduct(response)
-                setSelectedImage(product?.images[0])
+                setSelectedImageIndex(0)
             } catch (e) {
                 console.log(e)
             }
         }
         const loadReviews = async () => {
             try {
-                const response = await getProductReviewsByParam(host, `productId=${id}`)
+                const response = await getProductReviewsByParam(host, `productId=${id}&_expand=user`)
                 setReviews(response)
+                let avgStars = 0
+                response.forEach(function(arr) {
+                    avgStars += arr.starRate
+                })
+                setAverageStarRate(Math.round(avgStars / response.length))
             } catch (e) {
                 console.log(e)
             }
@@ -73,12 +81,12 @@ export default function ArticleDetail({session, host}) {
             <Container fluid={true} className={defaultStyles.pageContentGap15}>
                 <Row>
                     <Col>
-                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilledAutoWidth}`} style={{marginBottom: 15}}>
+                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilledAutoWidth}`} style={{marginBottom: 15}} onClick={() => router.push("../boosters")}>
                             <FontAwesomeIcon icon={faArrowLeft} style={{marginRight: 10}}/>Back
                         </button>
                     </Col>
                 </Row>
-                <Row>
+                <Row className={defaultStyles.margin24Bottom}>
                     <Col xs={3} sm={3} md={2} lg={2} xl={1}>
                         <div className={productDetailStyles.imagesList}>
                             {
@@ -87,8 +95,8 @@ export default function ArticleDetail({session, host}) {
                                         <div
                                             key={index}
                                             className={productDetailStyles.imageItem}
-                                            style={{backgroundImage: `url(${img})`}}
-                                            onClick={() => setSelectedImage(img)}
+                                            style={{backgroundImage: `url(${img})`, border: index === selectedImageIndex ? "solid 1px #FFFFFF" : "none"}}
+                                            onClick={() => setSelectedImageIndex(index)}
                                         />
                                     )
                                 })
@@ -96,10 +104,21 @@ export default function ArticleDetail({session, host}) {
                         </div>
                     </Col>
                     <Col xs={9} sm={9} md={{span: 6, offset: 2}} lg={{span: 4, offset: 0}} xl={4}>
-                        <div
-                            className={productDetailStyles.actualImage}
-                            style={{backgroundImage: `url(${selectedImage})`}}
-                        />
+                        <Carousel interval={null} activeIndex={selectedImageIndex} onSelect={(selectedIndex, e) => setSelectedImageIndex(selectedIndex)}>
+                            {
+                                product.images?.map((img, index) => {
+                                    return (
+                                        <Carousel.Item key={index}>
+                                            <div
+                                                className={productDetailStyles.actualImage}
+                                                style={{backgroundImage: `url(${img})`}}
+                                            />
+                                        </Carousel.Item>
+                                    )
+                                })
+                            }
+                        </Carousel>
+
                     </Col>
                     <Col sm={12} md={12} lg={6} xl={7}>
                         <Stack className={productDetailStyles.productInformation}>
@@ -128,11 +147,11 @@ export default function ArticleDetail({session, host}) {
                                 <div className={productDetailStyles.addToCart}>
                                     <div className={productDetailStyles.quantityToCart}>
                                         <button onClick={() => setAmountToCart(prev => prev - 1)} disabled={amountToCart === 1}>
-                                            <FontAwesomeIcon icon={faMinus} size={"2x"} color={"white"}/>
+                                            <FontAwesomeIcon icon={faMinus} size={"1x"} color={"white"}/>
                                         </button>
                                         <p>{amountToCart}</p>
                                         <button onClick={() => setAmountToCart(prev => prev + 1)} disabled={amountToCart === parseInt(product.stockAmount) }>
-                                            <FontAwesomeIcon icon={faPlus} size={"2x"} color={"white"}/>
+                                            <FontAwesomeIcon icon={faPlus} size={"1x"} color={"white"}/>
                                         </button>
                                     </div>
                                     <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>
@@ -157,14 +176,15 @@ export default function ArticleDetail({session, host}) {
                         </div>
                     </Col>
                 </Row>
-                <hr style={{borderColor: "#D707F1"}}/>
+                <div className={productDetailStyles.reviewSubline}/>
                 <Row>
                     <Col md={8} lg={10}>
-                        <Stack direction={"horizontal"}>
-                            <h1 className={defaultStyles.pageSubtitle}>Client Reviews</h1>
+                        <Stack direction={"horizontal"} style={{marginBottom: 10}}>
+                            <h3>Client Reviews</h3>
                             <button
                                 className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`}
-                                onClick={() => setShowReviewForm(!showReviewForm)}
+                                onClick={() => session.user ? setShowReviewForm(!showReviewForm) : router.push("../login")}
+                                disabled={session.user && session.user.id === reviews.filter(r => r.userId === session.user.id)[0]?.userId}
                             >{session.user ? showReviewForm ? "Cancel": "Write a review" : "Log In"}</button>
                         </Stack>
                         <Container fluid={true}>
@@ -177,16 +197,46 @@ export default function ArticleDetail({session, host}) {
                                     </Row>
                                     : null
                             }
+                            {
+                                reviews.length > 0 ?
+                                    <>
+                                        <Row className={defaultStyles.margin30Bottom}>
+                                            <Col className={defaultStyles.disableColumnPaddings}>
+                                                <ReactStars edit={false} count={5} size={36} color2={"#FFB800"} value={averageStarRate} half={true}/>
+                                                <i style={{color: "#FFFFFF", fontFamily: "Nunito, sans-serif"}}>({reviews.length} {`Review${reviews.length > 1 ? "s" : ""}`})</i>
+                                                <hr style={{borderColor: "#FFFFFF"}}/>
+                                            </Col>
+                                        </Row>
+                                        {
+                                            reviews.map((review, index) => {
+                                                return (
+                                                    <Row key={index} className={`${productDetailStyles.reviewList}`}>
+                                                        <Col className={defaultStyles.disableColumnPaddings}>
+                                                            <ProductReviewItem session={session} review={review}/>
+                                                            <hr className={productDetailStyles.reviewSubline}/>
+                                                        </Col>
+                                                    </Row>
+                                                )
+                                            })
+                                        }
+                                    </>
+                                    : <p className={productDetailStyles.emptyReviewText}>No Reviews</p>
+                            }
+
                         </Container>
+
                     </Col>
                     <Col sm={12} md={4} lg={2}>
-                        <Container fluid={true} className={defaultStyles.pageContentGap15}>
+                        <Container fluid={true} className={`${defaultStyles.pageContentGap15} ${productDetailStyles.productSuggestionList}`}>
                             <Row>
+                                <Col md={12}>
+                                    <h3>This might interest you</h3>
+                                </Col>
                                 {
                                     productSuggestions.map((product, index) => {
                                         return (
                                             <Col key={index} md={12} className={defaultStyles.margin10Bottom}>
-                                                <ProductArticle product={product} session={session}/>
+                                                <ProductArticle product={product} session={session} showAll={false} routeToDetail={() => router.push(`../boosters/${product.id}`)}/>
                                             </Col>
                                         )
                                     })
@@ -196,11 +246,6 @@ export default function ArticleDetail({session, host}) {
                     </Col>
                 </Row>
             </Container>
-
-
-
-
-
         </div>
     )
 }

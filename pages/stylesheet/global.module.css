@@ -49,9 +49,18 @@
     margin-bottom: 24px !important;
 }
 
+.margin30Bottom {
+    margin-bottom: 30px !important;
+}
+
 .disableColumnPaddings {
     padding-left: 0 !important;
     padding-right: 0 !important;
+}
+
+.alignmentCenter {
+    display: flex !important;
+    align-items: center !important;
 }
 
 /*Forms*/

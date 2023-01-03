@@ -9,6 +9,12 @@ body {
     width: 100%
 }
 
+h3 {
+    font-size: 25px;
+    color: #8DF3E8;
+    font-family: "Nunito", sans-serif;
+}
+
 .page {
     background: linear-gradient(to bottom, #4F2A59, #000000);
     min-height: calc(100vh - 75px);

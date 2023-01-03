@@ -125,3 +125,25 @@
     border: solid 2px #FFFFFF;
     border-radius: 50%;
 }
+
+.emptyReviewText {
+    width: 100%;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: Nunito, sans-serif;
+    font-size: 20px;
+    margin: 20px 0 0 !important;
+}
+
+.reviewList > div:last-child .reviewSubline {
+    display: none;
+}
+
+.reviewSubline {
+    width: 100%;
+    border: solid #D707F1 1px
+}
+
+.productSuggestionList {
+    border-left: solid 2px #D707F1;
+}

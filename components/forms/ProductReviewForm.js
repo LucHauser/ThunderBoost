@@ -44,8 +44,8 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
         text: "",
         starRate: 0,
         reviewDate: "",
-        productId: productId,
-        userId: null
+        productId: null,
+        userId: session.user.id
     }
 
     const [model, setModel] = useState(defaultModel)
@@ -53,9 +53,9 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
 
     useEffect(() => {
         if (session.user) {
-            setModel({...model, userId: session.user.id})
+            setModel({...model, userId: parseInt(session.user.id)})
         }
-        setModel({...model, productId: productId})
+        setModel({...model, productId: parseInt(productId)})
     }, [session, productId])
 
     const handleChange = (e) => {
@@ -66,7 +66,6 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
     }
 
     const rateProduct = async (e) => {
-        console.log("HERE")
         console.log(model)
         e.preventDefault()
         const result = validateModel(model)
@@ -89,14 +88,14 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
                 <Container fluid={true}>
                     <Row>
                         <Col className={productReviewFormStyles.columns}>
-                            <h3 className={defaultStyles.formTitle}>Write your Review {productId}</h3>
+                            <h3 className={defaultStyles.formTitle}>Write your Review</h3>
                         </Col>
                     </Row>
                     <Row>
                         <Col md={6} className={productReviewFormStyles.columns}>
                             <Form.Group className={defaultStyles.formGroup}>
                                 <Form.Label className={defaultStyles.formLabel}>Title</Form.Label>
-                                <Form.Control className={defaultStyles.formInputField} name="title" onChange={handleChange} placeholder={"Enter a title"}/>
+                                <Form.Control className={`${defaultStyles.formInputField} ${errors.title && defaultStyles.formInputError}`} name="title" onChange={handleChange} placeholder={"Enter a title"}/>
                                 {errors.title && <p>{errors.title}</p>}
                             </Form.Group>
                         </Col>
@@ -105,7 +104,7 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
                         <Col md={12} className={productReviewFormStyles.columns}>
                             <Form.Group className={defaultStyles.formGroup}>
                                 <Form.Label className={defaultStyles.formLabel}>Text</Form.Label>
-                                <textarea className={`${defaultStyles.formInputField} ${defaultStyles.formTextfield}`} onChange={handleChange} name={"text"} placeholder={"Enter your review"} rows={3}/>
+                                <textarea className={`${defaultStyles.formInputField} ${defaultStyles.formTextfield} ${errors.text && defaultStyles.formInputError}`} onChange={handleChange} name={"text"} placeholder={"Enter your review"} rows={3}/>
                                 {errors.text && <p>{errors.text}</p>}
                             </Form.Group>
                         </Col>
@@ -133,6 +132,7 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
                             <button type={"submit"} className={`${defaultStyles.buttonFilled}`}>Submit</button>
                         </Col>
                     </Row>
+                    <p>{formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")}</p>
                 </Container>
             </Form>
         </div>

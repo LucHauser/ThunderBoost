@@ -28,7 +28,8 @@ export default function BoostersPage({session, host}) {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const products = await getAllProductByFilterParameter(host, "active=true")
+                const products = await getAllProductByFilterParameter(host, "active=true&_embed=productReviews")
+                console.log(products)
                 setProducts(products)
                 setFilteredProduct(products)
                 createFilterListByUsage(products)
@@ -182,7 +183,7 @@ export default function BoostersPage({session, host}) {
                                         return (
                                             // eslint-disable-next-line react/jsx-key
                                             <Col key={index} xs={12} sm={6} md={6} lg={4} xl={3} className={`${defaultStyles.margin24Bottom}`}>
-                                                <ProductArticle session={session} product={article} routeToDetail={() => router.push(`./boosters/${article.id}/`)}/>
+                                                <ProductArticle session={session} product={article} routeToDetail={() => router.push(`./boosters/${article.id}/`)} showAll={true}/>
                                             </Col>
                                         )
                                     })

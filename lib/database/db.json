@@ -110,10 +110,19 @@
       "title": "Test",
       "text": "This is a test",
       "starRate": 4.5,
-      "reviewDate": "2023-0-02T20:52",
-      "productId": "1",
+      "reviewDate": "2023-01-02T20:52",
+      "productId": 1,
       "userId": 1,
       "id": 1
+    },
+    {
+      "title": "Test2",
+      "text": "Test2",
+      "starRate": 3,
+      "reviewDate": "2023-01-03T15:12",
+      "productId": 3,
+      "userId": 1,
+      "id": 2
     }
   ],
   "users": [

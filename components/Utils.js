@@ -13,6 +13,14 @@ export function hexToRgba(hex, alpha) {
     }
 }
 
+function formatMonth(month) {
+    if (month < 10) {
+        return "0" + month
+    } else {
+        return month
+    }
+}
+
 export default function formatTimestamp(timeToConvert, format) {
     if (!timeToConvert) return ""
     const date = new Date(timeToConvert)
@@ -31,7 +39,7 @@ export default function formatTimestamp(timeToConvert, format) {
             converted = `${getMonthDay(date)}. ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${minuteFormat(date.getMinutes())}`
             break
         case "yyyy-MM-ddTHH:mm":
-            converted = `${date.getFullYear()}-${date.getMonth()}-${getMonthDay(date)}T${date.getHours()}:${minuteFormat(date.getMinutes())}`
+            converted = `${date.getFullYear()}-${formatMonth(date.getMonth() + 1)}-${getMonthDay(date)}T${date.getHours()}:${minuteFormat(date.getMinutes())}`
             break
         case "HH.mm":
             converted = `${date.getHours()}:${date.getMinutes()}`
