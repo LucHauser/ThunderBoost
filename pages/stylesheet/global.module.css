@@ -41,6 +41,10 @@
 
 /*Lagout & Margins*/
 
+.margin0Bottom {
+    margin-bottom: 0 !important;
+}
+
 .margin10Bottom {
     margin-bottom: 10px !important;
 }
@@ -55,6 +59,14 @@
 
 .disableColumnPaddings {
     padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.disableColumnPaddingLeft {
+    padding-left: 0 !important;
+}
+
+.disableColumnPaddingRight {
     padding-right: 0 !important;
 }
 

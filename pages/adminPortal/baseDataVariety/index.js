@@ -8,8 +8,7 @@ import {deleteBaseDataVariety, getAllBaseDataVariety} from "@lib/api";
 import {Col, Container, Form, Row, Table} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faMagnifyingGlass, faPen, faPlus, faTrash, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
-import {checkVarietyToProductBeforeDelete} from "@lib/dataCascader";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 
 export default function BaseDataVarietyPage({session, host}) {
 

@@ -132,7 +132,6 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
                             <button type={"submit"} className={`${defaultStyles.buttonFilled}`}>Submit</button>
                         </Col>
                     </Row>
-                    <p>{formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")}</p>
                 </Container>
             </Form>
         </div>

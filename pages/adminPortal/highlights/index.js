@@ -16,7 +16,7 @@ import {
     faPlus, faSquarePlus, faT, faTag, faTrash, faWineBottle,
 } from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import HighlightView from "@components/views/HighlightView";
 import formatTimestamp, {checkIfEventIsNowBetweenStartTime} from "@components/Utils";
 import {

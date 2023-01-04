@@ -1,4 +1,4 @@
-import {useRedirectToLogin} from "@lib/session";
+import {useRedirectToLogin} from "@lib/hooks/session";
 import defaultStyle from "./stylesheet/global.module.css"
 import profileStyle from "./stylesheet/profile.module.css"
 import {Table} from "react-bootstrap";

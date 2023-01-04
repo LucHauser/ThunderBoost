@@ -1,4 +1,4 @@
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {getHighlightById} from "@lib/api";

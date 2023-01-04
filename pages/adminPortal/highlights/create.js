@@ -3,7 +3,7 @@ import HighlightForm from "@components/forms/HighlightForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 
 export default function createHighlight({session, host}) {
 

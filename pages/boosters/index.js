@@ -167,6 +167,7 @@ export default function BoostersPage({session, host}) {
                     </Col>
                     <Col xxl={10} lg={9} md={8} sm={12} xs={12}>
                         <Container fluid={true}>
+                            {/*
                             <Row>
                                 <Col>
                                     <div className={`${defaultStyles.flexHorizontal} ${boosterPageStyles.searchBar}`}>
@@ -177,12 +178,13 @@ export default function BoostersPage({session, host}) {
 
                                 </Col>
                             </Row>
+                            */}
                             <Row className={boosterPageStyles.collections}>
                                 {
                                     filteredProduct.map((article, index) => {
                                         return (
                                             // eslint-disable-next-line react/jsx-key
-                                            <Col key={index} xs={12} sm={6} md={6} lg={4} xl={3} className={`${defaultStyles.margin24Bottom}`}>
+                                            <Col key={index} xs={6} sm={6} md={6} lg={4} xl={3} className={`${defaultStyles.margin24Bottom}`}>
                                                 <ProductArticle session={session} product={article} routeToDetail={() => router.push(`./boosters/${article.id}/`)} showAll={true}/>
                                             </Col>
                                         )

@@ -2,40 +2,41 @@
     padding: 90px 140px;
 }
 
-@media (max-width: 992px) {
-    .page {
-        padding: 40px 10px;
-    }
-
-}
-
 .imagesList {
     background: rgba(255, 255, 255, 9%);
+    width: fit-content;
+    height: 80px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     padding: 10px;
     gap: 10px;
-    height: fit-content;
     border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
 }
 
 .imageItem {
-    width: 100%;
-    padding: 50%;
+    width: 60px;
+    height: 60px;
     box-sizing: border-box;
     background: #FFFFFF;
     background-size: cover;
 }
 
 .actualImage {
-    width: 100%;
-    padding: 50%;
-    box-sizing: border-box;
     background: #FFFFFF;
+}
+
+.productImage {
+    min-width: 100%;
+    padding: 50% !important;
+    box-sizing: border-box;
     background-size: cover;
 }
 
 .productInformation {
+    font-size: 20px;
     font-family: Nunito, sans-serif;
     color: #FFFFFF;
     height: fit-content !important;
@@ -48,10 +49,12 @@
 
 .productServings {
     background: rgba(255, 255, 255, 9%);
+    font-size: 15px;
     font-weight: bold;
+    text-align: center;
     padding: 5px 10px;
-    width: fit-content;
-    height: fit-content;
+    width: 100%;
+    min-height: fit-content;
     border-radius: 10px;
 }
 
@@ -75,6 +78,7 @@
     color: #EB3E7A;
     display: flex;
     align-items: end;
+    margin-bottom: 0 !important;
 }
 
 .productPriceSign > p {
@@ -95,8 +99,10 @@
     width: fit-content;
     height: fit-content;
     padding: 5px 10px;
+    font-size: 15px;
     font-weight: bold;
     border-radius: 10px;
+    margin-bottom: 0 !important;
 }
 
 .addToCartContainer {
@@ -117,10 +123,10 @@
     font-size: 25px;
 }
 
-.quantityToCart > button {
+.productQuantityButton {
     outline: none;
-    width: 45px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
     background: #7C4296;
     border: solid 2px #FFFFFF;
     border-radius: 50%;
@@ -146,4 +152,56 @@
 
 .productSuggestionList {
     border-left: solid 2px #D707F1;
+}
+
+@media (min-width: 576px) {
+    .productProperties {
+        height: auto !important;
+    }
+
+    .actualImage {
+        width: 390px;
+        height: 390px;
+        margin: auto !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .productNameRow {
+        margin-top: 24px;
+    }
+
+
+}
+
+@media (min-width: 992px) {
+    .imagesList {
+        flex-direction: column;
+        height: fit-content;
+        width: 100px;
+        margin: 0;
+    }
+
+    .imageItem {
+        width: 80px;
+        height: 80px
+    }
+}
+
+
+
+@media (min-height: 1200px) {
+    .productProperties {
+
+    }
+}
+
+@media (max-width: 1200px) {
+
+}
+
+@media (max-width: 1400px) {
+    .page {
+        padding: 40px 10px;
+    }
 }

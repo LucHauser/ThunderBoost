@@ -22,11 +22,11 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import markdownElements from "@components/views/MarkdownReview.module.css";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import formatTimestamp, {
     checkIfProductIsNowDiscount, formatServerUrl
 } from "@components/Utils";
-import {actualizeVarietyListAfterDeleteProduct} from "@lib/baseDataVarietyUtils";
+import {actualizeVarietyListAfterDeleteProduct} from "@lib/utils/baseDataVarietyUtils";
 
 export default function ProductManagementPage({session, host}) {
 

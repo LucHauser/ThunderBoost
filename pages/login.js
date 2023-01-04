@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import loginStyle from "./stylesheet/login.module.css"
 import defaultStyle from "./stylesheet/global.module.css"
-import {useRedirectToHome} from "@lib/session";
+import {useRedirectToHome} from "@lib/hooks/session";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import LoginForm from "@components/forms/LoginForm";
 import RegisterForm from "@components/forms/RegisterForm";

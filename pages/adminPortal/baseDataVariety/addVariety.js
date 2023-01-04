@@ -3,7 +3,7 @@ import BaseDataVarietyForm from "@components/forms/BaseDataVarietyForm";
 import {useRouter} from "next/router";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import {Col, Container, Row} from "react-bootstrap";
 
 export default function AddVariety({session, host}) {

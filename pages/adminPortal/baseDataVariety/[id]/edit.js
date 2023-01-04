@@ -5,7 +5,7 @@ import defaultStyles from "../../../stylesheet/global.module.css"
 import BaseDataVarietyForm from "@components/forms/BaseDataVarietyForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import {Col, Container, Row} from "react-bootstrap";
 
 export default function editVariety({session, host}) {

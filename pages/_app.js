@@ -1,5 +1,5 @@
 import Header from "@components/pageUtils/Header"
-import useSession from "@lib/session"
+import useSession from "@lib/hooks/session"
 import "./_app.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from "@components/pageUtils/Footer";

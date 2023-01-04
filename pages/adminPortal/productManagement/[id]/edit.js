@@ -3,7 +3,7 @@ import defaultStyles from "../../../stylesheet/global.module.css"
 import {useEffect, useState} from "react";
 import {getProductById} from "@lib/api";
 import ProductForm from "@components/forms/ProductForm";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {Col, Container, Row} from "react-bootstrap";

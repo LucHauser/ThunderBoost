@@ -12,13 +12,13 @@ import {createProduct, updateProduct} from "@lib/api";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import {useRouter} from "next/router";
-import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/session";
+import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import ImageSelectionList from "@components/ImageSelectionList";
 import VarietySelectionList from "@components/VarietySelectionList";
 import {
     actualizeVarietyListAfterCreatedProduct,
     actualizeVarietyListAfterEditedProduct
-} from "@lib/baseDataVarietyUtils";
+} from "@lib/utils/baseDataVarietyUtils";
 
 export default function ProductForm({session, productToEdit, host}) {
 
