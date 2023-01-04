@@ -10,7 +10,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faMinus, faPlus, faShoppingCart, faWarehouse} from "@fortawesome/free-solid-svg-icons";
-import formatTimestamp, {getDiscountPrice} from "@components/Utils";
+import formatTimestamp, {getDiscountPrice, isEventNowWithBoolean} from "@components/Utils";
 import ProductReviewForm from "@components/forms/ProductReviewForm";
 import {Carousel, Col, Container, Row, Stack} from "react-bootstrap";
 import ProductArticle from "@components/views/ProductCollectionItem";
@@ -149,7 +149,7 @@ export default function ArticleDetail({session, host}) {
                             <Row>
                                 <Col>
                                     {
-                                        product?.discountActive && (new Date(product?.discountFrom) > Date.now() && new Date(product?.discountUntil) > Date.now()) ?
+                                        isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
                                             <div className={productDetailStyles.productPriceBox}>
                                                 <h3 className={productDetailStyles.productPriceSign}>{getDiscountPrice(product.price, product?.discountPercent)}$<p>instead {product.price}$</p></h3>
                                                 {

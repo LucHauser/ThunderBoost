@@ -24,9 +24,10 @@ import remarkGfm from "remark-gfm";
 import markdownElements from "@components/views/MarkdownReview.module.css";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
 import formatTimestamp, {
-    checkIfProductIsNowDiscount, formatServerUrl
+    checkIfProductIsNowDiscount, formatServerUrl, isEventNow, isEventNowWithBoolean
 } from "@components/Utils";
 import {actualizeVarietyListAfterDeleteProduct} from "@lib/utils/baseDataVarietyUtils";
+import data from "bootstrap/js/src/dom/data";
 
 export default function ProductManagementPage({session, host}) {
 
@@ -277,7 +278,7 @@ export default function ProductManagementPage({session, host}) {
                                                                 <FontAwesomeIcon
                                                                     icon={faCircle}
                                                                     size={"1x"}
-                                                                    color={checkIfProductIsNowDiscount(product.discountFrom, product.discountUntil, product.discountActive) ?
+                                                                    color={isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) && product.discountActive ?
                                                                         "#6aa84f"
                                                                         : "#cc0000"
                                                                     }
@@ -370,7 +371,7 @@ export default function ProductManagementPage({session, host}) {
                                                                                 <tr>
                                                                                     <td><FontAwesomeIcon icon={faCheck}/></td>
                                                                                     <td>Discount Active</td>
-                                                                                    <td>{checkIfProductIsNowDiscount(product.discountFrom, product.discountUntil, product.discountActive) ? "active": "inactive"}</td>
+                                                                                    <td>{isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ? "active": "inactive"}</td>
                                                                                 </tr>
                                                                                 {
                                                                                     product.discountFrom !== "" || product.discountUntil !== "" ?
@@ -466,7 +467,6 @@ export default function ProductManagementPage({session, host}) {
                                                                     </div>
 
                                                                     <div>
-
                                                                         <button
                                                                             className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonRed}`}
                                                                             onClick={() => handleDeleteProduct(product.id, product.varieties)}>

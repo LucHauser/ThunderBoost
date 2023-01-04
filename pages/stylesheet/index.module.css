@@ -2,3 +2,13 @@
     padding: 30px;
     display: grid;
 }
+
+.highlightCarouselElement > a {
+    display: none !important;
+}
+
+.highlightView {
+    height: 600px;
+    margin-bottom: 50px;
+    padding: 10px
+}

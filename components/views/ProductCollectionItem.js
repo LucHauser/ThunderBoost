@@ -1,6 +1,6 @@
 import productArticleStyles from "./ProductCollectionItem.module.css"
 import defaultStyles from "../../pages/stylesheet/global.module.css"
-import {getDiscountPrice} from "@components/Utils";
+import {getDiscountPrice, isEventNow, isEventNowWithBoolean} from "@components/Utils";
 import {Stack} from "react-bootstrap";
 import ReactStars from "react-stars/dist/react-stars";
 
@@ -34,7 +34,7 @@ export default function ProductArticle({session, product, routeToDetail, showAll
                     showAll ?
                         <>
                             {
-                                product.discountActive && (new Date(product.discountFrom) > Date.now() && new Date(product.discountUntil) > Date.now()) ?
+                                isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
                                     <p className={productArticleStyles.productPrice}>{getDiscountPrice(product.price, product.discountPercent)}$<sub>instead {product.price}$</sub></p>
                                     : <p className={productArticleStyles.productPrice}>{product.price}$</p>
                             }

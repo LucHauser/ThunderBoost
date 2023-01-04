@@ -26,6 +26,12 @@ export default function formatTimestamp(timeToConvert, format) {
     const date = new Date(timeToConvert)
     let converted
     switch (format) {
+        case "dd/MM/yyyy":
+            converted = `${getMonthDay(date)}/${date.getMonth() + 1}/${date.getFullYear()}`
+            break
+        case "dd/MM/yyyy HH:mm":
+            converted = `${getMonthDay(date)}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+            break
         case "dd.MM.yyyy":
             converted = `${getMonthDay(date)}.${date.getMonth()}.${date.getFullYear()}`
             break
@@ -33,21 +39,29 @@ export default function formatTimestamp(timeToConvert, format) {
             converted = `${getMonthDay(date)}. ${months[date.getMonth()]} ${date.getFullYear()}`
             break
         case "dd.MM.yyyy HH.mm":
-            converted = `${getMonthDay(date)}.${date.getMonth()}.${date.getFullYear()} ${date.getHours()}:${minuteFormat(date.getMinutes())}`
+            converted = `${getMonthDay(date)}.${date.getMonth()}.${date.getFullYear()} ${timeFormat(date.getHours())}:${timeFormat(date.getMinutes())}`
             break
         case "dd.MMMM.yyyy HH:mm":
-            converted = `${getMonthDay(date)}. ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${minuteFormat(date.getMinutes())}`
+            converted = `${getMonthDay(date)}. ${months[date.getMonth()]} ${date.getFullYear()} ${timeFormat(date.getHours())}:${timeFormat(date.getMinutes())}`
             break
         case "yyyy-MM-ddTHH:mm":
-            converted = `${date.getFullYear()}-${formatMonth(date.getMonth() + 1)}-${getMonthDay(date)}T${date.getHours()}:${minuteFormat(date.getMinutes())}`
+            converted = `${date.getFullYear()}-${formatMonth(date.getMonth() + 1)}-${getMonthDay(date)}T${timeFormat(date.getHours())}:${timeFormat(date.getMinutes())}`
             break
         case "HH.mm":
             converted = `${date.getHours()}:${date.getMinutes()}`
             break
         default:
-            converted = `${getMonthDay(date)}.${date.getMonth()}.${date.getFullYear()} ${date.getHours()}:${minuteFormat(date.getMinutes())}`
+            converted = `${getMonthDay(date)}.${date.getMonth()}.${date.getFullYear()} ${timeFormat(date.getHours())}:${timeFormat(date.getMinutes())}`
     }
     return converted
+}
+
+function timeFormat(number) {
+    if (number < 10) {
+        return "0" + number
+    } else {
+        return number
+    }
 }
 
 function minuteFormat(minute) {
@@ -68,27 +82,29 @@ export function getDiscountPrice(price, percent) {
     }
 }
 
-/*
-* When is active:
-* active true, start = ""*/
-
-export function checkIfProductIsNowDiscount(start, end, active) {
-    const now = new Date()
+export function isEventNow(start, end) {
     let startDate, endDate
-    if (active === true) {
-        if (start !== "" && end !== "") {
-            startDate = new Date(start)
-            endDate = new Date(end)
-            return startDate < now && endDate > now
-        } else if (end === "") {
-            startDate = new Date(start)
-            return startDate < now
-        } else {
-            endDate = new Date(end)
-            return endDate > now
-        }
+    const now = Date.parse(formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm"))
+    if (start && end) {
+        startDate = Date.parse(new Date(start))
+        endDate = Date.parse(new Date(end))
+        return startDate <= now && endDate >= now
+    } else if (start) {
+        startDate = Date.parse(new Date(start))
+        return startDate <= now
+    } else if (end) {
+        endDate = Date.parse(new Date(end))
+        return endDate >= now
     } else {
         return false
+    }
+}
+
+export function isEventNowWithBoolean(start, end, bool) {
+    if ((start || end) && bool) {
+        return (isEventNow(start, end) && bool)
+    } else {
+        return bool
     }
 }
 
@@ -96,7 +112,7 @@ export function checkIfEventIsNowBetweenStartTime(start, end) {
     const startDate = new Date(start)
     const endDate = new Date(end)
     const now = new Date()
-    return startDate <= now && endDate >= now
+    return startDate > now && endDate < now
 }
 
 export function checkIfNowIsPendingBeforeStart(start) {

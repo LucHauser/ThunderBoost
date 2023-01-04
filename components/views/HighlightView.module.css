@@ -1,19 +1,15 @@
-.container {
-    border-radius: 15px;
+.highlightView {
     height: 100%;
-    display: grid;
-    grid-template-rows: 85% 15%;
-    grid-template-columns: 250px auto;
 }
+
 
 .imageArea {
     padding: 0 20px 20px 0;
 }
 
 .productImage {
-    margin-left: 20px;
-    margin-top: 20px;
-    width: 100%
+    width: 100%;
+    height: fit-content;
 }
 
 .eventType {
@@ -64,10 +60,8 @@
     width: fit-content;
 }
 
-.footerArea {
-    grid-column: 1 / span 2;
-    display: grid;
-    grid-template-columns: auto auto;
+.footerArea > div > div {
+    margin-top: 30px !important;
 }
 
 .dateUntilBox {
@@ -83,11 +77,9 @@
     padding: 10px;
     font-family: "Nunito", sans-serif;
     font-size: 20px;
-    grid-column: 1 / 1;
 }
 
 .buttonSector {
-    grid-column: 3 / 3;
     display: flex;
     gap: 10px;
     align-items: center;

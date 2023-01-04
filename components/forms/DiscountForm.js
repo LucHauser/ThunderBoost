@@ -19,7 +19,7 @@ export default function DiscountSettingsForm({session, productToEdit, host}) {
             errors.discountPercent = "Percentage must be between 0 to 100"
             isValid = false
         }
-        if (model.discountUntilText.length > 30) {
+        if (model.discountUntilText?.length > 30) {
             errors.discountUntilText = "Max. 30 Characters enabled"
             isValid = false
         }
@@ -58,7 +58,7 @@ export default function DiscountSettingsForm({session, productToEdit, host}) {
             return
         }
         try {
-            await updateProduct(product, session.accessToken)
+            await updateProduct(host, product, session.accessToken)
         } catch (e) {
             console.log(e)
         }
