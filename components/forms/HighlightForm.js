@@ -1588,7 +1588,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                             <button className={`${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}>Reset draft</button>
                         </div>
                     </Col>
-                    <Col md={4}>
+                    <Col md={4} sm={6}>
                         <div className={highlightFormStyles.buttonGroup}>
                             <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"} form={"highlight-form"}>Save Highlight</button>
                             <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>

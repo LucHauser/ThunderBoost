@@ -1,7 +1,18 @@
 .highlightView {
     height: 100%;
+    display: flex !important;
+    flex-wrap: wrap;
+    align-content: space-between;
+    contain: layout size;
 }
 
+.highlightView > div {
+    width: 100%;
+}
+
+.highlightView > div:nth-child(2) {
+    padding: 10px
+}
 
 .imageArea {
     padding: 0 20px 20px 0;
@@ -9,7 +20,8 @@
 
 .productImage {
     width: 100%;
-    height: fit-content;
+    height: fit-content !important;
+    overflow: hidden !important;
 }
 
 .eventType {
@@ -18,9 +30,7 @@
     font-size: 20px;
     align-items: center;
     height: 40px;
-    border-top-left-radius: 15px;
-    border-bottom-right-radius: 40px;
-    width: 200px;
+    width: 200px !important;
     padding-left: 5px;
     gap: 5px
 }
@@ -32,19 +42,11 @@
     animation: color-range 40s linear infinite
 }
 
-.contentArea {
-    padding: 60px 20px 20px;
-}
-
-.contentArea > h1 {
-    margin-bottom: 15px;
-    width: fit-content;
-}
-
 .contentArea > #productPrice {
     font-size: 30px;
     font-weight: bold;
     width: fit-content;
+    margin-right: auto;
     display: flex;
     padding: 5px 0
 }
@@ -60,8 +62,8 @@
     width: fit-content;
 }
 
-.footerArea > div > div {
-    margin-top: 30px !important;
+.footerArea {
+    margin-bottom: auto !important;
 }
 
 .dateUntilBox {
@@ -69,8 +71,6 @@
     margin-right: auto;
     width: auto;
     height: 50px;
-    border-bottom-left-radius: 15px;
-    border-top-right-radius: 25px;
     display: flex;
     gap: 5px;
     align-items: center;
@@ -79,14 +79,16 @@
     font-size: 20px;
 }
 
+.dateUntilBox > * {
+    margin-bottom: 0;
+}
+
 .buttonSector {
     display: flex;
     gap: 10px;
     align-items: center;
     justify-content: right;
     padding: 0 10px;
-    border-top-left-radius: 10px;
-    border-bottom-right-radius: 15px;
     width: auto;
     margin-left: auto;
 }
@@ -110,3 +112,10 @@
         background-position: 200vh;
     }
 }
+
+@media (max-width: 1915px) {
+    .productImage {
+        height: 410px;
+    }
+}
+
