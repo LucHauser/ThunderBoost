@@ -1,5 +1,5 @@
 .highlightView {
-    height: 100%;
+    height: 100% !important;
     display: flex !important;
     flex-wrap: wrap;
     align-content: space-between;
@@ -11,7 +11,8 @@
 }
 
 .highlightView > div:nth-child(2) {
-    padding: 10px
+    padding: 10px;
+    width: 100%
 }
 
 .imageArea {
@@ -42,7 +43,7 @@
     animation: color-range 40s linear infinite
 }
 
-.contentArea > #productPrice {
+#productPrice {
     font-size: 30px;
     font-weight: bold;
     width: fit-content;

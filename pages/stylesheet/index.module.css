@@ -1,6 +1,5 @@
 .landingPage {
-    padding: 30px;
-    display: grid;
+    padding-top: 30px;
 }
 
 .highlightCarouselElement > a {

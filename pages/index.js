@@ -2,14 +2,21 @@ import landingPageStyles from "./stylesheet/index.module.css"
 import defaultStyles from "./stylesheet/global.module.css";
 import ClientQuestionForm from "@components/forms/ClientQuestionForm";
 import {Carousel, CarouselItem, Col, Container, Row} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {getAllHighligtsInclusiveProduct} from "@lib/api";
 import {isEventNow} from "@components/Utils";
 import HighlightView from "@components/views/HighlightView";
+import {useElementSize} from "usehooks-ts";
 
 export default function IndexPage({session, host}) {
 
     const [activeHighlights, setActiveHighlights] = useState([])
+    const [carouselItemRef, carouselItem] = useElementSize()
+    const ref = useRef(null)
+
+    useEffect(() => {
+
+    })
 
     useEffect(() => {
         const loadHights = async () => {
@@ -47,8 +54,8 @@ export default function IndexPage({session, host}) {
                                 activeHighlights.map((highlight, index) => {
                                     return (
                                         <Carousel.Item key={index}>
-                                            <div className={landingPageStyles.highlightView}>
-                                                <HighlightView prop={highlight} presentingProduct={highlight.product}/>
+                                            <div className={landingPageStyles.highlightView} ref={carouselItemRef}>
+                                                <HighlightView prop={highlight} presentingProduct={highlight.product} finalHeight={600} finalWidth={carouselItem.width}/>
                                             </div>
 
                                         </Carousel.Item>

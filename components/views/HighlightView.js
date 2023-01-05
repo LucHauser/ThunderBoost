@@ -12,7 +12,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import {useElementSize} from "usehooks-ts";
 import {useEffect, useRef, useState} from "react";
 
-export default function HighlightView({prop, presentingProduct, editorViewMode, finalHeight}) {
+export default function HighlightView({prop, presentingProduct, editorViewMode, finalHeight, finalWidth}) {
 
     const [containerRef, container] = useElementSize()
     const [eventTypeRef, eventType] = useElementSize()
@@ -20,6 +20,9 @@ export default function HighlightView({prop, presentingProduct, editorViewMode, 
     const [highlightFooterRef, highlightFooter] = useElementSize()
     const [imageHeight, image] = useElementSize()
     const [disableFlex, setDisableFlex] = useState(false)
+    const [highlightDetailHeight, setHighlightDetailHeight] = useState(0)
+    const [containerWidth, setContainerWidth] = useState(0)
+    const [containerHeight, setContainerHeight] = useState(0)
 
     /*useEffect(() => {
         console.log(container.width, " ", container.height)
@@ -27,8 +30,21 @@ export default function HighlightView({prop, presentingProduct, editorViewMode, 
     }, [container, image])*/
 
     useEffect(() => {
+        if (finalWidth) {
+            setContainerWidth(finalWidth)
+        }
+        if (finalHeight) {
+            setContainerHeight(finalHeight)
+        }
+    },[finalWidth, finalHeight])
+
+    useEffect(() => {
         setDisableFlex(container.width >= 1333)
     },[container, eventType, highlightDetail, highlightFooter])
+
+    useEffect(() => {
+        setHighlightDetailHeight(container.height - eventType.height - highlightFooter.height - 20)
+    }, [container, eventType, highlightFooter])
 
     function backgroundingBySettings(styleOption, gradientOption, primaryColor, primaryOpacity, secondaryColor, secondaryOpacity) {
         let val = ``
@@ -95,18 +111,22 @@ export default function HighlightView({prop, presentingProduct, editorViewMode, 
                 </i>
                 {/**/}
             </div>
-            <div ref={highlightDetailRef}>
+            <div ref={highlightDetailRef} style={{height: highlightDetailHeight}}>
                 <Container fluid={true}>
                     <Row>
-                        <Col md={4}>
-                            <img
-                                style={Object.assign(disableFlex ? {width: image.width, height: image.height} : {width: "100%", height: "fit-content", overflow: "hidden"})}
-                                src={presentingProduct?.images[prop.productImageIndex]}
-                                alt={"Img"}
-                                ref={imageHeight}
-                            />
-                        </Col>
-                        <Col>
+                        {
+                            presentingProduct?.images &&
+                            <Col md={4}>
+                                {/*Object.assign(disableFlex ? {width: image.width, height: image.height} : {width: "100%", height: image.width, overflow: "hidden"})*/}
+                                <div
+                                    style={
+                                    Object.assign({}, {background: "#FFFFFF", backgroundImage: `url(${presentingProduct?.images[prop?.productImageIndex]})`, backgroundSize: "cover", width: container.height - eventType.height - highlightFooter.height - 40, height: container.height - eventType.height - highlightFooter.height - 40})
+                                    }/>
+
+                            </Col>
+                        }
+
+                        <Col md={8}>
                             <Container fluid={true}>
                                 <Row>
                                     <Col>
@@ -133,25 +153,32 @@ export default function HighlightView({prop, presentingProduct, editorViewMode, 
                                 <Row>
                                     <Col>
                                         {
-                                            prop.showProductPrice ?
-                                                <p className={
-                                                    !prop.showProductPrice ?
-                                                        defaultStyles.hideElement
-                                                        : null
-                                                }
-                                                   style={Object.assign({
-                                                       fontFamily: prop.productPriceFontFamily,
-                                                       color: prop.productPriceColor
-                                                   }, prop.enableProductPriceBackground ? {
-                                                       background: hexToRgba(prop.productPriceBackground, prop.productPriceBackgroundOpacity),
-                                                       padding: 5
-                                                   } : null )
-                                                   }
-                                                   id={highlightViewStyles["productPrice"]}>
-                                                    {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ?
-                                                        getDiscountPrice(presentingProduct?.price, presentingProduct?.discountPercent) : presentingProduct?.price}$
-                                                    {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ? <span style={{alignSelf: prop.originalPriceAlignment, color: prop.originalPriceColor}}>instead {presentingProduct.price}$</span> : null}
-                                                </p> : null
+                                            presentingProduct?.price &&
+                                                <>
+                                                    {
+                                                        prop.showProductPrice ?
+                                                            <p className={!prop.showProductPrice ?
+                                                                defaultStyles.hideElement
+                                                                : null
+                                                                }
+                                                                style={
+                                                                    Object.assign({
+                                                                        fontFamily: prop.productPriceFontFamily,
+                                                                        color: prop.productPriceColor
+                                                                    },
+                                                                prop.enableProductPriceBackground ? {
+                                                                    background: hexToRgba(prop.productPriceBackground, prop.productPriceBackgroundOpacity),
+                                                                    padding: 5
+                                                                    } : null )
+                                                                }
+                                                                id={highlightViewStyles["productPrice"]}>
+                                                                {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ?
+                                                                    getDiscountPrice(presentingProduct?.price, presentingProduct?.discountPercent) : presentingProduct?.price}$
+                                                                {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ? <span style={{alignSelf: prop.originalPriceAlignment, color: prop.originalPriceColor}}>instead {presentingProduct?.price}$</span> : null}
+                                                            </p> : null
+                                                    }
+                                                </>
+
                                         }
                                     </Col>
                                 </Row>
