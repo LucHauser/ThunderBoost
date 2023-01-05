@@ -250,7 +250,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
     const [model, setModel] = useState(defaultModel)
     const [errors, setErrors] = useState({})
     const [loadHighlight, setLoadHighlight] = useState(false)
-    const [products, setProducts] = useState([])
+    const [allProducts, setAllProducts] = useState([])
     const [productImageIndexOptions, setProductImageIndexOptions] = useState([])
     const [backgroundImages, setBackgroundImages] = useState([])
     const [showImageUploaderDialog, setShowImageUploaderDialog] = useState(false)
@@ -264,16 +264,13 @@ export default function HighlightForm({session, highlightToEdit, host}) {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const products = await getAllProducts(host)
-                setProducts(products)
+                const allProduct = await getAllProducts(host)
+                console.log(allProduct)
+                setAllProducts(allProduct)
             } catch (e) {
                 console.log(e)
             }
         }
-        loadProducts()
-    }, [host])
-
-    useEffect(() => {
         const loadImages = async () => {
             try {
                 const images = await getAllImagesByUsage(host, "Highlights Background")
@@ -282,20 +279,28 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                 console.log(e)
             }
         }
+        loadProducts()
         loadImages()
     }, [host])
 
     useEffect(() => {
         if (highlightToEdit) {
             setModel(highlightToEdit)
-            selectProductForPresentation(highlightToEdit.id)
+            setProductForPresentation(allProducts.filter(p => p.id === highlightToEdit.productId))
         }
         // console.log(model)
     }, [highlightToEdit])
 
-    function selectProductForPresentation(id) {
-        setProductForPresentation(products.filter(p => p.id === id)[0])
-    }
+    useEffect(() => {
+        console.log(model.productId)
+        setRelatedProduct(parseInt(model.productId))
+    }, [model.productId])
+
+    /*useEffect(() => {
+        setProductForPresentation(allProducts.filter(p => p.id = model.productId)[0])
+        console.log(model.productId)
+        setProductImageIndexOptions(allProducts.filter(p => p.id = model.productId)[0]?.images)
+    }, [model.productId])*/
 
     const onModelChange = (e) => {
         const target = e.target
@@ -307,33 +312,27 @@ export default function HighlightForm({session, highlightToEdit, host}) {
         })
     }
 
-    const onChoosingProduct = (e) => {
-        const name = e.target.name
-        const value = e.target.value
-        if (value !== null) {
-            setModel({
-                ...model,
-                [name]: products[value]?.id
-            })
-            console.log(model.productId)
-            setProductForPresentation(products[value])
-            createOptionList(products[value]?.images)
+    function setRelatedProduct(id) {
+        if (id === 0) {
+            setProductForPresentation({})
         } else {
-            setModel({
-                ...model,
-                [name]: value
-            })
-            setProductForPresentation(null)
-            setProductImageIndexOptions([])
+            const filtered = allProducts.filter(p => p.id === id)[0]
+            console.log(filtered)
+            setProductForPresentation(filtered)
+            createOptionList(filtered?.images)
         }
     }
 
     function createOptionList(imagesOfProduct) {
         let list = []
-        for (let i = 0; i < imagesOfProduct.length; i++) {
+        for (let i = 0; i < imagesOfProduct?.length; i++) {
             list.push(i)
         }
         setProductImageIndexOptions(list)
+        setModel({
+            ...model,
+            productImageIndex: list.length > 0 ? 0 : null
+        })
     }
 
     const onModelCheckboxChange = (e) => {
@@ -597,16 +596,18 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                 <Form.Select
                                                     className={defaultStyles.formInputFieldSmall}
                                                     name="productId"
-                                                    onChange={onChoosingProduct}
-                                                    value={model.productId}>
+                                                    onChange={(e) => {
+                                                        onModelChange(e)
+
+                                                    }}>
                                                     <option value={0}>Select Product</option>
                                                     {
-                                                        products.map((product, index) => {
+                                                        allProducts.map((p, index) => {
                                                             return (
                                                                 <option
                                                                     key={index}
-                                                                    value={index}>
-                                                                    {product.name}
+                                                                    value={p?.id}>
+                                                                    {p.name}
                                                                 </option>
                                                             )
                                                         })
@@ -620,7 +621,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         model.productId ?
                                             <>
                                                 {
-                                                    productForPresentation?.images && productImageIndexOptions.length > 1 ?
+                                                    productForPresentation?.images && productImageIndexOptions?.length > 1 ?
                                                         <>
                                                             <Row>
                                                                 <Col>
@@ -632,7 +633,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                             className={defaultStyles.formInputFieldSmall}
                                                                             onChange={onModelChange}
                                                                             value={model.productImageIndex}>
-                                                                            {productImageIndexOptions.map(index => {
+                                                                            {productImageIndexOptions.map((img, index) => {
                                                                                 return <option key={index} value={index}>Image {index + 1}</option>
                                                                             })}
                                                                         </Form.Select>

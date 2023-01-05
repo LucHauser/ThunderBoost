@@ -26,7 +26,7 @@ export default function createHighlight({session, host}) {
             </button>
             <h1>Plan a new Highlight</h1>
             <div>
-                <HighlightForm session={session}/>
+                <HighlightForm session={session} host={host}/>
             </div>
 
         </div>
