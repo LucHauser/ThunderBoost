@@ -1,0 +1,50 @@
+.navbarElement {
+    background: linear-gradient(to right, #C5416F, #6D49A7) !important;
+}
+
+.thunderboostBrand {
+    line-height: 1;
+    letter-spacing: 2px;
+    text-align: center;
+    font-family: 'HKModular-Bold', sans-serif !important;
+    color: #FFFFFF;
+    text-shadow: -1px -1px #D707F1, 1px 1px #8DF3E8;
+}
+
+.thunderboostBrand:hover {
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.toggler {
+    border: none;
+    color: transparent !important;
+}
+
+.offCanvas {
+    background: #3C306D;
+}
+
+.menuTitle {
+    color: #FFFFFF;
+    font-family: "Nunito", sans-serif;
+    font-size: 25px !important;
+}
+
+.navLinks {
+    gap: 20px !important;
+}
+
+.navLinks > a {
+    font-family: "Nunito", sans-serif;
+    color: #FFFFFF !important;
+}
+
+.iconButton {
+    height: 50px !important;
+    width: 50px !important;
+    outline: none;
+    border: none;
+    background: rgba(255, 255, 255, 9%);
+    border-radius: 25px;
+}

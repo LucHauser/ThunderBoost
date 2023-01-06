@@ -10,7 +10,7 @@ import {useRouter} from "next/router";
 
 
 
-export default function Header({session}) {
+export default function Header({session, shoppingCart}) {
 
     const [showShopBy, setShowShopBy] = useState(false)
     const [showNavOffcanvas, setShowNavOffcanvas] = useState(false)

@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from "@components/pageUtils/Footer";
 import {formatServerUrl} from "@components/Utils";
 import {useEffect, useState} from "react";
+import useShoppingCart from "@lib/hooks/useCart";
+import Navigation from "@components/pageUtils/Navbar";
 
 export default function App({ Component, pageProps }) {
     const session = useSession()
@@ -14,15 +16,19 @@ export default function App({ Component, pageProps }) {
         setHost(formatServerUrl(document.location.hostname))
     }, [])
 
+    const shoppingCart = useShoppingCart(session, host)
+
     const newPageProps = {
         ...pageProps,
         session,
-        host
+        host,
+        shoppingCart
     }
 
     return (
         <>
-            <Header session={session}/>
+            <Navigation shoppingCart={shoppingCart} session={session}/>
+            <Header session={session} shoppingCart={shoppingCart}/>
             <main className="page">
                 <Component {...newPageProps} />
             </main>

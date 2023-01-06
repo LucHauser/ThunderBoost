@@ -8,7 +8,7 @@ import {isEventNow} from "@components/Utils";
 import HighlightView from "@components/views/HighlightView";
 import {useElementSize} from "usehooks-ts";
 
-export default function IndexPage({session, host}) {
+export default function IndexPage({session, host, shoppingCart}) {
 
     const [activeHighlights, setActiveHighlights] = useState([])
     const [carouselItemRef, carouselItem] = useElementSize()
@@ -68,6 +68,11 @@ export default function IndexPage({session, host}) {
                 <Row>
                     <Col>
                         <h2 className={defaultStyles.pageSubtitle}>Why Thunderboost</h2>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <h2 style={{color: "white"}}>{shoppingCart.loggedIn.toString()}</h2>
                     </Col>
                 </Row>
             </Container>
