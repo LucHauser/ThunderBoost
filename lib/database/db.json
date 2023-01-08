@@ -796,5 +796,12 @@
       "id": 13
     }
   ],
-  "cart": []
+  "cart": [
+    {
+      "amount": 2,
+      "productId": 1,
+      "userId": 1,
+      "id": 1
+    }
+  ]
 }

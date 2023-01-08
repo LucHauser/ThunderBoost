@@ -1,54 +1,141 @@
-import {Container, Form, Nav, Navbar, Offcanvas} from "react-bootstrap";
+import {Card, CloseButton, Col, Collapse, Container, Form, Modal, Nav, Navbar, Offcanvas, Row} from "react-bootstrap";
 import navigationStyles from "./Navbar.module.css"
+import defaultStyles from "../../pages/stylesheet/global.module.css"
 import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars, faCartShopping, faMagnifyingGlass, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faCartShopping, faMagnifyingGlass, faUser, faX} from "@fortawesome/free-solid-svg-icons";
+import {useRouter} from "next/router";
 
 export default function Navigation({session, shoppingCart}) {
 
     const [showCart, setShowCart] = useState(false)
+    const [showSearch, setShowSearch] = useState(false)
+    const [showUserStatus, setShowUserStatus] = useState(false)
+    const router = useRouter()
 
     return (
         <>
-            <Navbar expand={"xl"} className={navigationStyles.navbarElement}>
+            <Navbar expand={"xl"} className={navigationStyles.navbarElement} variant={"dark"}>
                 <Container fluid={true}>
-                    <Navbar.Brand className={navigationStyles.thunderboostBrand}>Thunder<br/>boost</Navbar.Brand>
-                    <Navbar.Toggle className={navigationStyles.toggler}>
-                        <i><FontAwesomeIcon icon={faBars}/></i>
-                    </Navbar.Toggle>
-                    <Navbar.Offcanvas placement={"start"} className={navigationStyles.offCanvas}>
-                        <Offcanvas.Header className={navigationStyles.menuTitle}>
-                            <Offcanvas.Title>Thunderboost Menu</Offcanvas.Title>
+                    <Navbar.Brand href={"./"} className={navigationStyles.thunderboostBrand}>Thunder<br/>boost</Navbar.Brand>
+
+
+                    <Navbar.Offcanvas placement={"start"} className={navigationStyles.menu}>
+                        <Offcanvas.Header closeButton={true}>
+                            <Offcanvas.Title className={navigationStyles.menuTitle}>Thunderboost Menu</Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             <Nav className={`justify-content-center flex-grow-1 ${navigationStyles.navLinks}`}>
-                                <Nav.Link>Home</Nav.Link>
-                                <Nav.Link>Boosters</Nav.Link>
+                                <Nav.Link href={"./"}>Home</Nav.Link>
+                                <Nav.Link href={"./boosters"}>Boosters</Nav.Link>
                                 <Nav.Link>What is Thunderboost</Nav.Link>
                                 <Nav.Link>About</Nav.Link>
+                                {
+                                    session.user?.roleId === 1 ? <Nav.Link href={"./adminPortal"}>Admin Portal</Nav.Link> : null
+                                }
                             </Nav>
-                            <div className={"d-flex"}>
-                                <button className={navigationStyles.iconButton}>
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} color={"#FFFFFF"} size={"lg"}/>
-                                </button>
-                                <button className={navigationStyles.iconButton}>
-                                    <FontAwesomeIcon icon={faCartShopping} color={"#FFFFFF"} size={"lg"}/>
-                                </button>
-                                <button className={navigationStyles.iconButton}>
-                                    <FontAwesomeIcon icon={faUser} color={"#FFFFFF"} size={"lg"}/>
-                                </button>
-                            </div>
-
                         </Offcanvas.Body>
-
                     </Navbar.Offcanvas>
+                    <div>
+                        <button className={navigationStyles.iconButton} onClick={() => setShowSearch(true)}>
+                            <FontAwesomeIcon icon={faMagnifyingGlass} color={"rgba(255, 255, 255, 0.55)"} size={"lg"}/>
+                        </button>
+                        <button className={navigationStyles.iconButton} onClick={() => setShowCart(true)}>
+                            <FontAwesomeIcon icon={faCartShopping} color={"rgba(255, 255, 255, 0.55)"} size={"lg"}/>
+                        </button>
+                        <button className={navigationStyles.iconButton} onClick={() => session.user ? setShowUserStatus(true) : router.push("./login")}>
+                            <FontAwesomeIcon icon={faUser} color={"rgba(255, 255, 255, 0.55)"} size={"lg"}/>
+                        </button>
+                        <Navbar.Toggle className={navigationStyles.toggler}/>
+                    </div>
                 </Container>
             </Navbar>
-            <Offcanvas show={showCart} onHide={() => setShowCart(false)}>
+
+            <Modal show={showSearch} onHide={() => setShowSearch(false)} size={"lg"} contentClassName={navigationStyles.searchModal}>
+                <Container fluid={true}>
+                    <Row>
+                        <Col md={9} sm={8} className={`align-items-center ${defaultStyles.disableColumnPaddingLeft}`}>
+                            <Form.Control className={defaultStyles.formInputField} placeholder={"search something"}/>
+                        </Col>
+                        <Col md={2} sm={3}>
+                            <button className={defaultStyles.buttonFilled}>Search</button>
+                        </Col>
+                        <Col md={1} className={`align-self-center justify-content-end ${defaultStyles.disableColumnPaddingRight}`}>
+                            <CloseButton variant={"white"} onClick={() => setShowSearch(false)} className={navigationStyles.toggler}/>
+                        </Col>
+                    </Row>
+                </Container>
+            </Modal>
+
+            <Offcanvas show={showCart} onHide={() => setShowCart(false)} placement={"end"} className={navigationStyles.productCartOffcanvas}>
                 <Offcanvas.Header>
-                    <Offcanvas.Title>Your Cart</Offcanvas.Title>
+                    <Offcanvas.Title><FontAwesomeIcon icon={faCartShopping} style={{marginRight: 10}}/>Your Cart</Offcanvas.Title>
+                    <CloseButton variant={"white"} onClick={() => setShowCart(false)}/>
                 </Offcanvas.Header>
+                <Offcanvas.Body>
+                    {
+                        shoppingCart.loggedIn ?
+                            <>
+                                <button onClick={() => shoppingCart.printProd()}>Priont</button>
+                                <Container>
+                                    {
+                                        shoppingCart.products.map((p, index) => {
+                                            return (
+                                                <>
+                                                    <Row>
+                                                        <Col>
+                                                            <p style={{color: "#FFFFFF"}}>{p.product.name}</p>
+                                                        </Col>
+                                                    </Row>
+                                                </>
+
+                                            )
+                                        })
+                                    }
+                                </Container>
+
+                            </>
+                            :
+                            <>
+                                <p>You are not logged in, please Login or Register</p>
+                                <button className={defaultStyles.buttonFilled}>Login</button>
+                            </>
+                    }
+                </Offcanvas.Body>
             </Offcanvas>
+
+            <Modal
+                entered={false}
+                show={showUserStatus}
+                size={"sm"}
+                onBackdropClick={() => setShowUserStatus(false)}
+                onHide={() => setShowUserStatus(false)}
+                backdropClassName={navigationStyles.userModal}
+                dialogClassName={navigationStyles.userModalPosition}
+                animation={false}>
+                <Modal.Header>
+                    Logged in as {session.user?.firstName} {session.user?.lastName}
+                </Modal.Header>
+                <Modal.Body>
+                    <div className={"d-flex gap-2"}>
+                        <button
+                            className={defaultStyles.buttonFilled}
+                            onClick={() => {
+                                setShowUserStatus(false)
+                                router.push("./profile")
+                            }}>To Profile
+                        </button>
+                        <button
+                            className={defaultStyles.buttonFilled}
+                            onClick={() => {
+                                session.logout()
+                                setShowUserStatus(false)
+                            }}>Log out
+                        </button>
+                    </div>
+
+                </Modal.Body>
+            </Modal>
         </>
 
     )

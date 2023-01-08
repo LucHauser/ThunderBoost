@@ -18,11 +18,13 @@
 
 .toggler {
     border: none;
-    color: transparent !important;
+    padding: 0 !important;
+    margin-left: 10px;
+    color: transparent;
 }
 
-.offCanvas {
-    background: #3C306D;
+.menu {
+    background: #C5416F
 }
 
 .menuTitle {
@@ -31,20 +33,43 @@
     font-size: 25px !important;
 }
 
-.navLinks {
-    gap: 20px !important;
-}
-
 .navLinks > a {
     font-family: "Nunito", sans-serif;
     color: #FFFFFF !important;
 }
 
 .iconButton {
-    height: 50px !important;
-    width: 50px !important;
+    height: 40px !important;
+    margin-left: 10px;
     outline: none;
     border: none;
-    background: rgba(255, 255, 255, 9%);
+    background: transparent;
     border-radius: 25px;
+}
+
+.productCartOffcanvas {
+    color: #FFFFFF;
+    background: black;
+}
+
+.userModal {
+    background: transparent;
+    overflow: hidden !important;
+}
+.userModalPosition {
+    margin-top: 75px !important;
+    margin-right: 10px !important;
+}
+
+.searchModal {
+    background: #3C306D;
+    padding: 10px 10px;
+}
+
+
+
+@media (min-width: 1200px) {
+    .navLinks {
+        gap: 20px !important;
+    }
 }

@@ -16,9 +16,8 @@ import {Carousel, Col, Container, Row, Stack} from "react-bootstrap";
 import ProductArticle from "@components/views/ProductCollectionItem";
 import ProductReviewItem from "@components/views/ProductReviewItem";
 import ReactStars from "react-stars/dist/react-stars";
-import Image from "next/image";
 
-export default function ArticleDetail({session, host}) {
+export default function ArticleDetail({session, host, shoppingCart}) {
 
     const [product, setProduct] = useState({})
     const [reviews, setReviews] = useState([])
@@ -83,7 +82,7 @@ export default function ArticleDetail({session, host}) {
                 <Row>
                     <Col>
                         <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilledAutoWidth}`} style={{marginBottom: 15}} onClick={() => router.push("../boosters")}>
-                            <FontAwesomeIcon icon={faArrowLeft} style={{marginRight: 10}}/>Back
+                            <FontAwesomeIcon icon={faArrowLeft} style={{marginRight: 10}}/>Back {shoppingCart.loggedIn ? "Logged in" : "Not log"}
                         </button>
                     </Col>
                 </Row>
@@ -188,7 +187,7 @@ export default function ArticleDetail({session, host}) {
                             </Row>
                             <Row>
                                 <Col>
-                                    <button className={`${defaultStyles.buttonFilled}`}>
+                                    <button className={`${defaultStyles.buttonFilled}`} onClick={() => session.user ? shoppingCart.add(product, amountToCart) : router.push("./login")}>
                                         <FontAwesomeIcon icon={faShoppingCart} style={{marginRight: 10}}/>
                                         Add to Cart
                                     </button>

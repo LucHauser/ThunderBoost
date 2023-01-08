@@ -2,7 +2,7 @@ import loginStyles from "./LoginRegisterForm.module.css";
 import defaultStyle from "../../pages/stylesheet/global.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExclamation} from "@fortawesome/free-solid-svg-icons";
-import {Form} from "react-bootstrap";
+import {Col, Container, Form, Row} from "react-bootstrap";
 import {useState} from "react";
 import {login} from "@lib/api";
 import {useRouter} from "next/router";
@@ -76,24 +76,49 @@ export default function LoginForm({session, host}) {
 
     return (
         <>
-            <Form className={loginStyles.formContainer} onSubmit={handleLogin}>
-                <h2 className={defaultStyle.formTitle}>Login</h2>
-                <div className={defaultStyle.formSeparatorLine}/>
-                { loginErrors.login && <div className={loginStyles.errorText}>
-                    <FontAwesomeIcon icon={faExclamation} className={loginStyles.faExclamation}/>{loginErrors.login}</div>
-                }
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Email-Address</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${loginErrors.email && defaultStyle.formInputError}`} type="text" name="email" onChange={handleLoginChange} placeholder="Enter your Email-Address"/>
-                    {loginErrors.email && <p>{loginErrors.email}</p>}
-                </Form.Group>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Password</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${loginErrors.password  && defaultStyle.formInputError}`} type="password" name="password" onChange={handleLoginChange} placeholder="Enter your password"/>
-                    {loginErrors.password && <p>{loginErrors.password}</p>}
-                </Form.Group>
-                <button className={defaultStyle.buttonFilled} type="submit">Login</button>
-            </Form>
+            <div className={`${loginStyles.formContainer} ${loginStyles.loginForm}`}>
+                <Form onSubmit={handleLogin}>
+                    <Container fluid={true}>
+                        <Row>
+                            <Col>
+                                <h2 className={defaultStyle.formTitle}>Login</h2>
+                                <div className={defaultStyle.formSeparatorLine}/>
+                            </Col>
+                        </Row>
+                        { loginErrors.login &&
+                        <Row>
+                            <Col>
+                                <div className={loginStyles.errorText}>
+                                    <FontAwesomeIcon icon={faExclamation} className={loginStyles.faExclamation}/>{loginErrors.login}
+                                </div>
+                            </Col>
+                        </Row> }
+                        <Row>
+                            <Col>
+                                <Form.Group className={defaultStyle.formGroup}>
+                                    <Form.Label className={defaultStyle.formLabel}>Email-Address</Form.Label>
+                                    <Form.Control className={`${defaultStyle.formInputField} ${loginErrors.email && defaultStyle.formInputError}`} type="text" name="email" onChange={handleLoginChange} placeholder="Enter your Email-Address"/>
+                                    {loginErrors.email && <p>{loginErrors.email}</p>}
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group className={defaultStyle.formGroup}>
+                                    <Form.Label className={defaultStyle.formLabel}>Password</Form.Label>
+                                    <Form.Control className={`${defaultStyle.formInputField} ${loginErrors.password  && defaultStyle.formInputError}`} type="password" name="password" onChange={handleLoginChange} placeholder="Enter your password"/>
+                                    {loginErrors.password && <p>{loginErrors.password}</p>}
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <button style={{marginTop: 20}} className={defaultStyle.buttonFilled} type="submit">Login</button>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Form>
+            </div>
         </>
     )
 }

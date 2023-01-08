@@ -1,4 +1,3 @@
-import Header from "@components/pageUtils/Header"
 import useSession from "@lib/hooks/session"
 import "./_app.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -28,7 +27,6 @@ export default function App({ Component, pageProps }) {
     return (
         <>
             <Navigation shoppingCart={shoppingCart} session={session}/>
-            <Header session={session} shoppingCart={shoppingCart}/>
             <main className="page">
                 <Component {...newPageProps} />
             </main>

@@ -2,7 +2,7 @@ import loginStyles from "./LoginRegisterForm.module.css";
 import defaultStyle from "../../pages/stylesheet/global.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faExclamation} from "@fortawesome/free-solid-svg-icons";
-import {Form} from "react-bootstrap";
+import {Col, Container, Form, Row, Stack} from "react-bootstrap";
 import {useState} from "react";
 import {useRouter} from "next/router";
 import {register} from "@lib/api";
@@ -121,63 +121,107 @@ export default function RegisterForm({session, host}) {
     }
 
     return (
-        <>
-            <Form onSubmit={handleRegister} className={loginStyles.formContainer}>
-                <h2 className={defaultStyle.formTitle}>Create an account</h2>
-                <div className={defaultStyle.formSeparatorLine}/>
-                <ul className={loginStyles.userBenefitsContainer}>
-                    <li><FontAwesomeIcon icon={faCheck} color="white"/><p>Add Products to cart</p></li>
-                    <li><FontAwesomeIcon icon={faCheck} color="white"/><p>Leave a review of a product</p></li>
-                    <li><FontAwesomeIcon icon={faCheck} color="white"/><p>View orders and backorders</p></li>
-                    <li><FontAwesomeIcon icon={faCheck} color="white"/><p>Register as a new customer</p></li>
-                </ul>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Title</Form.Label>
-                    <Form.Select className={defaultStyle.formInputField} name="title" onChange={handleRegisterChange}>
-                        <option disabled={true} value="">Choose title</option>
-                        <option value="Mr">Mr</option>
-                        <option value="Ms">Ms</option>
-                    </Form.Select>
-                </Form.Group>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>First name</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.firstName && defaultStyle.formInputError}`} type="text" name="firstName" placeholder="Enter your first name" onChange={handleRegisterChange}/>
-                    {registerErrors.firstName && <p>{registerErrors.firstName}</p>}
-                </Form.Group>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Last name</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.lastName && defaultStyle.formInputError}`} type="text" name="lastName" placeholder="Enter your last name" onChange={handleRegisterChange}/>
-                    {registerErrors.lastName && <p>{registerErrors.lastName}</p>}
-                </Form.Group>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Email-Address</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.email && defaultStyle.formInputError}`} type="text" name="email" placeholder="Enter your email-address" onChange={handleRegisterChange}/>
-                    {registerErrors.email && <p>{registerErrors.email}</p>}
-                </Form.Group>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Username</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.username && defaultStyle.formInputError}`} type="text" name="username" placeholder="Enter your new username" onChange={handleRegisterChange}/>
-                    {registerErrors.username && <p>{registerErrors.username}</p>}
-                </Form.Group>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Password</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.password && defaultStyle.formInputError}`} type="password" name="password" placeholder="Enter your new password" onChange={handleRegisterChange}/>
-                    {registerErrors.password && <p>{registerErrors.password}</p>}
-                </Form.Group>
-                <Form.Group className={defaultStyle.formGroup}>
-                    <Form.Label className={defaultStyle.formLabel}>Repeat Password</Form.Label>
-                    <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.repeatPassword && defaultStyle.formInputError}`} type="password" name="repeatPassword" placeholder="Repeat your new password" onChange={handleRegisterChange}/>
-                    {registerErrors.repeatPassword && <p>{registerErrors.repeatPassword}</p>}
-                </Form.Group>
-                <Form.Group className={`${defaultStyle.formGroup}`}>
-                    <div className={loginStyles.formGroupTerms}>
-                        <Form.Control className={defaultStyle.formCheckbox} type="checkbox" name="agreedTerms" onChange={(e) => setCheckedAgree(e.target.checked)}/>
-                        <Form.Label className={defaultStyle.formLabel}>I have read and agree to the<br/> <a>Terms & Conditions</a> & <a>Privacy Policy</a><br/> of this online store</Form.Label>
-                    </div>
-                    {registerErrors.notChecked && <p>{registerErrors.notChecked}</p>}
-                </Form.Group>
-                <button className={defaultStyle.buttonFilled} type="submit">Register</button>
+        <div>
+            <Form onSubmit={handleRegister} className={`${loginStyles.formContainer} ${loginStyles.registerForm}`}>
+                <Container>
+                    <Row>
+                        <Col>
+                            <h2 className={defaultStyle.formTitle}>Create an account</h2>
+                            <div className={defaultStyle.formSeparatorLine}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Stack className={loginStyles.userBenefitsContainer}>
+                                <p><FontAwesomeIcon icon={faCheck} color="white"/>Add Products to cart</p>
+                                <p><FontAwesomeIcon icon={faCheck} color="white"/>Leave a review of a product</p>
+                                <p><FontAwesomeIcon icon={faCheck} color="white"/>View orders and backorders</p>
+                                <p><FontAwesomeIcon icon={faCheck} color="white"/>Register as a new customer</p>
+                            </Stack>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={defaultStyle.formGroup}>
+                                <Form.Label className={defaultStyle.formLabel}>Title</Form.Label>
+                                <Form.Select className={defaultStyle.formInputField} name="title" onChange={handleRegisterChange}>
+                                    <option disabled={true} value="">Choose title</option>
+                                    <option value="Mr">Mr</option>
+                                    <option value="Ms">Ms</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={defaultStyle.formGroup}>
+                                <Form.Label className={defaultStyle.formLabel}>First name</Form.Label>
+                                <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.firstName && defaultStyle.formInputError}`} type="text" name="firstName" placeholder="Enter your first name" onChange={handleRegisterChange}/>
+                                {registerErrors.firstName && <p>{registerErrors.firstName}</p>}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={defaultStyle.formGroup}>
+                                <Form.Label className={defaultStyle.formLabel}>Last name</Form.Label>
+                                <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.lastName && defaultStyle.formInputError}`} type="text" name="lastName" placeholder="Enter your last name" onChange={handleRegisterChange}/>
+                                {registerErrors.lastName && <p>{registerErrors.lastName}</p>}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={defaultStyle.formGroup}>
+                                <Form.Label className={defaultStyle.formLabel}>Email-Address</Form.Label>
+                                <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.email && defaultStyle.formInputError}`} type="text" name="email" placeholder="Enter your email-address" onChange={handleRegisterChange}/>
+                                {registerErrors.email && <p>{registerErrors.email}</p>}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={defaultStyle.formGroup}>
+                                <Form.Label className={defaultStyle.formLabel}>Username</Form.Label>
+                                <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.username && defaultStyle.formInputError}`} type="text" name="username" placeholder="Enter your new username" onChange={handleRegisterChange}/>
+                                {registerErrors.username && <p>{registerErrors.username}</p>}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={defaultStyle.formGroup}>
+                                <Form.Label className={defaultStyle.formLabel}>Password</Form.Label>
+                                <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.password && defaultStyle.formInputError}`} type="password" name="password" placeholder="Enter your new password" onChange={handleRegisterChange}/>
+                                {registerErrors.password && <p>{registerErrors.password}</p>}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={defaultStyle.formGroup}>
+                                <Form.Label className={defaultStyle.formLabel}>Repeat Password</Form.Label>
+                                <Form.Control className={`${defaultStyle.formInputField} ${registerErrors.repeatPassword && defaultStyle.formInputError}`} type="password" name="repeatPassword" placeholder="Repeat your new password" onChange={handleRegisterChange}/>
+                                {registerErrors.repeatPassword && <p>{registerErrors.repeatPassword}</p>}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className={`${defaultStyle.formGroupHorizontal}`}>
+                                <Form.Check className={defaultStyle.formCheckbox} type="checkbox" name="agreedTerms" onChange={(e) => setCheckedAgree(e.target.checked)}/>
+                                <Form.Label className={defaultStyle.formLabel}>I have read and agree to the <a>Terms & Conditions</a> & <a>Privacy Policy</a> of this online store</Form.Label>
+                                {registerErrors.notChecked && <p>{registerErrors.notChecked}</p>}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <button style={{marginTop: 20}} className={defaultStyle.buttonFilled} type="submit">Register</button>
+                        </Col>
+                    </Row>
+                </Container>
             </Form>
-        </>
+        </div>
     )
 }

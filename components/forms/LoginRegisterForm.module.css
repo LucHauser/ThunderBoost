@@ -1,39 +1,23 @@
 .formContainer {
     width: 100%;
-    gap: 20px;
-    border: solid #8DF3E8 2px;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    padding: 60px;
-    border-top: none
-}
-
-.formContainer > button {
-    margin-top: 10px
+    padding: 20px 0;
+    background: rgba(255, 255, 255, 9%);
+    border-radius: 5px;
 }
 
 .userBenefitsContainer {
-    background-color: #3C306D;
+    padding-left: 0;
     width: 100%;
-    padding: 15px;
     color: white;
     font-family: Arial, sans-serif;
     font-size: 20px;
     list-style-type: none;
-    margin-bottom: 30px;
-    display: grid;
-    grid-gap: 15px
 }
 
-.userBenefitsContainer > li {
-    display: grid;
-    grid-template-columns: 35px auto;
-}
-
-.formGroupTerms {
+.userBenefitsContainer > p {
     display: flex;
+    gap: 10px;
     align-items: center;
-    gap: 20px
 }
 
 .errorText {
@@ -53,23 +37,12 @@
     margin-right: 10px;
 }
 
-@media (min-width: 904px) {
-    .formContainer {
-        width: 100%;
+@media (max-width: 992px) {
+    .loginForm {
+        border-top-left-radius: 0 !important;
     }
-}
 
-@media (min-width: 1164px) {
-
-    .formContainer {
-        width: 536px;
-        border-top: solid 2px #8DF3E8;
-        border-radius: 6px;
-    }
-}
-
-@media (max-width: 454px) {
-    .formContainer {
-        padding: 5%
+    .registerForm {
+        border-top-right-radius: 0 !important;
     }
 }
