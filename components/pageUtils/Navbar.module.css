@@ -52,6 +52,36 @@
     background: black;
 }
 
+.cartButtonGroup > div > button {
+    font-size: 15px;
+}
+
+.transparentButton {
+    height: 50px;
+    background: transparent;
+    border: solid 2px #FFFFFF;
+    color: #FFFFFF;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.cartTitle {
+    font-size: 20px;
+    font-family: "Nunito", sans-serif;
+}
+
+.cartProductImage {
+    width: 100%
+}
+
+.productList {
+    color: #FFFFFF;
+}
+
+.productList > * {
+    margin-bottom: 0;
+}
+
 .userModal {
     background: transparent;
     overflow: hidden !important;

@@ -5,6 +5,7 @@ import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars, faCartShopping, faMagnifyingGlass, faUser, faX} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
+import {getDiscountPrice, isEventNowWithBoolean} from "@components/Utils";
 
 export default function Navigation({session, shoppingCart}) {
 
@@ -69,28 +70,62 @@ export default function Navigation({session, shoppingCart}) {
 
             <Offcanvas show={showCart} onHide={() => setShowCart(false)} placement={"end"} className={navigationStyles.productCartOffcanvas}>
                 <Offcanvas.Header>
-                    <Offcanvas.Title><FontAwesomeIcon icon={faCartShopping} style={{marginRight: 10}}/>Your Cart</Offcanvas.Title>
+                    <Offcanvas.Title><FontAwesomeIcon icon={faCartShopping} style={{marginRight: 10}}/>Shopping Cart</Offcanvas.Title>
                     <CloseButton variant={"white"} onClick={() => setShowCart(false)}/>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     {
                         shoppingCart.loggedIn ?
                             <>
-                                <button onClick={() => shoppingCart.printProd()}>Priont</button>
-                                <Container>
-                                    {
-                                        shoppingCart.products.map((p, index) => {
-                                            return (
-                                                <>
-                                                    <Row>
-                                                        <Col>
-                                                            <p style={{color: "#FFFFFF"}}>{p.product.name}</p>
-                                                        </Col>
-                                                    </Row>
-                                                </>
+                                <Container className={defaultStyles.pageContentGap15}>
+                                    <Row className={navigationStyles.cartButtonGroup}>
+                                        <Col>
+                                            <button className={`${navigationStyles.transparentButton}`}>Continue Shopping</button>
+                                        </Col>
+                                        <Col>
+                                            <button className={defaultStyles.buttonFilled} onClick={() => router.push("../cart")}>View Shopping Cart</button>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={6}>
+                                            <b className={navigationStyles.cartTitle}>Your order</b>
+                                        </Col>
+                                        <Col xs={6}>
+                                            <p>Articles: {shoppingCart.numbersOfArticles()} / {shoppingCart.getSum()}</p>
+                                        </Col>
+                                    </Row>
+                                    {shoppingCart.products.length > 0 ?
+                                        <>
+                                            {
+                                                shoppingCart.products.map((p, index) => {
+                                                    return (
+                                                        <>
+                                                            <Row>
+                                                                <Col>
+                                                                    <img src={p.product.images[0]} className={navigationStyles.cartProductImage}/>
+                                                                </Col>
+                                                                <Col xs={9} className={navigationStyles.productList}>
+                                                                    <b>{p.product.name}</b>
+                                                                    <p>{p.product.servings} Servings</p>
+                                                                    <b>{isEventNowWithBoolean(p.product.discountFrom, p.product.discountUntil, p.product.discountActive) ?
+                                                                        getDiscountPrice(p.product.price, p.product.discountPercent)
+                                                                        : p.product.price}$
+                                                                    </b>
+                                                                    <p>Amount: {p.amount}</p>
+                                                                </Col>
+                                                            </Row>
+                                                        </>
 
-                                            )
-                                        })
+                                                    )
+                                                })
+                                            }
+                                        </>
+                                        :
+                                        <Row>
+                                            <Col>
+                                                <p>Cart is empty</p>
+                                            </Col>
+                                        </Row>
                                     }
                                 </Container>
 

@@ -43,7 +43,7 @@
         "Orange"
       ],
       "active": true,
-      "discountActive": true,
+      "discountActive": false,
       "discountPercent": null,
       "discountFrom": "",
       "discountUntil": "",
@@ -69,7 +69,7 @@
         "Cola"
       ],
       "active": true,
-      "discountActive": true,
+      "discountActive": false,
       "discountPercent": null,
       "discountFrom": "",
       "discountUntil": "",
@@ -802,6 +802,18 @@
       "productId": 1,
       "userId": 1,
       "id": 1
+    },
+    {
+      "amount": 1,
+      "productId": 3,
+      "userId": 1,
+      "id": 2
+    },
+    {
+      "amount": 1,
+      "productId": 4,
+      "userId": 1,
+      "id": 3
     }
   ]
 }

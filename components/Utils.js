@@ -78,7 +78,7 @@ function getMonthDay(date) {
 
 export function getDiscountPrice(price, percent) {
     if (percent) {
-        return price - (price / 100 * percent)
+        return parseFloat(price) - (parseFloat(price) / 100 * parseInt(percent))
     }
 }
 
