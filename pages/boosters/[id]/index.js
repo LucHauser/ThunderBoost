@@ -82,7 +82,7 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                 <Row>
                     <Col>
                         <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilledAutoWidth}`} style={{marginBottom: 15}} onClick={() => router.push("../boosters")}>
-                            <FontAwesomeIcon icon={faArrowLeft} style={{marginRight: 10}}/>Back {shoppingCart.loggedIn ? "Logged in" : "Not log"}
+                            <FontAwesomeIcon icon={faArrowLeft} style={{marginRight: 10}}/>Back
                         </button>
                     </Col>
                 </Row>

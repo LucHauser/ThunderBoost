@@ -12,6 +12,7 @@ export default function Navigation({session, shoppingCart}) {
     const [showCart, setShowCart] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
     const [showUserStatus, setShowUserStatus] = useState(false)
+    const [searchText, setSearchText] = useState("")
     const router = useRouter()
 
     return (
@@ -52,17 +53,17 @@ export default function Navigation({session, shoppingCart}) {
                 </Container>
             </Navbar>
 
-            <Modal show={showSearch} onHide={() => setShowSearch(false)} size={"lg"} contentClassName={navigationStyles.searchModal}>
+            <Modal show={showSearch} onHide={() => {
+                setShowSearch(false)
+                setSearchText("")
+            }} size={"lg"} contentClassName={navigationStyles.searchModal}>
                 <Container fluid={true}>
                     <Row>
-                        <Col md={9} sm={8} className={`align-items-center ${defaultStyles.disableColumnPaddingLeft}`}>
-                            <Form.Control className={defaultStyles.formInputField} placeholder={"search something"}/>
+                        <Col xs={12} sm={9} md={9} className={`align-items-center`}>
+                            <Form.Control style={{width: "100%"}} className={defaultStyles.formInputField} placeholder={"search something"} onChange={(e) => setSearchText(e.target.value)}/>
                         </Col>
-                        <Col md={2} sm={3}>
-                            <button className={defaultStyles.buttonFilled}>Search</button>
-                        </Col>
-                        <Col md={1} className={`align-self-center justify-content-end ${defaultStyles.disableColumnPaddingRight}`}>
-                            <CloseButton variant={"white"} onClick={() => setShowSearch(false)} className={navigationStyles.toggler}/>
+                        <Col xs={12} sm={3} md={3} className={navigationStyles.submitSearch}>
+                            <button className={defaultStyles.buttonFilled} onClick={() => router.push(`../search/${searchText}`)}>Search</button>
                         </Col>
                     </Row>
                 </Container>
@@ -80,10 +81,16 @@ export default function Navigation({session, shoppingCart}) {
                                 <Container className={defaultStyles.pageContentGap15}>
                                     <Row className={navigationStyles.cartButtonGroup}>
                                         <Col>
-                                            <button className={`${navigationStyles.transparentButton}`}>Continue Shopping</button>
+                                            <button className={`${navigationStyles.transparentButton}`} onClick={() => {
+                                                router.push("../boosters")
+                                                setShowCart(false)
+                                            }}>Continue Shopping</button>
                                         </Col>
                                         <Col>
-                                            <button className={defaultStyles.buttonFilled} onClick={() => router.push("../cart")}>View Shopping Cart</button>
+                                            <button className={defaultStyles.buttonFilled} onClick={() => {
+                                                router.push("../cart")
+                                                setShowCart(false)
+                                            }}>View Shopping Cart</button>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -133,7 +140,10 @@ export default function Navigation({session, shoppingCart}) {
                             :
                             <>
                                 <p>You are not logged in, please Login or Register</p>
-                                <button className={defaultStyles.buttonFilled}>Login</button>
+                                <button className={defaultStyles.buttonFilled} onClick={() => {
+                                    router.push("../login")
+                                    setShowCart(false)
+                                }}>Login</button>
                             </>
                     }
                 </Offcanvas.Body>
@@ -157,7 +167,7 @@ export default function Navigation({session, shoppingCart}) {
                             className={defaultStyles.buttonFilled}
                             onClick={() => {
                                 setShowUserStatus(false)
-                                router.push("./profile")
+                                router.push("../profile")
                             }}>To Profile
                         </button>
                         <button
@@ -168,7 +178,6 @@ export default function Navigation({session, shoppingCart}) {
                             }}>Log out
                         </button>
                     </div>
-
                 </Modal.Body>
             </Modal>
         </>

@@ -103,3 +103,9 @@
         gap: 20px !important;
     }
 }
+
+@media (max-width: 575px) {
+    .submitSearch {
+        margin-top: 20px;
+    }
+}
