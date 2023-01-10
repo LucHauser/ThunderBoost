@@ -5,7 +5,7 @@ import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars, faCartShopping, faMagnifyingGlass, faUser, faX} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
-import {getDiscountPrice, isEventNowWithBoolean} from "@components/Utils";
+import {getDiscountPrice, isEventNow, isEventNowWithBoolean} from "@components/Utils";
 
 export default function Navigation({session, shoppingCart}) {
 
@@ -28,12 +28,12 @@ export default function Navigation({session, shoppingCart}) {
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             <Nav className={`justify-content-center flex-grow-1 ${navigationStyles.navLinks}`}>
-                                <Nav.Link href={"./"}>Home</Nav.Link>
-                                <Nav.Link href={"./boosters"}>Boosters</Nav.Link>
+                                <Nav.Link href={"../"}>Home</Nav.Link>
+                                <Nav.Link href={"../boosters"}>Boosters</Nav.Link>
                                 <Nav.Link>What is Thunderboost</Nav.Link>
                                 <Nav.Link>About</Nav.Link>
                                 {
-                                    session.user?.roleId === 1 ? <Nav.Link href={"./adminPortal"}>Admin Portal</Nav.Link> : null
+                                    session.user?.roleId === 1 ? <Nav.Link href={"../adminPortal"}>Admin Portal</Nav.Link> : null
                                 }
                             </Nav>
                         </Offcanvas.Body>
@@ -94,11 +94,11 @@ export default function Navigation({session, shoppingCart}) {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col xs={6}>
+                                        <Col xs={5}>
                                             <b className={navigationStyles.cartTitle}>Your order</b>
                                         </Col>
-                                        <Col xs={6}>
-                                            <p>Articles: {shoppingCart.numbersOfArticles()} / {shoppingCart.getSum()}</p>
+                                        <Col xs={7}>
+                                            <p style={{marginBottom: 0}}>Articles: {shoppingCart.numbersOfArticles()} / Total: {shoppingCart.getSum()} $</p>
                                         </Col>
                                     </Row>
                                     {shoppingCart.products.length > 0 ?
@@ -114,9 +114,12 @@ export default function Navigation({session, shoppingCart}) {
                                                                 <Col xs={9} className={navigationStyles.productList}>
                                                                     <b>{p.product.name}</b>
                                                                     <p>{p.product.servings} Servings</p>
-                                                                    <b>{isEventNowWithBoolean(p.product.discountFrom, p.product.discountUntil, p.product.discountActive) ?
-                                                                        getDiscountPrice(p.product.price, p.product.discountPercent)
-                                                                        : p.product.price}$
+                                                                    <b>{p.product.discountActive && isEventNow(p.product.discountFrom, p.product.discountUntil) ?
+                                                                        <>
+                                                                        {getDiscountPrice(p.product.price, p.product.discountPercent) + " $"} <sub className={navigationStyles.productDiscount}>instead {p.product.price + " $"}</sub>
+                                                                        </>
+
+                                                                        : p.product.price + " $"}
                                                                     </b>
                                                                     <p>Amount: {p.amount}</p>
                                                                 </Col>

@@ -86,7 +86,7 @@ export default function ImagesManagementPage({session, host}) {
                 </Row>
                 <Row>
                     <Col>
-                        <Table responsive className={defaultStyles.tableContainer}>
+                        <Table responsive="lg" className={defaultStyles.tableContainer}>
                             <thead className={defaultStyles.tableHeader}>
                             <tr>
                                 <th>#</th>

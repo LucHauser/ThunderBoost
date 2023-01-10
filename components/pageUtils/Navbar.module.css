@@ -76,10 +76,15 @@
 
 .productList {
     color: #FFFFFF;
+    font-family: "Nunito", sans-serif;
 }
 
 .productList > * {
     margin-bottom: 0;
+}
+
+.productDiscount {
+    color: #EB3E7A;
 }
 
 .userModal {
