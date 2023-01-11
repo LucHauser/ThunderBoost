@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }) {
             <main className="page">
                 <Component {...newPageProps} />
             </main>
-
+            <Footer/>
         </>
     )
 }

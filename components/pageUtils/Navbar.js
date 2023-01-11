@@ -30,8 +30,8 @@ export default function Navigation({session, shoppingCart}) {
                             <Nav className={`justify-content-center flex-grow-1 ${navigationStyles.navLinks}`}>
                                 <Nav.Link href={"../"}>Home</Nav.Link>
                                 <Nav.Link href={"../boosters"}>Boosters</Nav.Link>
-                                <Nav.Link>What is Thunderboost</Nav.Link>
-                                <Nav.Link>About</Nav.Link>
+                                <Nav.Link href={"../faq"}>What is Thunderboost</Nav.Link>
+                                <Nav.Link href={"../about"}>About</Nav.Link>
                                 {
                                     session.user?.roleId === 1 ? <Nav.Link href={"../adminPortal"}>Admin Portal</Nav.Link> : null
                                 }
