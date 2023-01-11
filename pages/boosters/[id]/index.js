@@ -77,7 +77,7 @@ export default function ArticleDetail({session, host, shoppingCart}) {
     })
 
     return (
-        <div className={productDetailStyles.page}>
+        <div className={defaultStyles.page}>
             <Container fluid={true} className={defaultStyles.pageContentGap15}>
                 <Row>
                     <Col>
@@ -86,46 +86,44 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                         </button>
                     </Col>
                 </Row>
-                <Row className={`${defaultStyles.margin24Bottom}`}>
-                    <Col>
-                        <Container fluid={true}>
-                            <Row>
-                                <Col xs={{order: "last"}} sm={{span: 12, order: "last"}} md={{span: 12, order: "last"}} lg={{span: 2, order: "first"}} xl={{span: 2}}>
-                                    <div className={productDetailStyles.imagesList}>
-                                        {
-                                            product.images?.map((img, index) => {
-                                                return (
-                                                    <div
-                                                        key={index}
-                                                        className={productDetailStyles.imageItem}
-                                                        style={{backgroundImage: `url(${img})`, boxShadow: index === selectedImageIndex ? "0 0 2px 2px #8DF3E8" : "none"}}
-                                                        onClick={() => setSelectedImageIndex(index)}
-                                                    />
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </Col>
-                                <Col sm={{span: 12}} md={{span: 12}} lg={{span: 10}} xl={{span: 10}}>
-                                    <Carousel fade interval={null} activeIndex={selectedImageIndex} onSelect={(selectedIndex, e) => setSelectedImageIndex(selectedIndex)} className={productDetailStyles.actualImage}>
-                                        {
-                                            product.images?.map((img, index) => {
-                                                return (
-                                                    <Carousel.Item key={index}>
-                                                        <div
-                                                            className={productDetailStyles.productImage}
-                                                            style={{backgroundImage: `url(${img})`}}
-                                                        />
-                                                    </Carousel.Item>
-                                                )
-                                            })
-                                        }
-                                    </Carousel>
-                                </Col>
-                            </Row>
-                        </Container>
+
+                <Row className={defaultStyles.margin24Bottom}>
+
+                    <Col xs={{span: 12, order: 1}} sm={{span: 2, order: "first"}} md={{span: 2}} lg={{span: 2, order: "first"}} xl={{span: 2}}>
+                        <div className={productDetailStyles.imagesList}>
+                            {
+                                product.images?.map((img, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className={productDetailStyles.imageItem}
+                                            style={{backgroundImage: `url(${img})`, boxShadow: index === selectedImageIndex ? "0 0 2px 2px #8DF3E8" : "none"}}
+                                            onClick={() => setSelectedImageIndex(index)}
+                                        />
+                                    )
+                                })
+                            }
+                        </div>
                     </Col>
-                    <Col sm={{span: 12}} md={{span: 5}} lg={{span: 5}} xl={{span: 4}}>
+
+                    <Col xs={{order: "first"}} sm={{span: 7, offset: 1, order: 1}} md={{span: 7, offset: 1}} lg={{span: 5, offset: 0}} xl={{span: 5}} className={defaultStyles.disableColumnPaddings}>
+                        <Carousel fade interval={null} activeIndex={selectedImageIndex} onSelect={(selectedIndex, e) => setSelectedImageIndex(selectedIndex)} className={productDetailStyles.actualImage}>
+                            {
+                                product.images?.map((img, index) => {
+                                    return (
+                                        <Carousel.Item key={index}>
+                                            <div
+                                                className={productDetailStyles.productImage}
+                                                style={{backgroundImage: `url(${img})`}}
+                                            />
+                                        </Carousel.Item>
+                                    )
+                                })
+                            }
+                        </Carousel>
+                    </Col>
+
+                    <Col xs={{order: "last"}} sm={{span: 12}} lg={5} xl={5}>
                         <Container fluid={true} className={productDetailStyles.productInformation}>
                             <Row className={productDetailStyles.productNameRow}>
                                 <Col>
@@ -138,7 +136,7 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                                     <i>({reviews.length})</i>
                                 </Stack>
                             </Row>
-                            <hr/>
+                            <hr style={{marginTop: 5}}/>
                             <Row>
                                 <Col md={6}>
                                     <b className={defaultStyles.margin0Bottom}>Size</b>
@@ -146,19 +144,23 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col>
+                                <Col xs={12}>
                                     {
                                         isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
                                             <div className={productDetailStyles.productPriceBox}>
                                                 <h3 className={productDetailStyles.productPriceSign}>{getDiscountPrice(product.price, product?.discountPercent)}$<p>instead {product.price}$</p></h3>
-                                                {
-                                                    product?.showDiscountUntilDate ?
-                                                        <p>{product?.discountUntilText ? product?.discountUntilText : "Until"} {formatTimestamp(product?.discountUntil, "dd.MMMM.yyyy HH:mm")}</p> : null
-                                                }
+
                                             </div>
                                             : <p className={productDetailStyles.productPriceSign}>{product.price}</p>
                                     }
                                 </Col>
+                                {
+
+                                    product?.showDiscountUntilDate ?
+                                        <Col xs={12}>
+                                            <p>{product?.discountUntilText ? product?.discountUntilText : "Until"} {formatTimestamp(product?.discountUntil, "dd.MMMM.yyyy HH:mm")}</p>
+                                        </Col>:  null
+                                }
                             </Row>
                             <Row>
                                 <Col className={defaultStyles.margin10Bottom}>
@@ -166,9 +168,12 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                                 </Col>
                             </Row>
                             <Row>
+                                <Col xs={12}>
+                                    <b>Quantity</b>
+                                </Col>
                                 <Col>
                                     <Stack direction={"horizontal"} gap={2} className={defaultStyles.margin24Bottom}>
-                                        <b>Quantity</b>
+
                                         <button onClick={() => setAmountToCart(prev => prev - 1)} disabled={amountToCart === 1} className={productDetailStyles.productQuantityButton}>
                                             <FontAwesomeIcon icon={faMinus} size={"xs"} color={"white"}/>
                                         </button>
@@ -197,91 +202,88 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                     </Col>
                 </Row>
 
-                {/*Description, Review | Suggestions*/}
-
+                <Row className={`${defaultStyles.margin24Bottom}`}>
+                    <Col>
+                        <div className={productDetailStyles.descriptionArea}>
+                            <h3>Description</h3>
+                            {/* eslint-disable-next-line react/no-children-prop */}
+                            <ReactMarkdown children={product.description}
+                                           rehypePlugins={[remarkGfm, rehypeRaw]}
+                                           className={markdown.elements}/>
+                        </div>
+                    </Col>
+                </Row>
                 <Row>
                     <Col>
-                        <Container fluid={true} className={`${defaultStyles.pageContentGap15}`}>
-                            <Row>
-                                <Col className={defaultStyles.disableColumnPaddings}>
-                                    <div className={productDetailStyles.descriptionArea}>
-                                        <h3>Description</h3>
-                                        {/* eslint-disable-next-line react/no-children-prop */}
-                                        <ReactMarkdown children={product.description}
-                                                       rehypePlugins={[remarkGfm, rehypeRaw]}
-                                                       className={markdown.elements}/>
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <div className={productDetailStyles.reviewSubline}/>
-                            </Row>
-                            <Row>
-                                <Col className={defaultStyles.disableColumnPaddings}>
-                                    <Stack direction={"horizontal"} style={{marginBottom: 10}}>
-                                        <h3>Client Reviews</h3>
-                                        <button
-                                            className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`}
-                                            onClick={() => session.user ? setShowReviewForm(!showReviewForm) : router.push("../login")}
-                                            disabled={session.user && session.user.id === reviews.filter(r => r.userId === session.user.id)[0]?.userId}
-                                        >{session.user ? showReviewForm ? "Cancel": "Write a review" : "Log In"}</button>
-                                    </Stack>
+                        <div className={productDetailStyles.reviewSubline}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Stack direction={"horizontal"} style={{marginBottom: 10}}>
+                            <h3>Client Reviews</h3>
+                            <button
+                                className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`}
+                                onClick={() => session.user ? setShowReviewForm(!showReviewForm) : router.push("../login")}
+                                disabled={session.user && session.user.id === reviews.filter(r => r.userId === session.user.id)[0]?.userId}
+                            >{session.user ? showReviewForm ? "Cancel": "Write a review" : "Log In"}</button>
+                        </Stack>
+                    </Col>
+                </Row>
+                {
+                    showReviewForm ?
+                        <Row className={defaultStyles.margin10Bottom}>
+                            <Col>
+                                <ProductReviewForm session={session} productId={id ? id : null} host={host}/>
+                            </Col>
+                        </Row>
+                        : null
+                }
+                {
+                    reviews.length > 0 ?
+                        <>
+                            <Row className={defaultStyles.margin30Bottom}>
+                                <Col>
+                                    <ReactStars edit={false} count={5} size={36} color2={"#FFB800"} value={averageStarRate} half={true}/>
+                                    <i style={{color: "#FFFFFF", fontFamily: "Nunito, sans-serif"}}>({reviews.length} {`Review${reviews.length > 1 ? "s" : ""}`})</i>
+                                    <hr style={{borderColor: "#FFFFFF"}}/>
                                 </Col>
                             </Row>
                             {
-                                showReviewForm ?
-                                    <Row className={defaultStyles.margin10Bottom}>
-                                        <Col className={`${defaultStyles.disableColumnPaddings}`}>
-                                            <ProductReviewForm session={session} productId={id ? id : null} host={host}/>
-                                        </Col>
-                                    </Row>
-                                    : null
-                            }
-                            {
-                                reviews.length > 0 ?
-                                    <>
-                                        <Row className={defaultStyles.margin30Bottom}>
-                                            <Col className={defaultStyles.disableColumnPaddings}>
-                                                <ReactStars edit={false} count={5} size={36} color2={"#FFB800"} value={averageStarRate} half={true}/>
-                                                <i style={{color: "#FFFFFF", fontFamily: "Nunito, sans-serif"}}>({reviews.length} {`Review${reviews.length > 1 ? "s" : ""}`})</i>
-                                                <hr style={{borderColor: "#FFFFFF"}}/>
+                                reviews.map((review, index) => {
+                                    return (
+                                        <Row key={index} className={`${productDetailStyles.reviewList}`}>
+                                            <Col>
+                                                <ProductReviewItem session={session} review={review}/>
+                                                <hr className={productDetailStyles.reviewSubline}/>
                                             </Col>
                                         </Row>
-                                        {
-                                            reviews.map((review, index) => {
-                                                return (
-                                                    <Row key={index} className={`${productDetailStyles.reviewList}`}>
-                                                        <Col className={defaultStyles.disableColumnPaddings}>
-                                                            <ProductReviewItem session={session} review={review}/>
-                                                            <hr className={productDetailStyles.reviewSubline}/>
-                                                        </Col>
-                                                    </Row>
-                                                )
-                                            })
-                                        }
-                                    </>
-                                    : <p className={productDetailStyles.emptyReviewText}>No Reviews</p>
+                                    )
+                                })
                             }
-                        </Container>
+                        </>
+                        : <p className={productDetailStyles.emptyReviewText}>No Reviews</p>
+                }
+                <Row>
+                    <Col>
+                        <div className={productDetailStyles.reviewSubline}/>
                     </Col>
-                    <Col sm={12} md={5} lg={5} xl={4} className={`${productDetailStyles.productSuggestionList}`}>
-                        <Container fluid={true} className={`${defaultStyles.pageContentGap15}`}>
-                            <Row>
-                                <Col md={12}>
-                                    <h3>This might interest you</h3>
+                </Row>
+                <Row>
+                    <Col md={12}>
+                        <h3>This might interest you</h3>
+                    </Col>
+                </Row>
+                <Row>
+                    {
+                        productSuggestions.map((product, index) => {
+                            return (
+                                <Col key={index} xs={6} sm={4} md={4} lg={4} xl={3} xxl={2} className={defaultStyles.margin10Bottom}>
+                                    <ProductArticle product={product} session={session} showAll={false} routeToDetail={() => router.push(`../boosters/${product.id}`)}/>
                                 </Col>
-                                {
-                                    productSuggestions.map((product, index) => {
-                                        return (
-                                            <Col key={index} xs={6} sm={6} md={6} lg={6} xl={12} xxl={6} className={defaultStyles.margin10Bottom}>
-                                                <ProductArticle product={product} session={session} showAll={false} routeToDetail={() => router.push(`../boosters/${product.id}`)}/>
-                                            </Col>
-                                        )
-                                    })
-                                }
-                            </Row>
-                        </Container>
-                    </Col>
+                            )
+                        })
+                    }
                 </Row>
             </Container>
         </div>

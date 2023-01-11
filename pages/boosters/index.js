@@ -115,7 +115,7 @@ export default function BoostersPage({session, host}) {
     }
 
     return (
-        <div className={boosterPageStyles.page}>
+        <div className={defaultStyles.page}>
             <Container fluid={true} className={defaultStyles.pageContentGap15}>
                 <Row>
                     <Col md={12}>

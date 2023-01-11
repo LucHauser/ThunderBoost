@@ -9,6 +9,10 @@ body {
     width: 100%;
 }
 
+hr {
+    width: 100% !important;
+}
+
 h3 {
     font-size: 25px;
     color: #8DF3E8;

@@ -14,6 +14,23 @@
 
 /*Page Config*/
 
+.page {
+    padding: 30px 10px
+}
+
+@media (min-width: 992px) {
+    .page {
+        padding: 30px 140px
+    }
+}
+
+@media (min-width: 1600px) {
+    .page {
+        width: 1600px;
+        margin: auto;
+    }
+}
+
 .pageTitle {
     color: #8DF3E8;
     font-size: 20px;
