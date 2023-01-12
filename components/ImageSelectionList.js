@@ -2,7 +2,7 @@ import defaultStyles from "../pages/stylesheet/global.module.css"
 import imageSelectionListStyles from "./ImageSelectionList.module.css"
 import {useEffect, useState} from "react";
 import {getAllImagesByUsage} from "@lib/api";
-import {Form} from "react-bootstrap";
+import {Col, Container, Form, Modal, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
@@ -31,12 +31,34 @@ export default function ImageSelectionList({usage, selectedImage, toggleDialog, 
 
     return (
         <div className={imageSelectionListStyles.container}>
-            <h2>Choose image</h2>
-            <div className={defaultStyles.formSeparatorLine}/>
-            <div className={imageSelectionListStyles.searchFieldGroup}>
-                <FontAwesomeIcon icon={faMagnifyingGlass}/>
-                <Form.Control className={imageSelectionListStyles.searchField} onChange={(e) => setFilterImage(e.target.value)} placeholder={"Search image by name"}/>
-            </div>
+            <Modal>
+                <Container fluid={true}>
+                    <Row>
+                        <Col>
+                            <h2>Choose image</h2>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div className={defaultStyles.formSeparatorLine}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <FontAwesomeIcon icon={faMagnifyingGlass}/>
+                        </Col>
+                        <Col>
+                            <Form.Control className={imageSelectionListStyles.searchField} onChange={(e) => setFilterImage(e.target.value)} placeholder={"Search image by name"}/>
+                        </Col>
+                    </Row>
+                    <Row>
+
+                    </Row>
+                </Container>
+            </Modal>
+
+
+
             <div className={imageSelectionListStyles.imageCollections}>
                 {
                     images.filter(i => i.designation.toString().toLowerCase().includes(filterImage) && i.active)

@@ -28,7 +28,7 @@ export default function ProductDiscountManager({session, host}) {
     }, [id, host])
 
     return (
-        <div className={defaultStyles.adminPageWrapper}>
+        <div className={defaultStyles.page}>
             <Container fluid={true} className={defaultStyles.pageContentGap15}>
                 <Row>
                     <Col>

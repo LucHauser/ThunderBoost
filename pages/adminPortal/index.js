@@ -4,7 +4,7 @@ import defaultStyles from "../stylesheet/global.module.css"
 
 export default function AdminPortal({session}) {
     return (
-        <div className={defaultStyles.adminPageWrapper}>
+        <div className={defaultStyles.page}>
             <AdminPortalHeader session={session} currentPage={0}/>
         </div>
     )

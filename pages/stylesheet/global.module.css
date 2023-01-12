@@ -15,7 +15,9 @@
 /*Page Config*/
 
 .page {
-    padding: 30px 10px
+    padding: 30px 10px;
+    font-family: "Nunito", sans-serif;
+    color: white;
 }
 
 @media (min-width: 992px) {

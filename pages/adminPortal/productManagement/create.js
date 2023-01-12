@@ -23,7 +23,7 @@ export default function createProductPage({session, host}) {
     // const host = formatServerUrl(document.location.hostname)
 
     return (
-        <div className={defaultStyles.adminPageWrapper}>
+        <div className={defaultStyles.page}>
             <Container fluid={true} className={defaultStyles.pageContentGap15}>
                 <Row>
                     <Col>

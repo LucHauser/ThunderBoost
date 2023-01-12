@@ -170,7 +170,7 @@ export default function ProductManagementPage({session, host}) {
     }
 
     return (
-        <div className={defaultStyles.adminPageWrapper}>
+        <div className={defaultStyles.page}>
             <Container fluid={true} id={productManagementStyles["productManagementPageLayout"]}>
                 <Row>
                     <Col>
