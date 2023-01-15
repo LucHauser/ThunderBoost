@@ -69,6 +69,16 @@
     transition: 0.1s ease-in-out;
 }
 
+.clearButton {
+    width: auto !important;
+    background: transparent !important;
+    color: rgba(255, 255, 255, 80%);
+    border: none;
+    font-family: Nunito, sans-serif;
+    margin-top: 15px;
+    margin-right: auto;
+}
+
 .informationCheckoutContainer {
     background: #3C306D;
     color: #FFFFFF;

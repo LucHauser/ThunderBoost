@@ -77,7 +77,7 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                                                                     <p style={{marginBottom: 0}}>{p.amount * (p.product.discountActive && isEventNow(p.product.discountFrom, p.product.discountUntil) ? getDiscountPrice(p.product.price, p.product.discountPercent) : p.product.price) + " $"}</p>
                                                                 </Col>
                                                                 <Col className={shoppingCartPageStyles.alignmentCenter} xs={{span: 4, offset: 8}} md={{span: 2, offset: 0}}>
-                                                                    <button className={shoppingCartPageStyles.removeButton}>
+                                                                    <button className={shoppingCartPageStyles.removeButton} onClick={() => shoppingCart.remove(p.id)}>
                                                                         <FontAwesomeIcon icon={faTrash}/>Remove
                                                                     </button>
                                                                 </Col>
@@ -86,6 +86,7 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                                                     </div>
                                                 )
                                             })}
+                                            <button className={shoppingCartPageStyles.clearButton} onClick={() => shoppingCart.clear()}>Clear Cart</button>
                                         </Stack>
                                     </Col>
                                 </Row>
