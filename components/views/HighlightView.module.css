@@ -20,9 +20,22 @@
 }
 
 .productImage {
-    width: 100%;
-    height: fit-content !important;
-    overflow: hidden !important;
+    width: 200px;
+    height: 200px;
+}
+
+@media (min-width: 764px) {
+    .productImage {
+        width: 300px;
+        height: 300px
+    }
+}
+
+@media (min-width: 1400px) {
+    .productImage {
+        width: 400px !important;
+        height: 400px !important;
+    }
 }
 
 .eventType {
@@ -111,12 +124,6 @@
 @keyframes color-range {
     to {
         background-position: 200vh;
-    }
-}
-
-@media (max-width: 1915px) {
-    .productImage {
-        height: 410px;
     }
 }
 

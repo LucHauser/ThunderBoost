@@ -9,7 +9,7 @@ import navigationStyles from "@components/pageUtils/Navbar.module.css";
 export default function ShoppingCartPage({session, host, shoppingCart}) {
 
     return (
-        <div className={shoppingCartPageStyles.page}>
+        <div className={defaultStyles.page}>
             <Container fluid={true}>
                 <Row>
                     <Col>
@@ -17,7 +17,7 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                     </Col>
                 </Row>
                 <Row>
-                    <Col sm={12} md={12} lg={9} xl={9}>
+                    <Col sm={12} md={12} xl={9}>
                         <Container fluid={true}>
                             <Row className={shoppingCartPageStyles.cartListHeader}>
                                 <Col md={{span: 5}}>
@@ -64,11 +64,11 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                                                                 <Col className={shoppingCartPageStyles.alignmentCenter} md={2}>
                                                                     <Stack direction={"horizontal"} className={shoppingCartPageStyles.quantityGroup}>
                                                                         <p className={shoppingCartPageStyles.productQuantity}>Quantity</p>
-                                                                        <button className={shoppingCartPageStyles.amountButton}>
+                                                                        <button disabled={p.amount <= 1} className={shoppingCartPageStyles.amountButton} onClick={() => shoppingCart.decrementAmount(p.id)}>
                                                                             <FontAwesomeIcon icon={faMinus} color={"#FFFFFF"}/>
                                                                         </button>
                                                                         <p>{p.amount}</p>
-                                                                        <button className={shoppingCartPageStyles.amountButton}>
+                                                                        <button disabled={p.amount >= p.product.stockAmount} className={shoppingCartPageStyles.amountButton} onClick={() => shoppingCart.incrementAmount(p.id)}>
                                                                             <FontAwesomeIcon icon={faPlus} color={"#FFFFFF"}/>
                                                                         </button>
                                                                     </Stack>
@@ -93,20 +93,20 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                                  :
                                 <Row>
                                     <Col>
-                                        <p>Cart is Empty</p>
+                                        <p className={`${shoppingCartPageStyles.emptyCartText}`}>Cart is Empty</p>
                                     </Col>
                                 </Row>
                             }
                         </Container>
                     </Col>
-                    <Col md={12} lg={3} xl={3} sm={12}>
+                    <Col md={12} xl={3} sm={12}>
                         <Container fluid={true} className={shoppingCartPageStyles.informationCheckoutContainer}>
                             <Row>
                                 <Col>
                                     <b>Overview</b>
                                 </Col>
                                 <Col>
-                                    <p>{shoppingCart.products.length} Articles</p>
+                                    <p>{shoppingCart.numbersOfArticles} Articles</p>
                                 </Col>
                             </Row>
                             <hr/>
@@ -115,7 +115,7 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                                     <b>Subtotal</b>
                                 </Col>
                                 <Col>
-                                    <p>{shoppingCart.getSum()}</p>
+                                    <p>{shoppingCart.getSum()}$</p>
                                 </Col>
                             </Row>
                             <Row>
@@ -123,7 +123,7 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                                     <b>Shipment</b>
                                 </Col>
                                 <Col>
-                                    <p>free</p>
+                                    <p>{shoppingCart.getShippmentPrice() !== 0 ? shoppingCart.getShippmentPrice() : "free"}</p>
                                 </Col>
                             </Row>
                             <hr/>
@@ -132,18 +132,17 @@ export default function ShoppingCartPage({session, host, shoppingCart}) {
                                     <b>Total of Order</b>
                                 </Col>
                                 <Col>
-                                    <p>Total here</p>
+                                    <p>{shoppingCart.getSum() + shoppingCart.getShippmentPrice()}$</p>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    <button className={defaultStyles.buttonFilled}>Proceed to checkout</button>
+                                    <button className={defaultStyles.buttonFilled} disabled={shoppingCart.products.length === 0}>Proceed to checkout</button>
                                 </Col>
                             </Row>
                         </Container>
                     </Col>
                 </Row>
-
             </Container>
         </div>
     )

@@ -96,6 +96,14 @@
     border-radius: 6px;
 }
 
+.emptyCartText {
+    color: #FFFFFF;
+    font-family: "Nunito", sans-serif;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+}
+
 @media (max-width: 768px) {
     .cartListHeader {
         display: none;
