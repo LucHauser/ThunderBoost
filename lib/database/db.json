@@ -43,10 +43,10 @@
         "Orange"
       ],
       "active": true,
-      "discountActive": false,
-      "discountPercent": null,
-      "discountFrom": "",
-      "discountUntil": "",
+      "discountActive": true,
+      "discountPercent": "40",
+      "discountFrom": "2023-01-18T16:16",
+      "discountUntil": "2023-01-26T16:16",
       "showDiscountUntilDate": false,
       "discountUntilText": "",
       "enableCountdown": false,
@@ -69,10 +69,10 @@
         "Cola"
       ],
       "active": true,
-      "discountActive": false,
-      "discountPercent": null,
-      "discountFrom": "",
-      "discountUntil": "",
+      "discountActive": true,
+      "discountPercent": "50",
+      "discountFrom": "2023-01-18T16:18",
+      "discountUntil": "2023-01-19T16:17",
       "showDiscountUntilDate": false,
       "discountUntilText": "",
       "enableCountdown": false,
@@ -722,10 +722,28 @@
   ],
   "cart": [
     {
-      "amount": 1,
-      "productId": 4,
+      "amount": 7,
+      "productId": 1,
+      "userId": 1,
+      "id": 1
+    },
+    {
+      "amount": 3,
+      "productId": 2,
       "userId": 1,
       "id": 2
+    },
+    {
+      "amount": 16,
+      "productId": 3,
+      "userId": 1,
+      "id": 3
+    },
+    {
+      "amount": 16,
+      "productId": 4,
+      "userId": 1,
+      "id": 4
     }
   ]
 }

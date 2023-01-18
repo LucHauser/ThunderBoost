@@ -45,7 +45,7 @@ export default function Navigation({session, shoppingCart}) {
                         <button className={navigationStyles.iconButton} onClick={() => setShowCart(true)}>
                             <FontAwesomeIcon icon={faCartShopping} color={"rgba(255, 255, 255, 0.55)"} size={"lg"}/>
                         </button>
-                        <button className={navigationStyles.iconButton} onClick={() => session.user ? setShowUserStatus(true) : router.push("./login")}>
+                        <button className={navigationStyles.iconButton} onClick={() => session.user ? setShowUserStatus(true) : router.push("../login")}>
                             <FontAwesomeIcon icon={faUser} color={"rgba(255, 255, 255, 0.55)"} size={"lg"}/>
                         </button>
                         <Navbar.Toggle className={navigationStyles.toggler}/>

@@ -35,10 +35,12 @@ export default function ArticleDetail({session, host, shoppingCart}) {
         const loadProduct = async () => {
             try {
                 const response = await getProductById(host, id)
+                console.log(response)
                 setProduct(response)
                 setSelectedImageIndex(0)
             } catch (e) {
                 console.log(e)
+                await router.push(`./${id}/oops`)
             }
         }
         const loadReviews = async () => {
@@ -136,12 +138,34 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                                     <i>({reviews.length})</i>
                                 </Stack>
                             </Row>
-                            <hr style={{marginTop: 5}}/>
+                            <Row>
+                                <Col>
+                                    <hr style={{marginTop: 5}}/>
+                                </Col>
+                            </Row>
+
                             <Row>
                                 <Col md={6}>
                                     <b className={defaultStyles.margin0Bottom}>Size</b>
                                     <p className={productDetailStyles.productServings}>{product.servings} Portions</p>
                                 </Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}>
+                                    <b className={defaultStyles.margin0Bottom}>Varieties</b>
+                                </Col>
+                            </Row>
+                            <Row>
+                                {
+                                    product?.varieties?.map(v => {
+                                        return (
+                                            <Col key={v} md={4} xs={6}>
+                                                <p className={productDetailStyles.productServings}>{v}</p>
+                                            </Col>
+
+                                        )
+                                    })
+                                }
                             </Row>
                             <Row>
                                 <Col xs={12}>
@@ -154,25 +178,22 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                                             : <p className={productDetailStyles.productPriceSign}>{product.price}</p>
                                     }
                                 </Col>
-                                {
+                                {/*
 
                                     product?.showDiscountUntilDate ?
                                         <Col xs={12}>
                                             <p>{product?.discountUntilText ? product?.discountUntilText : "Until"} {formatTimestamp(product?.discountUntil, "dd.MMMM.yyyy HH:mm")}</p>
                                         </Col>:  null
-                                }
-                            </Row>
-                            <Row>
-                                <Col className={defaultStyles.margin10Bottom}>
-                                    <i>Inclusive VAT</i>
-                                </Col>
+                                */}
                             </Row>
                             <Row>
                                 <Col xs={12}>
                                     <b>Quantity</b>
                                 </Col>
+                            </Row>
+                            <Row>
                                 <Col>
-                                    <Stack direction={"horizontal"} gap={2} className={defaultStyles.margin24Bottom}>
+                                    <Stack direction={"horizontal"} gap={2} className={defaultStyles.margin24Bottom} style={{marginTop: 10}}>
 
                                         <button onClick={() => setAmountToCart(prev => prev - 1)} disabled={amountToCart === 1} className={productDetailStyles.productQuantityButton}>
                                             <FontAwesomeIcon icon={faMinus} size={"xs"} color={"white"}/>

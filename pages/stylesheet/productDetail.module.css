@@ -60,6 +60,7 @@
     width: 100%;
     min-height: fit-content;
     border-radius: 10px;
+    margin-bottom: 0;
 }
 
 .productPriceBox {
