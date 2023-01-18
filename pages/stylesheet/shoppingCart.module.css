@@ -69,6 +69,16 @@
     transition: 0.1s ease-in-out;
 }
 
+.clearButton {
+    width: auto !important;
+    background: transparent !important;
+    color: rgba(255, 255, 255, 80%);
+    border: none;
+    font-family: Nunito, sans-serif;
+    margin-top: 15px;
+    margin-right: auto;
+}
+
 .informationCheckoutContainer {
     background: #3C306D;
     color: #FFFFFF;
@@ -84,6 +94,14 @@
 .removeButton:hover {
     background: rgba(255, 255, 255, 9%);
     border-radius: 6px;
+}
+
+.emptyCartText {
+    color: #FFFFFF;
+    font-family: "Nunito", sans-serif;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
 }
 
 @media (max-width: 768px) {

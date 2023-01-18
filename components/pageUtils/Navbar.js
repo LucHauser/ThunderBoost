@@ -98,7 +98,7 @@ export default function Navigation({session, shoppingCart}) {
                                             <b className={navigationStyles.cartTitle}>Your order</b>
                                         </Col>
                                         <Col xs={7}>
-                                            <p style={{marginBottom: 0}}>Articles: {shoppingCart.numbersOfArticles()} / Total: {shoppingCart.getSum()} $</p>
+                                            <p style={{marginBottom: 0}}>Articles: {shoppingCart.numbersOfArticles} / Total: {shoppingCart.getSum()} $</p>
                                         </Col>
                                     </Row>
                                     {shoppingCart.products.length > 0 ?

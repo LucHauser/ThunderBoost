@@ -123,7 +123,7 @@ export default function BoostersPage({session, host}) {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xxl={2} lg={3} md={4} sm={12} xs={12}>
+                    <Col xxl={3} lg={4} md={4} sm={12} xs={12}>
                         <h2 className={defaultStyles.pageSubtitle}>Filter</h2>
                         <div className={defaultStyles.formSubtitleSeparatorLine}/>
                         <Accordion>
@@ -165,7 +165,7 @@ export default function BoostersPage({session, host}) {
                             </Accordion.Item>
                         </Accordion>
                     </Col>
-                    <Col xxl={10} lg={9} md={8} sm={12} xs={12}>
+                    <Col xxl={9} lg={8} md={8} sm={12} xs={12}>
                         <Container fluid={true}>
                             {/*
                             <Row>
@@ -184,7 +184,7 @@ export default function BoostersPage({session, host}) {
                                     filteredProduct.map((article, index) => {
                                         return (
                                             // eslint-disable-next-line react/jsx-key
-                                            <Col key={index} xs={6} sm={6} md={6} lg={4} xl={3} className={`${defaultStyles.margin24Bottom}`}>
+                                            <Col key={index} xs={12} sm={6} md={6} xl={4} className={`${defaultStyles.margin24Bottom}`}>
                                                 <ProductArticle session={session} product={article} routeToDetail={() => router.push(`./boosters/${article.id}/`)} showAll={true}/>
                                             </Col>
                                         )

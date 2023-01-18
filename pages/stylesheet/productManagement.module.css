@@ -52,11 +52,11 @@
 }
 
 .productSpecs {
-    margin-top: 15px
+    margin-top: 15px;
+    font-size: 15px;
 }
 
 .productSpecs > tr > td {
-    width: 200px;
     padding: 5px 0
 }
 
@@ -72,14 +72,15 @@
     display: flex;
     gap: 15px;
     align-items: center;
-    margin-top: 15px
+    flex-wrap: wrap;
 }
 
 .varietyName {
     background: #8DF3E8;
     color: black;
-    padding: 5px;
+    padding: 3px;
     border-radius: 5px;
+    margin-bottom: 0;
 }
 
 .btnGroupCol {
@@ -95,4 +96,10 @@
     display: flex;
     justify-content: right;
     gap: 5px
+}
+
+@media (min-width: 1200px) {
+    .productSpecs {
+        font-size: 20px;
+    }
 }

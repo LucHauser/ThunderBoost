@@ -38,7 +38,7 @@ export default function editHighlight({session, host}) {
     }
 
     return (
-        <div className={defaultStyles.adminPageWrapper}>
+        <div className={defaultStyles.page}>
             <button
                 style={{width: 100}}
                 className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}

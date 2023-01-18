@@ -19,7 +19,7 @@ export default function createHighlight({session, host}) {
     const router = useRouter()
 
     return (
-        <div className={defaultStyles.adminPageWrapper}>
+        <div className={defaultStyles.page}>
             <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => router.push("../highlights")}>
                 <FontAwesomeIcon icon={faLeftLong}/>
                 &nbsp;&nbsp;&nbsp;Back

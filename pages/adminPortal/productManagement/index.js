@@ -291,7 +291,7 @@ export default function ProductManagementPage({session, host}) {
                                                 <Accordion.Body className={defaultStyles.accordionBody}>
                                                     <Container fluid={true}>
                                                         <Row>
-                                                            <Col md={2} className={productManagementStyles.imageCol}>
+                                                            <Col xs={12} sm={6} lg={2} className={productManagementStyles.imageCol}>
                                                                 <h4>Images</h4>
                                                                 <div className={productManagementStyles.productImagesCollection}>
                                                                     {
@@ -308,7 +308,7 @@ export default function ProductManagementPage({session, host}) {
                                                                     }
                                                                 </div>
                                                             </Col>
-                                                            <Col md={8}>
+                                                            <Col xs={12} sm={6} lg={6} xl={7}>
                                                                 <h4>Information</h4>
                                                                 <table className={productManagementStyles.productSpecs}>
                                                                     <tr>
@@ -416,7 +416,7 @@ export default function ProductManagementPage({session, host}) {
                                                                     className={markdownElements.elements}
                                                                 />
                                                             </Col>
-                                                            <Col md={2} className={productManagementStyles.btnGroupCol}>
+                                                            <Col xs={12} lg={4} xl={3} className={productManagementStyles.btnGroupCol}>
                                                                 <div className={productManagementStyles.productCrudBtnGroup}>
                                                                     <h4>Edit & Delete</h4>
                                                                     <div>

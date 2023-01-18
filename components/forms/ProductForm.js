@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Col, Container, Form, FormGroup, Row} from "react-bootstrap";
+import {Col, Container, Form, FormGroup, Modal, Row} from "react-bootstrap";
 import defaultStyles from "../../pages/stylesheet/global.module.css"
 import productFormStyles from "./ProductForm.module.css"
 import markdownElements from "../views/MarkdownReview.module.css"
@@ -473,13 +473,15 @@ export default function ProductForm({session, productToEdit, host}) {
                     </Row>
                 </Container>
             </Form>
-            {
-                showImageSelectionDialog ?
-                    <div className={productFormStyles.selectionDialog}>
-                        <ImageSelectionList host={host} usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => addImageToList(image)}/>
-                    </div>
-                    : null
-            }
+            <Modal>
+                <Modal.Header>
+                    Select Image
+                </Modal.Header>
+                <Modal.Body>
+
+                </Modal.Body>
+            </Modal>
+            <ImageSelectionList host={host} usage={"Product Image"} toggleDialog={() => setShowImageSelectionDialog(false)} selectedImage={(image) => addImageToList(image)} show={showImageSelectionDialog}/>
             {
                 showVarietySelectionDialog ?
                     <div className={productFormStyles.selectionDialog}>
