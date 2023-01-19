@@ -7,6 +7,7 @@ import {useRouter} from "next/router";
 import {Accordion, Col, Container, Form, Row, Stack} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {getAvgStarRating, getDiscountPrice, isEventNowWithBoolean} from "@components/Utils";
 
 export default function BoostersPage({session, host}) {
 
@@ -16,10 +17,19 @@ export default function BoostersPage({session, host}) {
         {name: "Students & Pupils", checked: false, count: 0}
     ]
 
+    const sortOptions = [
+        {name: "Relevance", option: 0},
+        {name: "Stock amount", option: 1},
+        {name: "Lowest Price", option: 2},
+        {name: "Hightest Price", option: 3},
+        {name: "Rating", option: 4}
+    ]
+
     const [products, setProducts] = useState([])
     const [filterProductName, setFilterProductName] = useState("")
     const [varietyList, setVarietyList] = useState([])
     const [usageList, setUsageList] = useState(usages)
+    const [selectedSortOption, setSelectedSortOption] = useState(0)
     const [filterVariety, setFilterVariety] = useState([])
     const [filterUsage, setFilterUsage] = useState([])
     const [filteredProduct, setFilteredProduct] = useState([])
@@ -56,7 +66,7 @@ export default function BoostersPage({session, host}) {
 
     useEffect(() => {
         filterProducts()
-    }, [varietyList, usageList, filterProductName])
+    }, [varietyList, usageList, filterProductName, selectedSortOption])
 
     const handleSelectVarieties = (e, name) => {
         const newState = varietyList.map(item => {
@@ -103,7 +113,43 @@ export default function BoostersPage({session, host}) {
             }
             productsToFilter = productsToFilter.filter(eval(usageStr))
         }
-        setFilteredProduct(productsToFilter)
+        const finalFilteredAndSorted = selectedSortOption === 0 ? sortProducts(filteredProduct) : filteredProduct
+        setFilteredProduct(finalFilteredAndSorted)
+    }
+
+    const sortProducts = (productsAfterFiltered) => {
+        let p = productsAfterFiltered
+        switch (selectedSortOption) {
+            case 0:
+                break
+            case 1:
+                p = p.sort((a, b) => parseInt(b.stockAmount) - parseInt(a.stockAmount))
+                break;
+            case 2:
+                p = p.sort((a, b) =>
+                    parseFloat(isEventNowWithBoolean(b.discountFrom, b.discountUntil, b.discountActive) ?
+                        getDiscountPrice(b.price, b.discountPercent) :
+                        b.price) -
+                    parseFloat(isEventNowWithBoolean(a.discountFrom, a.discountUntil, a.discountActive) ?
+                        getDiscountPrice(a.price, a.discountPercent)
+                        : a.price)
+                )
+                break;
+            case 3:
+                p = p.sort((a, b) =>
+                    parseFloat(isEventNowWithBoolean(a.discountFrom, a.discountUntil, a.discountActive) ?
+                        getDiscountPrice(a.price, a.discountPercent)
+                        : a.price) -
+                    parseFloat(isEventNowWithBoolean(b.discountFrom, b.discountUntil, b.discountActive) ?
+                        getDiscountPrice(b.price, b.discountPercent) :
+                        b.price)
+                )
+                break;
+            case 4:
+                p = p.sort((a, b) => getAvgStarRating(b?.productReviews) - getAvgStarRating(a?.productReviews))
+                break;
+        }
+        return p
     }
 
     function createFilterListByUsage(products) {
@@ -120,6 +166,19 @@ export default function BoostersPage({session, host}) {
                 <Row>
                     <Col md={12}>
                         <h1 className={`${defaultStyles.pageTitle}`}>All boosters in assortment</h1>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Form.Select className={defaultStyles.dropDownFilter} style={{marginLeft: "auto", marginRight: 10}} value={selectedSortOption} onChange={(e) => setSelectedSortOption(e.target.selectedIndex)}>
+                            {
+                                sortOptions.map((opt) => {
+                                    return (
+                                        <option key={opt.option} value={opt.option}>{opt.name}</option>
+                                    )
+                                })
+                            }
+                        </Form.Select>
                     </Col>
                 </Row>
                 <Row>

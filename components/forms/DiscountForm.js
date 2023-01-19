@@ -15,8 +15,8 @@ export default function DiscountSettingsForm({session, productToEdit, host}) {
             discountUntilText: ""
         }
         let isValid = true
-        if (model.discountPercent < 0 || model.discountPercent > 100) {
-            errors.discountPercent = "Percentage must be between 0 to 100"
+        if (parseInt(model.discountPercent) < 1 || parseInt(model.discountPercent) > 100) {
+            errors.discountPercent = "Percentage must be between 1 to 100"
             isValid = false
         }
         if (model.discountUntilText?.length > 30) {
@@ -51,7 +51,7 @@ export default function DiscountSettingsForm({session, productToEdit, host}) {
     const saveDiscountSettings = async (e) => {
         e.preventDefault()
         setLoadProduct(true)
-        const result = validateDiscountSettings(host, product)
+        const result = validateDiscountSettings(product)
         if (!result.isValid) {
             setErrors(result.errors)
             setLoadProduct(false)
@@ -59,10 +59,11 @@ export default function DiscountSettingsForm({session, productToEdit, host}) {
         }
         try {
             await updateProduct(host, product, session.accessToken)
+            navigateBack()
         } catch (e) {
             console.log(e)
         }
-        navigateBack()
+
     }
 
     const navigateBack = () => {

@@ -4,7 +4,7 @@ import {getDiscountPrice, isEventNow, isEventNowWithBoolean} from "@components/U
 import {Stack} from "react-bootstrap";
 import ReactStars from "react-stars/dist/react-stars";
 
-export default function ProductArticle({session, product, routeToDetail, showAll}) {
+export default function ProductArticle({shoppingCart, product, routeToDetail, showAll}) {
 
     function getAvgStarRating(productRatings) {
         let avg = 0

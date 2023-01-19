@@ -77,9 +77,8 @@ function getMonthDay(date) {
 }
 
 export function getDiscountPrice(price, percent) {
-    if (percent) {
-        return parseFloat(price) - (parseFloat(price) / 100 * parseInt(percent))
-    }
+    const discountPrice = parseFloat(price) - (parseFloat(price) / 100 * parseInt(percent))
+    return discountPrice.toFixed(2)
 }
 
 export function isEventNow(start, end) {
@@ -152,4 +151,12 @@ export function getDate(date) {
 
 export function formatServerUrl(host) {
     return "http://" + host + ":3001"
+}
+
+export function getAvgStarRating(productRatings) {
+    let avg = 0
+    productRatings?.forEach(function(arr) {
+        avg += arr.starRate
+    })
+    return Math.round(avg / productRatings?.length)
 }
