@@ -3,7 +3,6 @@
 }
 
 .tabWrapper {
-    background: #4F2A59;
 
 }
 
@@ -11,18 +10,26 @@
     list-style-type: none;
     overflow: scroll;
     white-space: nowrap;
+    border-bottom: solid 2px #FFFFFF;
+    padding: 0
+}
+
+.nav::-webkit-scrollbar {
+    display: none;
 }
 
 .nav li {
     display: inline-block;
+    padding: 10px 15px;
+    font-size: 20px;
 }
 
-.navElement:hover {
-
+.nav li:hover {
+    background: rgba(255, 255 ,255, 9%);
 }
 
 .activeNavElement {
-
+    background: rgba(255, 255, 255, 9%);
 }
 
 .mainTitle, .currentPageTitle {
