@@ -123,6 +123,24 @@
       "productId": 3,
       "userId": 1,
       "id": 2
+    },
+    {
+      "title": "fdfdsfsd",
+      "text": "fdsfdsfsaf",
+      "starRate": 4,
+      "reviewDate": "2023-01-21T15:56",
+      "userId": 1,
+      "productId": 2,
+      "id": 3
+    },
+    {
+      "title": "Level up sind geil",
+      "text": "gfeil geil geil",
+      "starRate": 4,
+      "reviewDate": "2023-01-22T16:41",
+      "userId": 1,
+      "productId": 4,
+      "id": 4
     }
   ],
   "users": [
@@ -722,28 +740,10 @@
   ],
   "cart": [
     {
-      "amount": 7,
-      "productId": 1,
-      "userId": 1,
-      "id": 1
-    },
-    {
-      "amount": 3,
-      "productId": 2,
-      "userId": 1,
-      "id": 2
-    },
-    {
-      "amount": 16,
-      "productId": 3,
-      "userId": 1,
-      "id": 3
-    },
-    {
-      "amount": 16,
+      "amount": 4,
       "productId": 4,
       "userId": 1,
-      "id": 4
+      "id": 3
     }
   ]
 }

@@ -208,10 +208,12 @@ export default function RegisterForm({session, host}) {
                     </Row>
                     <Row>
                         <Col>
-                            <Form.Group className={`${defaultStyle.formGroupHorizontal}`}>
-                                <Form.Check className={defaultStyle.formCheckbox} type="checkbox" name="agreedTerms" onChange={(e) => setCheckedAgree(e.target.checked)}/>
-                                <Form.Label className={defaultStyle.formLabel}>I have read and agree to the <a>Terms & Conditions</a> & <a>Privacy Policy</a> of this online store</Form.Label>
-                                {registerErrors.notChecked && <p>{registerErrors.notChecked}</p>}
+                            <Form.Group className={`${defaultStyle.formGroup}`}>
+                                <div className={defaultStyle.formGroupHorizontal}>
+                                    <Form.Check className={defaultStyle.formCheckbox} type="checkbox" name="agreedTerms" onChange={(e) => setCheckedAgree(e.target.checked)}/>
+                                    <Form.Label className={defaultStyle.formLabel} style={{fontSize: 15}}>I have read and agree to the <a>Terms & Conditions</a> & <a>Privacy Policy</a> of this online store</Form.Label>
+                                </div>
+                                {registerErrors.notChecked && <p style={{background: "#e53c7a", color: "white", fontWeight: "bold", padding: 5, borderRadius: 5}}>{registerErrors.notChecked}</p>}
                             </Form.Group>
                         </Col>
                     </Row>

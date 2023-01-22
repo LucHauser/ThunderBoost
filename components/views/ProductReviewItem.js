@@ -13,7 +13,7 @@ export default function ProductReviewItem({session, review}) {
                         <ReactStars count={5} color2={"#FFB800"} value={review.starRate} half={true} edit={false} size={32}/>
                     </Col>
                     <Col className={defaultStyles.alignmentCenter}>
-                        <p style={{marginLeft: "auto"}} className={productReviewItemStyles.reviewDate}>{session.user && review.user.id === session.user.id ? "By you" : "From " + review.user.firstName + " " + review.user.lastName} on {formatTimestamp(review.reviewDate, "dd.MMMM.yyyy HH:mm")}</p>
+                        <p style={{marginLeft: "auto"}} className={productReviewItemStyles.reviewDate}>{session.user && review.user?.id === session.user?.id ? "By you" : "From " + review.user?.firstName + " " + review.user?.lastName} on {formatTimestamp(review.reviewDate, "dd.MMMM.yyyy HH:mm")}</p>
                     </Col>
                 </Row>
                 <Row>

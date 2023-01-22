@@ -182,7 +182,7 @@
 
 .formInputField > option, .formInputFieldSmall > option {
     color: #FFFFFF;
-    background-color: #6D49A7;
+    background-color: #6D49A7 !important;
 }
 
 .formInputField[type=date],
@@ -400,11 +400,11 @@
 
 .dropDownFilter {
     background: transparent !important;
-    width: 100px !important;
+    width: 100px;
     height: 40px !important;
     border: none !important;
     font-family: "Nunito", sans-serif;
-    font-size: 20px !important;
+    font-size: 20px;
     color: #FFFFFF !important;
     appearance: menulist-button;
 }

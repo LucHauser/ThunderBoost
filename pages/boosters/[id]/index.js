@@ -21,6 +21,7 @@ export default function ArticleDetail({session, host, shoppingCart}) {
 
     const [product, setProduct] = useState({})
     const [reviews, setReviews] = useState([])
+    const [reviewToEdit, setReviewToEdit] = useState({})
     const [averageStarRate, setAverageStarRate] = useState(0.0)
     const [productSuggestions, setProductSuggestions] = useState([])
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
@@ -35,7 +36,6 @@ export default function ArticleDetail({session, host, shoppingCart}) {
         const loadProduct = async () => {
             try {
                 const response = await getProductById(host, id)
-                console.log(response)
                 setProduct(response)
                 setSelectedImageIndex(0)
             } catch (e) {
@@ -74,9 +74,11 @@ export default function ArticleDetail({session, host, shoppingCart}) {
         loadProductSuggestion()
     }, [id])
 
-    useEffect(() => {
-
-    })
+    const editReview = async () => {
+        const targetReview = await getProductReviewsByParam(host, `userId=${session.user.id}`)[0]
+        setReviewToEdit(targetReview)
+        setShowReviewForm(true)
+    }
 
     return (
         <div className={defaultStyles.page}>
@@ -178,13 +180,6 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                                             : <p className={productDetailStyles.productPriceSign}>{product.price}</p>
                                     }
                                 </Col>
-                                {/*
-
-                                    product?.showDiscountUntilDate ?
-                                        <Col xs={12}>
-                                            <p>{product?.discountUntilText ? product?.discountUntilText : "Until"} {formatTimestamp(product?.discountUntil, "dd.MMMM.yyyy HH:mm")}</p>
-                                        </Col>:  null
-                                */}
                             </Row>
                             <Row>
                                 <Col xs={12}>
@@ -213,7 +208,7 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                             </Row>
                             <Row>
                                 <Col>
-                                    <button className={`${defaultStyles.buttonFilled}`} onClick={() => session.user ? shoppingCart.add(product, amountToCart) : router.push("./login")}>
+                                    <button className={`${defaultStyles.buttonFilled}`} onClick={() => session.user ? shoppingCart.addProduct(product.id, amountToCart) : router.push("./login")}>
                                         <FontAwesomeIcon icon={faShoppingCart} style={{marginRight: 10}}/>
                                         Add to Cart
                                     </button>
@@ -243,11 +238,26 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                     <Col>
                         <Stack direction={"horizontal"} style={{marginBottom: 10}}>
                             <h3>Client Reviews</h3>
-                            <button
-                                className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`}
-                                onClick={() => session.user ? setShowReviewForm(!showReviewForm) : router.push("../login")}
-                                disabled={session.user && session.user.id === reviews.filter(r => r.userId === session.user.id)[0]?.userId}
-                            >{session.user ? showReviewForm ? "Cancel": "Write a review" : "Log In"}</button>
+                            {
+                                session.user ?
+                                    <button
+                                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`}
+                                        onClick={() =>
+                                            (session.user.id === reviews.filter(r => r.userId === session.user.id)[0]?.userId) ?
+                                                editReview(session.user.id)
+                                                : setShowReviewForm(prevState => !prevState)}
+                                    >{showReviewForm ?
+                                        "Cancel"
+                                        : session.user.id === reviews.filter(r => r.userId === session.user.id)[0]?.userId ?
+                                            "Edit review" : "Write a review"
+                                    }</button>
+                                    : <button
+                                        className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`}
+                                        onClick={() => router.push("../login")}>
+                                        Login
+                                    </button>
+                            }
+
                         </Stack>
                     </Col>
                 </Row>
@@ -255,7 +265,27 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                     showReviewForm ?
                         <Row className={defaultStyles.margin10Bottom}>
                             <Col>
-                                <ProductReviewForm session={session} productId={id ? id : null} host={host}/>
+                                <ProductReviewForm
+                                    session={session}
+                                    productId={id}
+                                    host={host}
+                                    onReviewed={(newReview) => {
+                                        setReviews([...reviews, newReview])
+                                    }}
+                                    reviewToEdit={reviewToEdit}
+                                    onReviewEdited={(edited) => {
+                                        setShowReviewForm(prevState => !prevState)
+                                        setReviews(prevState =>
+                                            prevState.map(r => {
+                                                if (r.id === edited.id) {
+                                                    return {...r, ...edited}
+                                                } else {
+                                                    return r
+                                                }
+                                            })
+                                        )}
+                                    }
+                                />
                             </Col>
                         </Row>
                         : null

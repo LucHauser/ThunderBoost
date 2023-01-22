@@ -1,15 +1,15 @@
 import {useEffect, useState} from "react";
-import {getAllBaseDataVariety, getAllProductByFilterParameter, getAllProducts} from "@lib/api";
+import {getAllBaseDataVariety, getAllProductByFilterParameter, getProductById} from "@lib/api";
 import defaultStyles from "../stylesheet/global.module.css"
 import boosterPageStyles from "../stylesheet/boostersPage.module.css"
 import ProductArticle from "@components/views/ProductCollectionItem";
 import {useRouter} from "next/router";
 import {Accordion, Col, Container, Form, Row, Stack} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {faArrowDownShortWide} from "@fortawesome/free-solid-svg-icons";
 import {getAvgStarRating, getDiscountPrice, isEventNowWithBoolean} from "@components/Utils";
 
-export default function BoostersPage({session, host}) {
+export default function BoostersPage({session, host, shoppingCart}) {
 
     const usages = [
         {name: "Gaming", checked: false, count: 0},
@@ -18,7 +18,7 @@ export default function BoostersPage({session, host}) {
     ]
 
     const sortOptions = [
-        {name: "Relevance", option: 0},
+        {name: "Relevance", option: null},
         {name: "Stock amount", option: 1},
         {name: "Lowest Price", option: 2},
         {name: "Hightest Price", option: 3},
@@ -39,7 +39,6 @@ export default function BoostersPage({session, host}) {
         const loadProducts = async () => {
             try {
                 const products = await getAllProductByFilterParameter(host, "active=true&_embed=productReviews")
-                console.log(products)
                 setProducts(products)
                 setFilteredProduct(products)
                 createFilterListByUsage(products)
@@ -111,45 +110,33 @@ export default function BoostersPage({session, host}) {
                     usageStr = usageStr + " || "
                 }
             }
-            productsToFilter = productsToFilter.filter(eval(usageStr))
+            productsToFilter.filter(eval(usageStr))
         }
-        const finalFilteredAndSorted = selectedSortOption === 0 ? sortProducts(filteredProduct) : filteredProduct
-        setFilteredProduct(finalFilteredAndSorted)
-    }
-
-    const sortProducts = (productsAfterFiltered) => {
-        let p = productsAfterFiltered
-        switch (selectedSortOption) {
-            case 0:
-                break
-            case 1:
-                p = p.sort((a, b) => parseInt(b.stockAmount) - parseInt(a.stockAmount))
-                break;
-            case 2:
-                p = p.sort((a, b) =>
-                    parseFloat(isEventNowWithBoolean(b.discountFrom, b.discountUntil, b.discountActive) ?
-                        getDiscountPrice(b.price, b.discountPercent) :
-                        b.price) -
-                    parseFloat(isEventNowWithBoolean(a.discountFrom, a.discountUntil, a.discountActive) ?
-                        getDiscountPrice(a.price, a.discountPercent)
-                        : a.price)
-                )
-                break;
-            case 3:
-                p = p.sort((a, b) =>
-                    parseFloat(isEventNowWithBoolean(a.discountFrom, a.discountUntil, a.discountActive) ?
-                        getDiscountPrice(a.price, a.discountPercent)
-                        : a.price) -
-                    parseFloat(isEventNowWithBoolean(b.discountFrom, b.discountUntil, b.discountActive) ?
-                        getDiscountPrice(b.price, b.discountPercent) :
-                        b.price)
-                )
-                break;
-            case 4:
-                p = p.sort((a, b) => getAvgStarRating(b?.productReviews) - getAvgStarRating(a?.productReviews))
-                break;
+        if (selectedSortOption === 1) {
+            productsToFilter.sort((a, b) => parseInt(b.stockAmount) - parseInt(a.stockAmount))
+        } else if (selectedSortOption === 2) {
+            productsToFilter.sort((a, b) =>
+                parseFloat(isEventNowWithBoolean(a.discountFrom, a.discountUntil, a.discountActive) ?
+                    getDiscountPrice(a.price, a.discountPercent)
+                    : a.price) -
+                parseFloat(isEventNowWithBoolean(b.discountFrom, b.discountUntil, b.discountActive) ?
+                    getDiscountPrice(b.price, b.discountPercent) :
+                    b.price)
+            )
+        } else if (selectedSortOption === 3) {
+        productsToFilter.sort((a, b) =>
+            parseFloat(isEventNowWithBoolean(b.discountFrom, b.discountUntil, b.discountActive) ?
+                getDiscountPrice(b.price, b.discountPercent) :
+                b.price) -
+            parseFloat(isEventNowWithBoolean(a.discountFrom, a.discountUntil, a.discountActive) ?
+                getDiscountPrice(a.price, a.discountPercent)
+                : a.price)
+            )
         }
-        return p
+        else if (selectedSortOption === 4) {
+            productsToFilter.sort((a, b) => (getAvgStarRating(b?.productReviews) > 0 ? getAvgStarRating(b?.productReviews) : 0) - (getAvgStarRating(a?.productReviews) > 0 ? getAvgStarRating(a?.productReviews) : 0))
+        }
+        setFilteredProduct(productsToFilter)
     }
 
     function createFilterListByUsage(products) {
@@ -158,6 +145,17 @@ export default function BoostersPage({session, host}) {
             listToAddCount[i].count = products.filter(p => p.usage === listToAddCount[i].name).length
         }
         setUsageList(listToAddCount.filter(u => u.count > 0))
+    }
+
+    const addProductToShoppingCart = (id) => {
+        const getProduct = async (id) => {
+            try {
+                return await getProductById(host, id)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        shoppingCart.add(getProduct(id), 1)
     }
 
     return (
@@ -169,20 +167,18 @@ export default function BoostersPage({session, host}) {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <Form.Select className={defaultStyles.dropDownFilter} style={{marginLeft: "auto", marginRight: 10}} value={selectedSortOption} onChange={(e) => setSelectedSortOption(e.target.selectedIndex)}>
-                            {
-                                sortOptions.map((opt) => {
-                                    return (
-                                        <option key={opt.option} value={opt.option}>{opt.name}</option>
-                                    )
-                                })
-                            }
-                        </Form.Select>
+                    <Col xs={{span: 12, order: 2}} md={{order: 1}}>
+                        <Stack direction={"horizontal"} style={{justifyContent: "right"}}>
+                            <FontAwesomeIcon icon={faArrowDownShortWide}/>
+                            <Form.Select className={defaultStyles.dropDownFilter} style={{marginRight: 10, width: "auto"}} value={selectedSortOption} onChange={(e) => setSelectedSortOption(e.target.selectedIndex)}>
+                                {
+                                    sortOptions.map(opt => <option key={opt.option} value={opt.option}>{opt.name}</option>)
+                                }
+                            </Form.Select>
+                        </Stack>
+
                     </Col>
-                </Row>
-                <Row>
-                    <Col xxl={3} lg={4} md={4} sm={12} xs={12}>
+                    <Col xxl={3} lg={4} md={{span: 4}} sm={12} xs={{span: 12, order: 1}}>
                         <h2 className={defaultStyles.pageSubtitle}>Filter</h2>
                         <div className={defaultStyles.formSubtitleSeparatorLine}/>
                         <Accordion>
@@ -224,27 +220,15 @@ export default function BoostersPage({session, host}) {
                             </Accordion.Item>
                         </Accordion>
                     </Col>
-                    <Col xxl={9} lg={8} md={8} sm={12} xs={12}>
+                    <Col xxl={9} lg={8} md={{span: 8, order: 3}} sm={12} xs={{span: 12, order: 3}}>
                         <Container fluid={true}>
-                            {/*
-                            <Row>
-                                <Col>
-                                    <div className={`${defaultStyles.flexHorizontal} ${boosterPageStyles.searchBar}`}>
-                                        <p className={defaultStyles.formLabel}>Search:</p>
-                                        <Form.Control className={defaultStyles.filterInputField} onChange={(e) => setFilterProductName(e.target.value)}/>
-                                        <FontAwesomeIcon icon={faMagnifyingGlass} size={"lg"} color={"white"}/>
-                                    </div>
-
-                                </Col>
-                            </Row>
-                            */}
                             <Row className={boosterPageStyles.collections}>
                                 {
                                     filteredProduct.map((article, index) => {
                                         return (
                                             // eslint-disable-next-line react/jsx-key
                                             <Col key={index} xs={12} sm={6} md={6} xl={4} className={`${defaultStyles.margin24Bottom}`}>
-                                                <ProductArticle session={session} product={article} routeToDetail={() => router.push(`./boosters/${article.id}/`)} showAll={true}/>
+                                                <ProductArticle session={session} product={article} routeToDetail={() => router.push(`./boosters/${article.id}/`)} showAll={true} addThisToCart={(id) => addProductToShoppingCart(id)}/>
                                             </Col>
                                         )
                                     })

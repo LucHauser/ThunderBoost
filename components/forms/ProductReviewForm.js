@@ -4,10 +4,10 @@ import {useEffect, useState} from "react";
 import {Col, Container, Form, Row} from "react-bootstrap";
 import ReactStars from "react-stars"
 import {faStar} from "@fortawesome/free-solid-svg-icons";
-import {postProductReview} from "@lib/api";
+import {editProductReview, postProductReview} from "@lib/api";
 import formatTimestamp from "@components/Utils";
 
-export default function ProductReviewForm({session, productId, host, onReviewed}) {
+export default function ProductReviewForm({session, productId, host, onReviewed, reviewToEdit, onReviewEdited}) {
 
     function validateModel(model) {
         let isValid = true
@@ -45,18 +45,17 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
         starRate: 0,
         reviewDate: "",
         productId: null,
-        userId: session.user.id
+        userId: null
     }
 
     const [model, setModel] = useState(defaultModel)
     const [errors, setErrors] = useState({})
 
     useEffect(() => {
-        if (session.user) {
-            setModel({...model, userId: parseInt(session.user.id)})
+        if (reviewToEdit) {
+            setModel(reviewToEdit)
         }
-        setModel({...model, productId: parseInt(productId)})
-    }, [session, productId])
+    }, [reviewToEdit])
 
     const handleChange = (e) => {
         setModel({
@@ -73,7 +72,18 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
             setErrors(result.errors)
             return
         }
+        if (model.id) {
+            try {
+                const response = await editProductReview(host, model, session.accessToken)
+                response.user = session.user
+                onReviewEdited(response)
+            } catch (e) {
+                console.log(e)
+            }
+        }
         model.reviewDate = formatTimestamp(new Date(), "yyyy-MM-ddTHH:mm")
+        model.userId = session.user.id
+        model.productId = parseInt(productId)
         try {
             const response = await postProductReview(host, model)
             onReviewed(response)
@@ -95,7 +105,13 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
                         <Col md={6} className={productReviewFormStyles.columns}>
                             <Form.Group className={defaultStyles.formGroup}>
                                 <Form.Label className={defaultStyles.formLabel}>Title</Form.Label>
-                                <Form.Control className={`${defaultStyles.formInputField} ${errors.title && defaultStyles.formInputError}`} name="title" onChange={handleChange} placeholder={"Enter a title"}/>
+                                <Form.Control
+                                    className={`${defaultStyles.formInputField} ${errors.title && defaultStyles.formInputError}`}
+                                    name="title"
+                                    onChange={handleChange}
+                                    placeholder={"Enter a title"}
+                                    defaultValue={model.title}
+                                />
                                 {errors.title && <p>{errors.title}</p>}
                             </Form.Group>
                         </Col>
@@ -104,7 +120,14 @@ export default function ProductReviewForm({session, productId, host, onReviewed}
                         <Col md={12} className={productReviewFormStyles.columns}>
                             <Form.Group className={defaultStyles.formGroup}>
                                 <Form.Label className={defaultStyles.formLabel}>Text</Form.Label>
-                                <textarea className={`${defaultStyles.formInputField} ${defaultStyles.formTextfield} ${errors.text && defaultStyles.formInputError}`} onChange={handleChange} name={"text"} placeholder={"Enter your review"} rows={3}/>
+                                <textarea
+                                    className={`${defaultStyles.formInputField} ${defaultStyles.formTextfield} ${errors.text && defaultStyles.formInputError}`}
+                                    onChange={handleChange}
+                                    name={"text"}
+                                    placeholder={"Enter your review"}
+                                    rows={3}
+                                    defaultValue={model.text}
+                                />
                                 {errors.text && <p>{errors.text}</p>}
                             </Form.Group>
                         </Col>

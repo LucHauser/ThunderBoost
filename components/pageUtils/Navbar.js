@@ -109,7 +109,7 @@ export default function Navigation({session, shoppingCart}) {
                                                         <>
                                                             <Row>
                                                                 <Col>
-                                                                    <img src={p.product.images[0]} className={navigationStyles.cartProductImage}/>
+                                                                    <img src={p.product?.images[0]} className={navigationStyles.cartProductImage}/>
                                                                 </Col>
                                                                 <Col xs={9} className={navigationStyles.productList}>
                                                                     <b>{p.product.name}</b>

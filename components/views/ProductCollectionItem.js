@@ -3,8 +3,10 @@ import defaultStyles from "../../pages/stylesheet/global.module.css"
 import {getDiscountPrice, isEventNow, isEventNowWithBoolean} from "@components/Utils";
 import {Stack} from "react-bootstrap";
 import ReactStars from "react-stars/dist/react-stars";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 
-export default function ProductArticle({shoppingCart, product, routeToDetail, showAll}) {
+export default function ProductArticle({product, routeToDetail, addThisToCart, showAll}) {
 
     function getAvgStarRating(productRatings) {
         let avg = 0
@@ -15,34 +17,62 @@ export default function ProductArticle({shoppingCart, product, routeToDetail, sh
     }
 
     return (
-        <div className={productArticleStyles.container} onClick={() => routeToDetail()}>
+        <div className={productArticleStyles.container}>
+            {
+                showAll ?
+                    <div className={productArticleStyles.discountOverlay}>
+                        {
+                            isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
+                                <p>{product.discountPercent}%</p>
+                                : null
+                        }
+                    </div> : null
+            }
+
+
             <Stack>
-                <div className={productArticleStyles.productImage} style={{backgroundImage: `url(${product.images[0]})`}}/>
+                <Stack onClick={() => routeToDetail()}>
+                    <div className={productArticleStyles.productImage} style={{backgroundImage: `url(${product.images[0]})`}}/>
+                    <p className={productArticleStyles.productName}>{product.name}</p>
+                    {
+                        showAll ?
+                            <>
+                                <Stack gap={1} direction={"horizontal"}>
+                                    <ReactStars
+                                        className={productArticleStyles.starRating}
+                                        count={5}
+                                        edit={false}
+                                        half={true}
+                                        size={24}
+                                        value={getAvgStarRating(product?.productReviews)}
+                                    />
+                                    <p>({product?.productReviews?.length})</p>
+                                </Stack>
+
+                                {
+                                    isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
+                                        <Stack direction={"horizontal"} gap={2}>
+                                            <p className={productArticleStyles.productPrice}
+                                               style={{textDecoration: "line-through"}}>{getDiscountPrice(product.price, product.discountPercent)}$</p>
+                                            <p className={productArticleStyles.productPrice}
+                                               style={{color: "#EB3E7A"}}>{product.price}$</p>
+                                        </Stack>
+
+                                        : <p className={productArticleStyles.productPrice}>{product.price}$</p>
+                                }
+                            </> : null
+                    }
+
+                </Stack>
                 {
                     showAll ?
-                        <ReactStars
-                            className={productArticleStyles.starRating}
-                            count={5}
-                            edit={false}
-                            half={true}
-                            size={32}
-                            value={getAvgStarRating(product?.productReviews)}
-                        /> : null
+                        <Stack direction={"horizontal"}>
+                            <p>{product.stockAmount} in Stock</p>
+                            <button className={productArticleStyles.buttonCart} onClick={() => addThisToCart(product.id)}>
+                                <FontAwesomeIcon icon={faShoppingCart}/>
+                            </button>
+                        </Stack> : null
                 }
-                <p className={productArticleStyles.productName}>{product.name}</p>
-                {
-                    showAll ?
-                        <>
-                            {
-                                isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
-                                    <p className={productArticleStyles.productPrice}>{getDiscountPrice(product.price, product.discountPercent)}$<sub>instead {product.price}$</sub></p>
-                                    : <p className={productArticleStyles.productPrice}>{product.price}$</p>
-                            }
-                            <button className={defaultStyles.buttonFilled}>Add to Cart</button>
-                        </> : null
-
-                }
-
             </Stack>
         </div>
     )
