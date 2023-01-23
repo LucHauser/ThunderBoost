@@ -17,7 +17,7 @@ export default function UploadImage({session, host}) {
             <h1>Upload new Image</h1>
             <div className={defaultStyles.formSeparatorLine}/>
             <div style={{display: "flex", justifyContent: "center"}}>
-                <ImageUploadForm session={session}/>
+                <ImageUploadForm session={session} host={host}/>
             </div>
         </div>
     )
