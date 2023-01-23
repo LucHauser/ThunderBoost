@@ -6,7 +6,7 @@ import {getAllProductByFilterParameter} from "@lib/api";
 import {Col, Container, Form, Row} from "react-bootstrap";
 import ProductArticle from "@components/views/ProductCollectionItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeft, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 export default function searchPage({session, host, shoppingCart}) {
 
@@ -35,7 +35,16 @@ export default function searchPage({session, host, shoppingCart}) {
 
     return (
         <div className={searchPageStyles.page}>
-            <Container fluid={true}>
+            <Container fluid={true} className={defaultStyles.pageContentGap15}>
+                <Row>
+                    <Col>
+                        <button
+                            className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm} ${defaultStyles.buttonFilledAutoWidth}`}
+                            onClick={() => router.push("../../")}>
+                            <FontAwesomeIcon icon={faArrowLeft} color={"white"} style={{marginRight: 10}}/>Back
+                        </button>
+                    </Col>
+                </Row>
                 <Row>
                     <Col>
                         <h1 className={defaultStyles.pageTitle}>Search in Thunderboost</h1>

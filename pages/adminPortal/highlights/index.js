@@ -37,9 +37,9 @@ export default function HighlightManagementPage({session, host}) {
     const viewModeOptions = ["All", "Pending", "Active running", "Expired", "Inactive Highlights", "Draft"]
 
     const [allHighlights, setAllHighlights] = useState([])
-    const [filteredHighlights, setFilteredHighlights] = useState([])
+    const [filterHighlightText, setFilterHighlightText] = useState("")
     const [tableViewMode, setTableViewMode] = useState("")
-    const [collapsedItem, setCollapsedItem] = useState("")
+    const [filteredHighlight, setFilteredHighlight] = useState([])
     const [showHighlightView, setShowHighlightView] = useState(false)
     const [showCloneHighlightDialog, setShowCloneHighlightDialog] = useState(false)
     const [selectedHighlight, setSelectedHighlight] = useState({})
@@ -52,12 +52,17 @@ export default function HighlightManagementPage({session, host}) {
             try {
                 const highlights = await getAllHighligtsInclusiveProduct(host)
                 setAllHighlights(highlights)
+                setFilteredHighlight(highlights)
             } catch (e) {
                 console.log(e)
             }
         }
         loadHighlights()
     }, [host])
+
+    useEffect(() => {
+        filterHighlight()
+    }, [filterHighlightText])
 
     const changeViewMode = (e) => {
         setTableViewMode(e.target.value)
@@ -113,21 +118,27 @@ export default function HighlightManagementPage({session, host}) {
         setAllHighlights((prevState) => prevState.filter(h => h.id !== id))
     }
 
+    function filterHighlight() {
+        let filteredHighlight = allHighlights
+        filteredHighlight = filteredHighlight.filter(h => h.designation.includes(filterHighlightText))
+        setFilteredHighlight(filteredHighlight)
+    }
+
     return (
-        <div className={defaultStyles.adminPageWrapper}>
+        <div className={defaultStyles.page}>
             <Container fluid={true} id={highlightManagementStyles["highlightManagementPageLayout"]}>
                 <Row>
                     <Col>
                         <AdminPortalHeader session={session} currentPage={2}/>
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
+                <Row className={defaultStyles.listFilterBar}>
+                    <Col sm={12} md={10}>
                         <div className={defaultStyles.filterActionBar}>
                             <div className={defaultStyles.filterGroup}>
                                 <div className={defaultStyles.formGroupHorizontal}>
-                                    <p style={{fontSize: 20, width: 220}} className={defaultStyles.paragraphs}>Filter Highlight:</p>
-                                    <Form.Control className={defaultStyles.filterInputField} onChange={(e) => setFilteredHighlights(e.target.value)} placeholder={"Filter Highlight"}/>
+                                    <p style={{fontSize: 20}} className={defaultStyles.paragraphs}>Filter Highlight:</p>
+                                    <Form.Control className={defaultStyles.filterInputField} style={{width: 250}} onChange={(e) => setFilterHighlightText(e.target.value)} placeholder={"Filter Highlight"}/>
                                 </div>
                                 <div className={defaultStyles.formGroupHorizontal}>
                                     <p className={defaultStyles.paragraphs} style={{fontSize: 20}}>View Mode:</p>
@@ -139,24 +150,25 @@ export default function HighlightManagementPage({session, host}) {
                                         })}
                                     </Form.Select>
                                 </div>
-
                             </div>
-                            <button className={highlightManagementStyles.addBtn} onClick={() => router.push("./highlights/create")}>
-                                <FontAwesomeIcon
-                                    style={{marginRight: 10}}
-                                    icon={faPlus}
-                                    color={"white"}
-                                />
-                                New
-                            </button>
                         </div>
+                    </Col>
+                    <Col className={`${defaultStyles.alignmentCenter} ${highlightManagementStyles.addBtnCol}`}>
+                        <button className={highlightManagementStyles.addBtn} onClick={() => router.push("./highlights/create")}>
+                            <FontAwesomeIcon
+                                style={{marginRight: 10}}
+                                icon={faPlus}
+                                color={"white"}
+                            />
+                            New
+                        </button>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
                         <Accordion flush alwaysOpen>
                             {
-                                allHighlights.map((highlight, index) => (
+                                filteredHighlight.map((highlight, index) => (
                                     <Accordion.Item key={index} className={defaultStyles.accordionItem} eventKey={highlight.id}>
                                         <Accordion.Header className={defaultStyles.accordionHeader}>
                                             <div className={highlightManagementStyles.accordionHeadingContent}>
@@ -290,6 +302,13 @@ export default function HighlightManagementPage({session, host}) {
                         </div>
                     </div> : null
             }
+            <button className={`${highlightManagementStyles.addBtnFloat}`} onClick={() => router.push("./highlights/create")}>
+                <FontAwesomeIcon
+                    icon={faPlus}
+                    color={"white"}
+                    size={"2x"}
+                />
+            </button>
 
         </div>
     )

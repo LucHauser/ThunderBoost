@@ -744,6 +744,12 @@
       "productId": 4,
       "userId": 1,
       "id": 3
+    },
+    {
+      "amount": 3,
+      "productId": 1,
+      "userId": 1,
+      "id": 4
     }
   ]
 }

@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useRedirectBlockAdmin, useRedirectToLogin} from "@lib/hooks/session";
+import {Col, Container, Row} from "react-bootstrap";
 
 export default function createHighlight({session, host}) {
 
@@ -19,16 +20,26 @@ export default function createHighlight({session, host}) {
     const router = useRouter()
 
     return (
-        <div className={defaultStyles.page}>
-            <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => router.push("../highlights")}>
-                <FontAwesomeIcon icon={faLeftLong}/>
-                &nbsp;&nbsp;&nbsp;Back
-            </button>
-            <h1>Plan a new Highlight</h1>
-            <div>
-                <HighlightForm session={session} host={host}/>
+        <div>
+            <div className={defaultStyles.page}>
+                <Container fluid={true} className={defaultStyles.pageContentGap15}>
+                    <Row>
+                        <Col className={defaultStyles.disableColumnPaddings}>
+                            <button style={{width: 100}} className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`} onClick={() => router.push("../highlights")}>
+                                <FontAwesomeIcon icon={faLeftLong}/>
+                                &nbsp;&nbsp;&nbsp;Back
+                            </button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className={defaultStyles.disableColumnPaddings}>
+                            <h1>Plan a new Highlight</h1>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
 
+            <HighlightForm session={session} host={host}/>
         </div>
     )
 }

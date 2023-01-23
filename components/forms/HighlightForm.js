@@ -10,7 +10,7 @@ import formatTimestamp, {
 } from "@components/Utils";
 import ImageUploadForm from "@components/forms/ImageUploadForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUpload} from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeft, faArrowRight, faPencil, faUpload} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/router";
 import {useElementSize} from "usehooks-ts";
 
@@ -253,6 +253,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
     const [errors, setErrors] = useState({})
     const [loadHighlight, setLoadHighlight] = useState(false)
     const [showEditor, setShowEditor] = useState(false)
+    const [editorPlacement, setEditorPlacement] = useState(false)
     const [allProducts, setAllProducts] = useState([])
     const [productImageIndexOptions, setProductImageIndexOptions] = useState([])
     const [backgroundImages, setBackgroundImages] = useState([])
@@ -401,24 +402,24 @@ export default function HighlightForm({session, highlightToEdit, host}) {
 
     return (
         <div className={highlightFormStyles.highlightEditor}>
-            <Container fluid={true} className={highlightFormStyles.highlightEditorContainer}>
+            <Container fluid={true} className={`${highlightFormStyles.highlightEditorContainer} ${defaultStyles.pageContentGap15}`}>
                 <Row>
-                    <Col md={11}>
-                        <h3>Live Preview</h3>
-                    </Col>
-                    <Col md={1}>
-                        <button onClick={() => setShowEditor(true)}>Editor</button>
+                    <Col xs={{span: 6, offset: 6}} sm={{span: 2, offset: 10}} className={defaultStyles.disableColumnPaddings}>
+                        <button
+                            onClick={() => setShowEditor(true)}
+                            className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}>
+                            <FontAwesomeIcon icon={faPencil} color={"white"} style={{marginRight: 10}}/>Editor
+                        </button>
                     </Col>
                 </Row>
-
                 <Row>
-                    <Col md={12}>
+                    <Col md={12} className={defaultStyles.disableColumnPaddings}>
                         <div className={highlightFormStyles.highlightPreview} style={{background: !disableEditorBackground ? editorBackground : "transparent"}}>
                             <HighlightView prop={model} presentingProduct={productForPresentation} editViewMode={true}/>
                         </div>
                     </Col>
                 </Row>
-                <Row style={{margin: "15px 0 0", background: "rgba(255, 255, 255, 9%)", borderRadius: 5}}>
+                <Row style={{background: "rgba(255, 255, 255, 9%)", borderRadius: 5}} className={highlightFormStyles.editorSettingsBar}>
                     <Col md={6} className={highlightFormStyles.editorSettings}>
                         <Stack direction={"horizontal"} gap={2} className={highlightFormStyles.settingsGroup}>
                             <p>Editor Preview Background: </p>
@@ -436,7 +437,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                             <Form.Check className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(e.target.checked)}/>
                         </Stack>
                     </Col>
-                    <Col md={5}>
+                    <Col md={6}>
                         <Stack direction={"horizontal"} gap={2}>
                             <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"} form={"highlight-form"}>Save Highlight</button>
                             <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>
@@ -467,10 +468,16 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                     </div>
                 </div> : null
             }
-            <Offcanvas ref={editorRef} placement={"end"} show={showEditor} className={highlightFormStyles.highlightEditor} backdropClassName={highlightFormStyles.offcanvasBackdrop}>
+            <Offcanvas ref={editorRef} placement={editorPlacement ? "start" : "end"} show={showEditor} className={highlightFormStyles.highlightEditor} backdropClassName={highlightFormStyles.offcanvasBackdrop}>
                 <Offcanvas.Header className={`${highlightFormStyles.offCanvHeader}`}>
                     <h3>Editor</h3>
-                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`} onClick={() => setShowEditor(false)}>Close</button>
+                    <div>
+                        <button className={`${defaultStyles.buttonTransparent} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`} onClick={() => setEditorPlacement(p => !p)}>
+                            <FontAwesomeIcon icon={editorPlacement ? faArrowRight : faArrowLeft} color={"white"}/>
+                        </button>
+                        <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`} onClick={() => setShowEditor(false)}>Close</button>
+                    </div>
+
                 </Offcanvas.Header>
                 <Offcanvas.Body className={highlightFormStyles.highlightEditorForm}>
                     <Form id={"highlight-form"} onSubmit={handleSubmit}>

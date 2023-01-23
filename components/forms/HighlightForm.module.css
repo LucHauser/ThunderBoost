@@ -11,9 +11,9 @@
 }
 
 .highlightPreview {
-    padding: 30px;
+    width: 100%;
+    padding: 10px 0;
     height: 600px;
-    border-radius: 5px;
 }
 
 .highlightEditorForm {
@@ -40,6 +40,11 @@
     overflow: scroll;
     height: 100%;
     gap: 5px
+}
+
+.editorSettingsBar {
+    margin: 0 10px;
+    padding: 10px;
 }
 
 .editorSettings {
