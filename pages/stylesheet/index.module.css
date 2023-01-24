@@ -7,7 +7,52 @@
 }
 
 .highlightView {
-    height: 600px;
-    margin-bottom: 50px;
-    padding: 10px
+    height: auto;
+
+}
+
+.highlightCarousel {
+    display: none;
+}
+
+#why-thunderboost > div > div, #bestReviewsPicks > div > div {
+    background: linear-gradient(to bottom, #9305A7, #4A0354);
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    gap: 5px;
+}
+
+#bestReviewsPicks > div > div {
+    background: rgba(255, 255, 255, 9%);
+    height: 200px;
+}
+
+@media (min-width: 992px) {
+    .highlightView {
+        min-height: 600px !important;
+        margin-bottom: 50px;
+    }
+
+    .highlightCarousel {
+        display: flex;
+        align-items: center;
+        padding: 30px 0;
+        height: auto;
+        background: #000000;
+    }
+
+    .highlightCarouselElement {
+        height: 60vh;
+        width: 100%
+    }
+
+    .highlightMobile {
+        display: none;
+    }
 }

@@ -21,6 +21,17 @@
 }
 
 @media (min-width: 992px) {
+    .pageTitle {
+        font-size: 40px;
+        margin-bottom: 60px;
+    }
+
+    .pageSubtitle {
+        font-size: 40px;
+    }
+}
+
+@media (min-width: 992px) {
     .page {
         padding: 30px 140px
     }
@@ -42,7 +53,7 @@
 }
 
 .pageSubtitle {
-    font-size: 40px;
+    font-size: 25px;
     font-family: 'Nunito', sans-serif;
     color: #8DF3E8;
 }
@@ -216,8 +227,6 @@
 
 .formColorPicker {
     padding: 0;
-    min-width: 30px !important;
-    min-height: 34px !important;
     background-color: transparent !important;
     appearance: none !important;
     -webkit-appearance: none !important;
@@ -228,11 +237,13 @@
 
 .formColorPicker > input {
     padding: 0 !important;
+    width: 30px !important;
 }
 
 .formColorPicker::-webkit-color-swatch {
+    height: 30px !important;
     padding: 0 !important;
-    border-radius: 5px !important;
+    border-radius: 15px !important;
     border: none !important;
 }
 
@@ -312,8 +323,8 @@
 }
 
 .buttonSm {
-    height: 30px;
-    font-size: 15px;
+    height: 30px !important;
+    font-size: 15px !important;
     font-family: Nunito, sans-serif;
 }
 
@@ -335,6 +346,7 @@
 }
 
 .defaultTransparentButton {
+    background: transparent;
     width: auto;
     height: 50px;
     border: solid #FFFFFF 2px;
@@ -540,6 +552,12 @@
     border-bottom-right-radius: 6px;
 }
 
+@media (max-width: 992px) {
+    .tableContainer {
+        font-size: 15px;
+    }
+}
+
 .tableRowActions {
     display: flex;
     justify-content: right;
@@ -560,13 +578,3 @@
     display: none
 }
 
-@media (min-width: 850px) {
-    .pageTitle {
-        font-size: 40px;
-        margin-bottom: 60px;
-    }
-}
-
-.test {
-    font-family: Broadway, sans-serif;
-}

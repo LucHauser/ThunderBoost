@@ -1,4 +1,4 @@
-import {Col, Container, Form, FormGroup, Offcanvas, Row, Stack} from "react-bootstrap";
+import {Col, Container, Form, FormGroup, Modal, Offcanvas, Row, Stack} from "react-bootstrap";
 import defaultStyles from "../../pages/stylesheet/global.module.css"
 import highlightFormStyles from "./HighlightForm.module.css"
 import {useEffect, useRef, useState} from "react";
@@ -261,6 +261,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
     const [productForPresentation, setProductForPresentation] = useState(null)
     const [editorBackground, setEditorBackground] = useState("#FFFFFF")
     const [disableEditorBackground, setDisableEditorBackground] = useState(false)
+    const [previewPadding, setPreviewPadding] = useState(0)
     const [showCreateDraftDialog, setShowCreateDraftDialog] = useState(false)
 
     const router = useRouter()
@@ -403,47 +404,53 @@ export default function HighlightForm({session, highlightToEdit, host}) {
     return (
         <div className={highlightFormStyles.highlightEditor}>
             <Container fluid={true} className={`${highlightFormStyles.highlightEditorContainer} ${defaultStyles.pageContentGap15}`}>
-                <Row>
-                    <Col xs={{span: 6, offset: 6}} sm={{span: 2, offset: 10}} className={defaultStyles.disableColumnPaddings}>
-                        <button
-                            onClick={() => setShowEditor(true)}
-                            className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}>
-                            <FontAwesomeIcon icon={faPencil} color={"white"} style={{marginRight: 10}}/>Editor
-                        </button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={12} className={defaultStyles.disableColumnPaddings}>
-                        <div className={highlightFormStyles.highlightPreview} style={{background: !disableEditorBackground ? editorBackground : "transparent"}}>
-                            <HighlightView prop={model} presentingProduct={productForPresentation} editViewMode={true}/>
-                        </div>
-                    </Col>
-                </Row>
+                <button
+                    onClick={() => setShowEditor(true)}
+                    className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm}`}>
+                    <FontAwesomeIcon icon={faPencil} color={"white"} style={{marginRight: 10}}/>Editor
+                </button>
+                <div className={`${highlightFormStyles.highlightPreview} `} style={{background: !disableEditorBackground ? editorBackground : "transparent", paddingLeft: `${previewPadding}%`, paddingRight: `${previewPadding}%`}}>
+                    <HighlightView prop={model} presentingProduct={productForPresentation} editViewMode={true}/>
+                </div>
                 <Row style={{background: "rgba(255, 255, 255, 9%)", borderRadius: 5}} className={highlightFormStyles.editorSettingsBar}>
-                    <Col md={6} className={highlightFormStyles.editorSettings}>
-                        <Stack direction={"horizontal"} gap={2} className={highlightFormStyles.settingsGroup}>
-                            <p>Editor Preview Background: </p>
-                            <input
-                                value={editorBackground}
-                                type="color"
-                                onChange={(e) => setEditorBackground(e.target.value)}
-                                className={defaultStyles.formColorPicker}
-                                onDoubleClick={() => setEditorBackground("#6D49A7")}/>
-                            { editorBackground !== "#FFFFFF" ?
-                                <i onClick={() => setEditorBackground("#FFFFFF")}>Reset color</i>
-                                : null
-                            }
-                            <p>Disable Editor Preview Background</p>
-                            <Form.Check className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(e.target.checked)}/>
-                        </Stack>
-                    </Col>
-                    <Col md={6}>
-                        <Stack direction={"horizontal"} gap={2}>
-                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} type={"submit"} form={"highlight-form"}>Save Highlight</button>
-                            <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>
-                            <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => navigateBack()}>Discard</button>
-                        </Stack>
-                    </Col>
+                    <Container className={`${defaultStyles.pageContentGap15}`}>
+                        <Row>
+                            <Col sm={12} md={3}>
+                                <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                    <p>Editor Preview Background: </p>
+                                    <input
+                                        value={editorBackground}
+                                        type="color"
+                                        onChange={(e) => setEditorBackground(e.target.value)}
+                                        className={defaultStyles.formColorPicker}
+                                        onDoubleClick={() => setEditorBackground("#FFFFFF")}/>
+                                </Stack>
+                            </Col>
+                            <Col sm={12} md={3}>
+                                <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                    <Form.Check className={defaultStyles.formCheckbox} onChange={e => setDisableEditorBackground(e.target.checked)}/>
+                                    <p>Disable Editor Preview Background</p>
+                                </Stack>
+                            </Col>
+                            <Col md={6}>
+                                <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                    <p>Preview width (Beta)</p>
+                                    <input type={"range"} className={highlightFormStyles.colorOpacityRange} min={0} max={40} step={0.01} onChange={(e) => setPreviewPadding(e.target.value)}/>
+                                </Stack>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={12} sm={6} md={{span: 3, offset: 3}} lg={{span: 2, offset: 6}}>
+                                <button className={`${defaultStyles.buttonFilled}`} style={{width: "100%"}} onClick={handleSubmit}>Save Highlight</button>
+                            </Col>
+                            <Col xs={12} sm={6} md={3} lg={2}>
+                                <button className={`${defaultStyles.defaultTransparentButton}`} style={{width: "100%"}} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>
+                            </Col>
+                            <Col xs={12} md={3} lg={2}>
+                                <button className={`${defaultStyles.defaultTransparentButton}`} style={{width: "100%"}} onClick={() => navigateBack()}>Discard</button>
+                            </Col>
+                        </Row>
+                    </Container>
                 </Row>
             </Container>
 
@@ -456,18 +463,31 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                 </div> : null
             }
 
-            {showCreateDraftDialog ?
-                <div className={highlightFormStyles.dialog}>
-                    <div className={highlightFormStyles.saveAsDraftDialog}>
-                        <h3>Inputs are not valid!</h3>
-                        <p>Do you want save the Highlight as Draft?</p>
-                        <div style={{display: "flex", justifyContent: "space-between"}}>
-                            <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>
-                            <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonTransparent} `} onClick={() => setShowCreateDraftDialog(false)}>Cancel</button>
-                        </div>
-                    </div>
-                </div> : null
-            }
+            <Modal show={showCreateDraftDialog} contentClassName={highlightFormStyles.dialog}>
+                <Modal.Body>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h3>Inputs are not valid!</h3>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <p>Do you want save the Highlight as Draft?</p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Stack direction={"horizontal"} gap={2}>
+                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ${defaultStyles.buttonSm} ms-auto`} onClick={() => handleSaveHighlightAsDraft()}>Save as Draft</button>
+                                    <button className={`${defaultStyles.defaultTransparentButton} ${defaultStyles.buttonSm}`} onClick={() => setShowCreateDraftDialog(false)}>Cancel</button>
+                                </Stack>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Modal.Body>
+            </Modal>
+
             <Offcanvas ref={editorRef} placement={editorPlacement ? "start" : "end"} show={showEditor} className={highlightFormStyles.highlightEditor} backdropClassName={highlightFormStyles.offcanvasBackdrop}>
                 <Offcanvas.Header className={`${highlightFormStyles.offCanvHeader}`}>
                     <h3>Editor</h3>
@@ -480,7 +500,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
 
                 </Offcanvas.Header>
                 <Offcanvas.Body className={highlightFormStyles.highlightEditorForm}>
-                    <Form id={"highlight-form"} onSubmit={handleSubmit}>
+                    <Form>
                         <div className={highlightFormStyles.highlightEditorFormInputs}>
                             <Container>
                                 <Row>
@@ -596,7 +616,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*eventTypeBackground, eventTypeBackgroundOpacity*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Event Type Background</Form.Label>
-                                            <div className={highlightFormStyles.colorPickerInput}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -605,6 +625,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     value={model.eventTypeBackground}
                                                     onChange={onModelChange}
                                                 />
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
                                                 <input
                                                     className={highlightFormStyles.colorOpacityRange}
@@ -619,7 +641,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     value={model.eventTypeBackgroundOpacity}
                                                 />
-                                            </div>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -628,7 +650,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*eventTypeTextColor*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Event Type Text Color</Form.Label>
-                                            <div className={highlightFormStyles.colorPickerInput}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -636,15 +658,16 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     type="color"
                                                     value={model.eventTypeTextColor}
                                                     onChange={onModelChange}/>
-                                                <p className={defaultStyles.formSubLabelSmall}>RGB-Animation: </p>
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <Form.Check
                                                     className={defaultStyles.formCheckbox}
                                                     name="eventTypeTextRgbAnimation"
                                                     onChange={onModelCheckboxChange}
                                                     defaultChecked={model.eventTypeTextRgbAnimation}
                                                 />
-                                            </div>
-
+                                                <p className={defaultStyles.formSubLabelSmall}>RGB-Animation: </p>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -728,8 +751,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                             <Col>
                                                                 {/*productPriceFontFamily, productPriceColor*/}
                                                                 <Form.Group className={defaultStyles.formGroupSmall}>
-                                                                    <Form.Label className={defaultStyles.formLabelSmall}>Product Price Styling</Form.Label>
-                                                                    <div className={highlightFormStyles.multiInputsLine}>
+                                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                         <p className={defaultStyles.formSubLabelSmall}>Font: </p>
                                                                         <Form.Select
                                                                             className={defaultStyles.formInputFieldSmall}
@@ -742,6 +764,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                                 )
                                                                             })}
                                                                         </Form.Select>
+                                                                    </Stack>
+                                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                         <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                                         <Form.Control
                                                                             type="color"
@@ -750,7 +774,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                             className={`${defaultStyles.formColorPicker}`}
                                                                             value={model.productPriceColor}
                                                                         />
-                                                                    </div>
+                                                                    </Stack>
                                                                 </Form.Group>
                                                             </Col>
                                                         </Row>
@@ -776,8 +800,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                                 <Col>
                                                                                     {/*originalPriceColor, originalPriceAlignment*/}
                                                                                     <Form.Group className={defaultStyles.formGroupSmall}>
-                                                                                        <Form.Label className={defaultStyles.formLabelSmall}>Original Price Text Styling</Form.Label>
-                                                                                        <div className={highlightFormStyles.multiInputsLine}>
+                                                                                        <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                                             <p>Color: </p>
                                                                                             <Form.Control
                                                                                                 type="color"
@@ -786,6 +809,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                                                 className={`${defaultStyles.formColorPicker}`}
                                                                                                 value={model.originalPriceColor}
                                                                                             />
+                                                                                        </Stack>
+                                                                                        <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                                             <p>Alignment: </p>
                                                                                             <Form.Select
                                                                                                 className={defaultStyles.formInputFieldSmall}
@@ -795,7 +820,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                                                     return (<option key={index} value={opt.value}>{opt.text}</option>)
                                                                                                 })}
                                                                                             </Form.Select>
-                                                                                        </div>
+                                                                                        </Stack>
                                                                                     </Form.Group>
                                                                                 </Col>
                                                                             </Row> : null
@@ -823,8 +848,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                         <Col>
                                                                             {/*productPriceBackground, productPriceBackgroundOpacity*/}
                                                                             <Form.Group className={defaultStyles.formGroupSmall}>
-                                                                                <Form.Label className={defaultStyles.formLabelSmall}>Product Price Background</Form.Label>
-                                                                                <div className={highlightFormStyles.multiInputsLine}>
+                                                                                <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                                     <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                                                     <Form.Control
                                                                                         className={defaultStyles.formColorPicker}
@@ -833,6 +857,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                                         onChange={onModelChange}
                                                                                         value={model.productPriceBackground}
                                                                                     />
+                                                                                </Stack>
+                                                                                <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                                     <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
                                                                                     <input
                                                                                         className={highlightFormStyles.colorOpacityRange}
@@ -847,7 +873,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                                         onChange={onModelChange}
                                                                                         defaultValue={model.productPriceBackgroundOpacity}
                                                                                     />
-                                                                                </div>
+                                                                                </Stack>
                                                                             </Form.Group>
                                                                         </Col>
                                                                     </Row>
@@ -921,13 +947,13 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                 {/*additionalUntilText, dateUntilColor*/}
                                                                 <FormGroup className={defaultStyles.formGroupSmall}>
                                                                     <Form.Label className={defaultStyles.formLabelSmall}>Additional Text</Form.Label>
-                                                                    <div className={highlightFormStyles.multiInputsLine}>
-                                                                        <Form.Control
-                                                                            name="additionalUntilText"
-                                                                            className={defaultStyles.formInputFieldSmall}
-                                                                            onChange={onModelChange}
-                                                                            defaultValue={model.additionalUntilText}
-                                                                        />
+                                                                    <Form.Control
+                                                                        name="additionalUntilText"
+                                                                        className={defaultStyles.formInputFieldSmall}
+                                                                        onChange={onModelChange}
+                                                                        defaultValue={model.additionalUntilText}
+                                                                    />
+                                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                         <p className={defaultStyles.formSubLabelSmall}>Color:</p>
                                                                         <Form.Control
                                                                             value={model.dateUntilColor}
@@ -936,7 +962,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                             className={defaultStyles.formColorPicker}
                                                                             onChange={onModelChange}
                                                                         />
-                                                                    </div>
+                                                                    </Stack>
                                                                     {errors.additionalUntilText && <p>{errors.additionalUntilText}</p>}
                                                                 </FormGroup>
                                                             </Col>
@@ -946,7 +972,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                 {/*dateUntilBackground, dateUntilBackgroundOpacity*/}
                                                                 <Form.Group className={defaultStyles.formGroupSmall}>
                                                                     <Form.Label className={defaultStyles.formLabelSmall}>Background</Form.Label>
-                                                                    <div className={highlightFormStyles.multiInputsLine}>
+                                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                         <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                                         <Form.Control
                                                                             className={defaultStyles.formColorPicker}
@@ -955,6 +981,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                             onChange={onModelChange}
                                                                             value={model.dateUntilBackground}
                                                                         />
+                                                                    </Stack>
+                                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                         <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
                                                                         <input
                                                                             className={highlightFormStyles.colorOpacityRange}
@@ -969,7 +997,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                             onChange={onModelChange}
                                                                             defaultValue={model.dateUntilBackgroundOpacity}
                                                                         />
-                                                                    </div>
+                                                                    </Stack>
                                                                 </Form.Group>
                                                             </Col>
                                                         </Row>
@@ -1018,7 +1046,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*titleFontFamily, titleColor*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Title Styling</Form.Label>
-                                            <div className={highlightFormStyles.multiInputsLine}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Font: </p>
                                                 <Form.Select
                                                     className={defaultStyles.formInputFieldSmall}
@@ -1031,6 +1059,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                         )
                                                     })}
                                                 </Form.Select>
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                 <Form.Control
                                                     type="color"
@@ -1039,7 +1069,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     className={`${defaultStyles.formColorPicker}`}
                                                     value={model.titleColor}
                                                 />
-                                            </div>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -1057,30 +1087,35 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                 <Form.Label className={defaultStyles.formLabelSmall}>Title Background</Form.Label>
                                             </div>
                                             {model.showTitleBackground ?
-                                                <div className={highlightFormStyles.multiInputsLine}>
-                                                    <p className={defaultStyles.formSubLabelSmall}>Color: </p>
-                                                    <Form.Control
-                                                        className={defaultStyles.formColorPicker}
-                                                        name="titleBackgroundColor"
-                                                        type="color"
-                                                        onChange={onModelChange}
-                                                        value={model.titleBackgroundColor}
-                                                    />
-                                                    <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
-                                                    <input
-                                                        className={highlightFormStyles.colorOpacityRange}
-                                                        style={{
-                                                            background: `linear-gradient(to left, ${model.titleBackgroundColor}, ${hexToRgba(model.titleBackgroundColor, 0)})`
-                                                        }}
-                                                        name="titleBackgroundOpacity"
-                                                        type="range"
-                                                        min="0"
-                                                        max="1"
-                                                        step="0.01"
-                                                        onChange={onModelChange}
-                                                        defaultValue={model.titleBackgroundOpacity}
-                                                    />
-                                                </div> : null
+                                                <>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                                        <Form.Control
+                                                            className={defaultStyles.formColorPicker}
+                                                            name="titleBackgroundColor"
+                                                            type="color"
+                                                            onChange={onModelChange}
+                                                            value={model.titleBackgroundColor}
+                                                        />
+                                                    </Stack>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
+                                                        <input
+                                                            className={highlightFormStyles.colorOpacityRange}
+                                                            style={{
+                                                                background: `linear-gradient(to left, ${model.titleBackgroundColor}, ${hexToRgba(model.titleBackgroundColor, 0)})`
+                                                            }}
+                                                            name="titleBackgroundOpacity"
+                                                            type="range"
+                                                            min="0"
+                                                            max="1"
+                                                            step="0.01"
+                                                            onChange={onModelChange}
+                                                            defaultValue={model.titleBackgroundOpacity}
+                                                        />
+                                                    </Stack>
+
+                                                </> : null
                                             }
                                         </Form.Group>
                                     </Col>
@@ -1099,29 +1134,33 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                 <Form.Label className={defaultStyles.formLabelSmall}>Title Shadowing</Form.Label>
                                             </div>
                                             {model.showTitleShadow ?
-                                                <div className={highlightFormStyles.multiInputsLine}>
-                                                    <p className={defaultStyles.formSubLabelSmall}>Shadow style: </p>
-                                                    <Form.Select
-                                                        className={defaultStyles.formInputFieldSmall}
-                                                        name="titleShadowStyle"
-                                                        onChange={onModelChange}
-                                                        value={model.titleShadowStyle}>
-                                                        {titleShadowStyleOptions.map((opt, index) => {
-                                                            return (
-                                                                <option key={index} value={opt.value}>{opt.text}</option>
-                                                            )
-                                                        })}
-                                                    </Form.Select>
-                                                    <p className={defaultStyles.formSubLabelSmall}>Color: </p>
-                                                    <Form.Control
-                                                        className={`${defaultStyles.formColorPicker}`}
-                                                        type="color"
-                                                        name="titleShadowColor"
-                                                        onChange={onModelChange}
-                                                        value={model.titleShadowColor}
-                                                    />
-                                                </div>
-                                                : <div/>}
+                                                <>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Shadow style: </p>
+                                                        <Form.Select
+                                                            className={defaultStyles.formInputFieldSmall}
+                                                            name="titleShadowStyle"
+                                                            onChange={onModelChange}
+                                                            value={model.titleShadowStyle}>
+                                                            {titleShadowStyleOptions.map((opt, index) => {
+                                                                return (
+                                                                    <option key={index} value={opt.value}>{opt.text}</option>
+                                                                )
+                                                            })}
+                                                        </Form.Select>
+                                                    </Stack>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                                        <Form.Control
+                                                            className={`${defaultStyles.formColorPicker}`}
+                                                            type="color"
+                                                            name="titleShadowColor"
+                                                            onChange={onModelChange}
+                                                            value={model.titleShadowColor}
+                                                        />
+                                                    </Stack>
+                                                </> : null
+                                            }
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -1152,7 +1191,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*textFontFamily, textColor*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Text Styling</Form.Label>
-                                            <div className={highlightFormStyles.multiInputsLine}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Font: </p>
                                                 <Form.Select
                                                     className={defaultStyles.formInputFieldSmall}
@@ -1170,6 +1209,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                         )
                                                     })}
                                                 </Form.Select>
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                 <Form.Control
                                                     name="textColor"
@@ -1178,7 +1219,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     className={`${defaultStyles.formColorPicker}`}
                                                     value={model.textColor}
                                                 />
-                                            </div>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -1196,30 +1237,34 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                 <Form.Label className={defaultStyles.formLabelSmall}>Text Background</Form.Label>
                                             </div>
                                             {model.showTextBackground ?
-                                                <div className={highlightFormStyles.multiInputsLine}>
-                                                    <p className={defaultStyles.formSubLabelSmall}>Color: </p>
-                                                    <Form.Control
-                                                        className={defaultStyles.formColorPicker}
-                                                        name="textBackgroundColor"
-                                                        type="color"
-                                                        onChange={onModelChange}
-                                                        value={model.textBackgroundColor}
-                                                    />
-                                                    <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
-                                                    <input
-                                                        className={highlightFormStyles.colorOpacityRange}
-                                                        style={{
-                                                            background: `linear-gradient(to left, ${model.textBackgroundColor}, ${hexToRgba(model.textBackgroundColor, 0)})`
-                                                        }}
-                                                        name="textBackgroundOpacity"
-                                                        type="range"
-                                                        min="0"
-                                                        max="1"
-                                                        step="0.01"
-                                                        onChange={onModelChange}
-                                                        defaultValue={model.textBackgroundOpacity}
-                                                    />
-                                                </div> : null
+                                                <>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                                        <Form.Control
+                                                            className={defaultStyles.formColorPicker}
+                                                            name="textBackgroundColor"
+                                                            type="color"
+                                                            onChange={onModelChange}
+                                                            value={model.textBackgroundColor}
+                                                        />
+                                                    </Stack>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Opacity:</p>
+                                                        <input
+                                                            className={highlightFormStyles.colorOpacityRange}
+                                                            style={{
+                                                                background: `linear-gradient(to left, ${model.textBackgroundColor}, ${hexToRgba(model.textBackgroundColor, 0)})`
+                                                            }}
+                                                            name="textBackgroundOpacity"
+                                                            type="range"
+                                                            min="0"
+                                                            max="1"
+                                                            step="0.01"
+                                                            onChange={onModelChange}
+                                                            defaultValue={model.textBackgroundOpacity}
+                                                        />
+                                                    </Stack>
+                                                </> : null
                                             }
                                         </Form.Group>
                                     </Col>
@@ -1238,29 +1283,35 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                 <Form.Label className={defaultStyles.formLabelSmall}>Text Shadowing</Form.Label>
                                             </div>
                                             {model.showTextShadow ?
-                                                <div className={highlightFormStyles.multiInputsLine}>
-                                                    <p className={defaultStyles.formSubLabelSmall}>Shadow style: </p>
-                                                    <Form.Select
-                                                        className={defaultStyles.formInputFieldSmall}
-                                                        name="textShadowStyle"
-                                                        onChange={onModelChange}
-                                                        value={model.textShadowStyle}>
-                                                        {titleShadowStyleOptions.map((opt, index) => {
-                                                            return (
-                                                                <option key={index} value={opt.value}>{opt.text}</option>
-                                                            )
-                                                        })}
-                                                    </Form.Select>
-                                                    <p className={defaultStyles.formSubLabelSmall}>Color: </p>
-                                                    <Form.Control
-                                                        className={`${defaultStyles.formColorPicker}`}
-                                                        type="color"
-                                                        name="textShadowColor"
-                                                        onChange={onModelChange}
-                                                        value={model.textShadowColor}
-                                                    />
-                                                </div>
-                                                : <div/>}
+                                                <>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Shadow style: </p>
+                                                        <Form.Select
+                                                            className={defaultStyles.formInputFieldSmall}
+                                                            name="textShadowStyle"
+                                                            onChange={onModelChange}
+                                                            value={model.textShadowStyle}>
+                                                            {titleShadowStyleOptions.map((opt, index) => {
+                                                                return (
+                                                                    <option key={index} value={opt.value}>{opt.text}</option>
+                                                                )
+                                                            })}
+                                                        </Form.Select>
+                                                    </Stack>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                        <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                                        <Form.Control
+                                                            className={`${defaultStyles.formColorPicker}`}
+                                                            type="color"
+                                                            name="textShadowColor"
+                                                            onChange={onModelChange}
+                                                            value={model.textShadowColor}
+                                                        />
+                                                    </Stack>
+                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                    </Stack>
+                                                </> : null
+                                            }
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -1297,7 +1348,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                 <Col>
                                                     <Form.Group className={defaultStyles.formGroupSmall}>
                                                         <Form.Label className={defaultStyles.formLabelSmall}>Background Colors</Form.Label>
-                                                        <div className={highlightFormStyles.multiInputsLine}>
+                                                        <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                             <p className={defaultStyles.formSubLabelSmall}>Primary: </p>
                                                             <Form.Control
                                                                 className={`${defaultStyles.formColorPicker}`}
@@ -1306,6 +1357,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                 type="color"
                                                                 value={model.primaryBackgroundColor}
                                                             />
+                                                        </Stack>
+                                                        <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                             <p className={defaultStyles.formSubLabelSmall}>Opacity:  </p>
                                                             <input
                                                                 className={highlightFormStyles.colorOpacityRange}
@@ -1320,11 +1373,12 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                 onChange={onModelChange}
                                                                 defaultValue={model.primaryBackgroundColorOpacity}
                                                             />
-                                                        </div>
+                                                        </Stack>
+
                                                         {
                                                             model.backgroundStyle === "1" ?
                                                                 <>
-                                                                    <div className={highlightFormStyles.multiInputsLine}>
+                                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                         <p className={defaultStyles.formSubLabelSmall}>Secondary: </p>
                                                                         <Form.Control
                                                                             className={`${defaultStyles.formColorPicker}`}
@@ -1333,6 +1387,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                             onChange={onModelChange}
                                                                             value={model.secondaryBackgroundColor}
                                                                         />
+                                                                    </Stack>
+                                                                    <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                                         <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
                                                                         <input
                                                                             className={highlightFormStyles.colorOpacityRange}
@@ -1347,9 +1403,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                                             onChange={onModelChange}
                                                                             defaultValue={model.secondaryBackgroundColorOpacity}
                                                                         />
-                                                                    </div>
-                                                                </>
-                                                                : null
+                                                                    </Stack>
+                                                                </> : null
                                                         }
                                                     </Form.Group>
                                                 </Col>
@@ -1423,31 +1478,34 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                             </div>
                                             {
                                                 model.highlightContentShadow ?
-                                                    <div className={highlightFormStyles.multiInputsLine}>
-                                                        <p className={defaultStyles.formSubLabelSmall}>Color: </p>
-                                                        <Form.Control
-                                                            className={defaultStyles.formColorPicker}
-                                                            name="highlightShadowColor"
-                                                            type="color"
-                                                            onChange={onModelChange}
-                                                            value={model.highlightShadowColor}
-                                                        />
-                                                        <p className={defaultStyles.formSubLabelSmall}>Strength: </p>
-                                                        <input
-                                                            className={highlightFormStyles.colorOpacityRange}
-                                                            style={{
-                                                                background: `linear-gradient(to left, ${model.highlightShadowColor}, ${hexToRgba(model.highlightShadowColor, 0)})`
-                                                            }}
-                                                            name="highlightShadowColorOpacity"
-                                                            type="range"
-                                                            min="0"
-                                                            max="1"
-                                                            step="0.01"
-                                                            onChange={onModelChange}
-                                                            defaultValue={model.highlightShadowColorOpacity}
-                                                        />
-                                                    </div>
-                                                    : <div/>
+                                                    <>
+                                                        <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                            <p className={defaultStyles.formSubLabelSmall}>Color: </p>
+                                                            <Form.Control
+                                                                className={defaultStyles.formColorPicker}
+                                                                name="highlightShadowColor"
+                                                                type="color"
+                                                                onChange={onModelChange}
+                                                                value={model.highlightShadowColor}
+                                                            />
+                                                        </Stack>
+                                                        <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
+                                                            <p className={defaultStyles.formSubLabelSmall}>Strength: </p>
+                                                            <input
+                                                                className={highlightFormStyles.colorOpacityRange}
+                                                                style={{
+                                                                    background: `linear-gradient(to left, ${model.highlightShadowColor}, ${hexToRgba(model.highlightShadowColor, 0)})`
+                                                                }}
+                                                                name="highlightShadowColorOpacity"
+                                                                type="range"
+                                                                min="0"
+                                                                max="1"
+                                                                step="0.01"
+                                                                onChange={onModelChange}
+                                                                defaultValue={model.highlightShadowColorOpacity}
+                                                            />
+                                                        </Stack>
+                                                    </> : null
                                             }
                                         </Form.Group>
                                     </Col>
@@ -1463,7 +1521,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*buttonAreaBackground, buttonAreaBackgroundOpacity*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Area Backgronding</Form.Label>
-                                            <div className={highlightFormStyles.multiInputsLine}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -1472,6 +1530,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     value={model.buttonAreaBackground}
                                                 />
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
                                                 <input
                                                     className={highlightFormStyles.colorOpacityRange}
@@ -1486,7 +1546,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     defaultValue={model.buttonAreaBackgroundOpacity}
                                                 />
-                                            </div>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -1495,13 +1555,16 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*buttonToProductText, buttonToProductTextColor*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Button to Product Text</Form.Label>
-                                            <div className={highlightFormStyles.multiInputsLine}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p>Text: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formInputFieldSmall}
                                                     name="buttonToProductText"
                                                     onChange={onModelChange}
-                                                    defaultValue={model.buttonToProductText}/>
+                                                    defaultValue={model.buttonToProductText}
+                                                />
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p>Color: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -1510,7 +1573,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     value={model.buttonToProductTextColor}
                                                 />
-                                            </div>
+                                            </Stack>
                                             {errors.buttonToProductText && <p>{errors.buttonToProductText}</p>}
                                         </Form.Group>
                                     </Col>
@@ -1520,7 +1583,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*buttonToProductBackground, buttonToProductBackgroundOpacity*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Button to Product Background</Form.Label>
-                                            <div className={highlightFormStyles.multiInputsLine}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -1529,6 +1592,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     value={model.buttonToProductBackground}
                                                 />
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
                                                 <input
                                                     className={highlightFormStyles.colorOpacityRange}
@@ -1543,7 +1608,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     defaultValue={model.buttonToProductBackgroundOpacity}
                                                 />
-                                            </div>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -1552,7 +1617,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*buttonToCartTextColor, buttonToCartIconColor*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Button Cart Text</Form.Label>
-                                            <div className={highlightFormStyles.multiInputsLine}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color Text: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -1561,6 +1626,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     value={model.buttonCartTextColor}
                                                 />
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color Icon: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -1569,7 +1636,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     value={model.buttonCartIconColor}
                                                 />
-                                            </div>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -1578,7 +1645,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                         {/*buttonCartBackground, buttonCartBackgroundOpacity*/}
                                         <Form.Group className={defaultStyles.formGroupSmall}>
                                             <Form.Label className={defaultStyles.formLabelSmall}>Button Cart Background</Form.Label>
-                                            <div className={highlightFormStyles.multiInputsLine}>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Color: </p>
                                                 <Form.Control
                                                     className={defaultStyles.formColorPicker}
@@ -1587,6 +1654,8 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     value={model.buttonCartBackground}
                                                 />
+                                            </Stack>
+                                            <Stack direction={"horizontal"} className={highlightFormStyles.multiInputsLine}>
                                                 <p className={defaultStyles.formSubLabelSmall}>Opacity: </p>
                                                 <input
                                                     className={highlightFormStyles.colorOpacityRange}
@@ -1601,7 +1670,7 @@ export default function HighlightForm({session, highlightToEdit, host}) {
                                                     onChange={onModelChange}
                                                     defaultValue={model.buttonCartBackgroundOpacity}
                                                 />
-                                            </div>
+                                            </Stack>
                                         </Form.Group>
                                     </Col>
                                 </Row>

@@ -6,6 +6,7 @@ import defaultStyles from "../../../stylesheet/global.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeftLong} from "@fortawesome/free-solid-svg-icons";
 import HighlightForm from "@components/forms/HighlightForm";
+import {Col, Container, Row} from "react-bootstrap";
 
 export default function editHighlight({session, host}) {
 
@@ -38,16 +39,27 @@ export default function editHighlight({session, host}) {
     }
 
     return (
-        <div className={defaultStyles.page}>
-            <button
-                style={{width: 100}}
-                className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}
-                onClick={() =>  router.push("../../highlights")}>
-                <FontAwesomeIcon icon={faLeftLong}/>
-                &nbsp;&nbsp;&nbsp;Back
-            </button>
-            <h1>Edit {highlightForEdit?.designation}</h1>
-            <div className={defaultStyles.formSeparatorLine} style={{marginTop: 10}}/>
+        <div>
+            <div className={defaultStyles.page}>
+                <Container fluid={true} className={defaultStyles.pageContentGap15}>
+                    <Row>
+                        <Col className={defaultStyles.disableColumnPaddings}>
+                            <button
+                                style={{width: 100}}
+                                className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonSm}`}
+                                onClick={() =>  router.push("../../highlights")}>
+                                <FontAwesomeIcon icon={faLeftLong}/>
+                                &nbsp;&nbsp;&nbsp;Back
+                            </button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <h1>Edit {highlightForEdit?.designation}</h1>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
             <HighlightForm session={session} highlightToEdit={highlightForEdit} host={host}/>
         </div>
     )

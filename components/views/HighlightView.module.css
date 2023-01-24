@@ -1,52 +1,51 @@
 .highlightView {
-    height: 100% !important;
-    display: flex !important;
-    flex-wrap: wrap;
-    align-content: space-between;
-    contain: layout size;
-}
-
-.highlightView > div {
-    width: 100%;
-}
-
-.highlightView > div:nth-child(2) {
-    padding: 10px;
+    height: auto;
     width: 100%
 }
 
+.viewContainer {
+    padding: 0 !important;
+    margin-bottom: 80px;
+}
+
 .imageArea {
-    padding: 0 20px 20px 0;
+    padding: 0 20px 20px;
 }
 
-.productImage {
-    width: 200px;
-    height: 200px;
+.highlightMainContentRow {
+    margin: 0 !important;
 }
 
-@media (min-width: 764px) {
+@media (min-width: 350px) {
     .productImage {
-        width: 300px;
-        height: 300px
+        width: 300px !important;
+        height: 300px !important;
+        padding: 0 !important;
+        margin-right: auto;
     }
 }
 
-@media (min-width: 1400px) {
+.productImage {
+    width: 100%;
+    padding: 50%
+}
+
+@media (min-width: 992px) {
     .productImage {
-        width: 400px !important;
-        height: 400px !important;
+        width: 400px;
+        height: 400px;
     }
 }
 
 .eventType {
+    padding: 5px 10px;
     display: flex;
+    align-items: center;
     font-family: "Nunito", sans-serif;
     font-size: 20px;
-    align-items: center;
-    height: 40px;
-    width: 200px !important;
-    padding-left: 5px;
-    gap: 5px
+    width: fit-content;
+    gap: 5px;
+    margin-bottom: 15px;
 }
 
 .textRgbAnimation {
@@ -54,6 +53,10 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: color-range 40s linear infinite
+}
+
+.highlightInformation {
+    padding: 0 20px
 }
 
 #productPrice {
@@ -76,21 +79,15 @@
     width: fit-content;
 }
 
-.footerArea {
-    margin-bottom: auto !important;
-}
-
 .dateUntilBox {
-    margin-top: auto;
-    margin-right: auto;
-    width: auto;
-    height: 50px;
+    width: fit-content;
     display: flex;
     gap: 5px;
     align-items: center;
     padding: 10px;
     font-family: "Nunito", sans-serif;
-    font-size: 20px;
+    font-size: 15px;
+    margin-top: 10px;
 }
 
 .dateUntilBox > * {
@@ -98,17 +95,13 @@
 }
 
 .buttonSector {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: right;
-    padding: 0 10px;
-    width: auto;
+    width: fit-content;
     margin-left: auto;
+    margin-right: 0;
 }
 
-.buttonSector > button {
-    width: auto;
+.buttonSector > div > button {
+    width: fit-content;
     height: 50px;
     border: none;
     padding: 10px;
@@ -124,6 +117,17 @@
 @keyframes color-range {
     to {
         background-position: 200vh;
+    }
+}
+
+@media (min-width: 992px) {
+    .highlightView {
+        height: 100%;
+    }
+
+    .footerArea {
+        padding: 5px;
+        min-height: 60px;
     }
 }
 

@@ -53,7 +53,7 @@ export default function UserAndPrivilegesPage({session, host}) {
             <Container fluid={true} className={defaultStyles.pageContentGap15}>
                 <Row>
                     <Col>
-                        <AdminPortalHeader session={session} currentPage={6}/>
+                        <AdminPortalHeader session={session} currentPage={5}/>
                     </Col>
                 </Row>
                 <Row>
@@ -68,7 +68,7 @@ export default function UserAndPrivilegesPage({session, host}) {
                 </Row>
                 <Row>
                     <Col>
-                        <Table className={defaultStyles.tableContainer} responsive>
+                        <Table className={defaultStyles.tableContainer} responsive={"xl"}>
                             <thead className={defaultStyles.tableHeader}>
                             <tr>
                                 <th>Id</th>

@@ -38,7 +38,6 @@ export default function createHighlight({session, host}) {
                     </Row>
                 </Container>
             </div>
-
             <HighlightForm session={session} host={host}/>
         </div>
     )

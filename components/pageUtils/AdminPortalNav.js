@@ -14,7 +14,6 @@ export default function AdminPortalHeader({session, currentPage}) {
         {name: "Highlights", ico: faBullhorn, routerTo: "/highlights"},
         {name: "Base Data Variety", ico: faTags, routerTo: "/baseDataVariety"},
         {name: "Images Management", ico: faImage, routerTo: "/imagesManagement"},
-        {name: "Questions from Client", ico: faQuestion, routerTo: "/clientQuestions"},
         {name: "Users and Privileges", ico: faUsers, routerTo: "/usersAndPrivileges"},
     ]
 

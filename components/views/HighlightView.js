@@ -10,7 +10,7 @@ import ReactMarkdown from "react-markdown";
 import Countdown from 'react-countdown'
 import {Col, Container, Row, Stack} from "react-bootstrap";
 
-export default function HighlightView({prop, presentingProduct}) {
+export default function HighlightView({prop, presentingProduct, navigateToDetail, addProductToCart, editViewMode}) {
 
     /*useEffect(() => {
         console.log(container.width, " ", container.height)
@@ -63,46 +63,36 @@ export default function HighlightView({prop, presentingProduct}) {
                         {boxShadow: `0 0 8px 8px ${hexToRgba(prop.highlightShadowColor, prop.highlightShadowColorOpacity)}`}
                         : null)
             }>
-            <Container fluid={true}>
-                <Row>
-                    <Col xs={12}>
+            <Container fluid={true} className={highlightViewStyles.viewContainer}>
+                <div
+                    className={highlightViewStyles.eventType}
+                    style={
+                        {
+                            background: hexToRgba(prop.eventTypeBackground, prop.eventTypeBackgroundOpacity)
+                        }
+                    }>
+                    <FontAwesomeIcon icon={faBullhorn} color={prop.eventTypeTextColor}/>
+                    <i style={
+                        {
+                            color: prop.eventTypeTextColor
+                        }}
+                        className={prop.eventTypeTextRgbAnimation ? highlightViewStyles.textRgbAnimation : null}>
+                        {prop.enableCustomEventType ? prop.customEventTypeText : prop.eventType}
+                    </i>
+                    {/**/}
+                </div>
+                <Row className={highlightViewStyles.highlightMainContentRow}>
+                    <Col xs={12} md={4} xxl={3} className={highlightViewStyles.imageArea}>
                         <div
-                            className={highlightViewStyles.eventType}
                             style={
-                                {
-                                    background: hexToRgba(prop.eventTypeBackground, prop.eventTypeBackgroundOpacity)
-                                }
-                            }>
-                            <FontAwesomeIcon icon={faBullhorn} color={prop.eventTypeTextColor}/>
-                            <i style={
-                                {
-                                    color: prop.eventTypeTextColor
-                                }}
-                               className={prop.eventTypeTextRgbAnimation ? highlightViewStyles.textRgbAnimation : null}>
-                                {prop.enableCustomEventType ? prop.customEventTypeText : prop.eventType}
-                            </i>
-                            {/**/}
-                        </div>
+                                Object.assign({}, {background: "transparent", backgroundImage: `url(${presentingProduct?.images[prop?.productImageIndex]})`, backgroundSize: "cover"})
+                            }
+                            className={highlightViewStyles.productImage}
+                        />
                     </Col>
-                </Row>
-                <Row>
-                    {
-                        presentingProduct?.images &&
-                        <Col xs={12} md={6} xxl={4}>
-                            {/*Object.assign(disableFlex ? {width: image.width, height: image.height} : {width: "100%", height: image.width, overflow: "hidden"})*/}
-                            <div
-                                style={
-                                    Object.assign({}, {background: "#FFFFFF", backgroundImage: `url(${presentingProduct?.images[prop?.productImageIndex]})`, backgroundSize: "cover"})
-                                }
-                                className={highlightViewStyles.productImage}
-                            />
-
-                        </Col>
-                    }
-
-                    <Col xs={12} md={6} xxl={8}>
-                        <Stack>
-                            <h1
+                    <Col xs={12} md={8} xxl={9}>
+                        <Stack className={highlightViewStyles.highlightInformation}>
+                            <h2
                                 style={Object.assign(
                                     {
                                         color: prop.titleColor,
@@ -110,37 +100,22 @@ export default function HighlightView({prop, presentingProduct}) {
                                             prop.titleFontFamily :
                                             null,
                                         textShadow: prop.showTitleShadow ? `${prop.titleShadowStyle} ${prop.titleShadowColor}` : null
-                                    }, prop.showTitleBackground ? {background: hexToRgba(prop.titleBackgroundColor, prop.titleBackgroundOpacity), padding: "3px 10px"} : null)
+                                    }, prop.showTitleBackground ? {background: hexToRgba(prop.titleBackgroundColor, prop.titleBackgroundOpacity), padding: "3px 10px"} : null, {marginBottom: 0})
                                 }
-                                className={prop.titleFontFamily === "HK-Modular" ?
-                                    defaultStyles.getHKModular :
-                                    null
-                                }>
-                                {prop.title === "" ?
-                                    "Enter a title..."
-                                    : prop.title
+                                className={prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null
+                            }>
+                                {
+                                    prop.title === "" ? "Enter a title..." : prop.title
                                 }
-                            </h1>
+                            </h2>
                             {
                                 presentingProduct?.price &&
                                 <>
                                     {
                                         prop.showProductPrice ?
-                                            <p className={!prop.showProductPrice ?
-                                                defaultStyles.hideElement
-                                                : null
-                                            }
-                                               style={
-                                                   Object.assign({
-                                                           fontFamily: prop.productPriceFontFamily,
-                                                           color: prop.productPriceColor
-                                                       },
-                                                       prop.enableProductPriceBackground ? {
-                                                           background: hexToRgba(prop.productPriceBackground, prop.productPriceBackgroundOpacity),
-                                                           padding: 5
-                                                       } : null )
-                                               }
-                                               id={highlightViewStyles["productPrice"]}>
+                                            <p className={!prop.showProductPrice ? defaultStyles.hideElement : null}
+                                                style={Object.assign({fontFamily: prop.productPriceFontFamily, color: prop.productPriceColor}, prop.enableProductPriceBackground ? {background: hexToRgba(prop.productPriceBackground, prop.productPriceBackgroundOpacity), padding: 5} : null, {marginBottom: 0})}
+                                                id={highlightViewStyles["productPrice"]}>
                                                 {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ?
                                                     getDiscountPrice(presentingProduct?.price, presentingProduct?.discountPercent) : presentingProduct?.price}$
                                                 {presentingProduct?.discountActive && prop?.showProductPriceInclusiveDiscount ? <span style={{alignSelf: prop.originalPriceAlignment, color: prop.originalPriceColor}}>instead {presentingProduct?.price}$</span> : null}
@@ -158,8 +133,8 @@ export default function HighlightView({prop, presentingProduct}) {
                                 background: hexToRgba(prop.textBackgroundColor, prop.textBackgroundOpacity),
                                 padding: "5px 10px"
                             } : null)}
-                                 className={`${prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null}`}
-                                 id={highlightViewStyles["highlightText"]}>
+                                className={`${prop.titleFontFamily === "HK-Modular" ? defaultStyles.getHKModular : null}`}
+                                id={highlightViewStyles["highlightText"]}>
                                 <ReactMarkdown
                                     className={`${markdownElements.elements}`}
                                     /* eslint-disable-next-line react/no-children-prop */
@@ -170,13 +145,15 @@ export default function HighlightView({prop, presentingProduct}) {
                         </Stack>
                     </Col>
                 </Row>
-                <Row>
-                    <Col className={defaultStyles.disableColumnPaddings} xs={6}>
+            </Container>
+            <Container fluid={true} className={highlightViewStyles.footerArea}>
+                <Row style={{marginRight: 0}}>
+                    <Col className={defaultStyles.disableColumnPaddings} xs={12} md={6}>
                         { prop.showUntilDate ?
                             <div className={highlightViewStyles.dateUntilBox} style={{background: hexToRgba(prop.dateUntilBackground, prop.dateUntilBackgroundOpacity)}}>
-                                <h3 style={{color: prop.dateUntilColor}}>{`${prop.additionalUntilText !== "" ? prop.additionalUntilText : "Until"}`}</h3>
+                                <h3 style={{color: prop.dateUntilColor, fontSize: 15}}>{`${prop.additionalUntilText !== "" ? prop.additionalUntilText : "Until"}`}</h3>
                                 {prop.runningCountdown ?
-                                    <h3 style={{fontFamily: "Nunito, sans-serif", fontSize: 23, color: prop.dateUntilColor}}>
+                                    <h3 style={{fontFamily: "Nunito, sans-serif", fontSize: 15, color: prop.dateUntilColor}}>
                                         <Countdown date={prop.dateUntil}/>
                                     </h3>
                                     : <h3 style={{color: prop.dateUntilColor}}>{formatTimestamp(prop.dateUntil, "dd.MM.yyyy HH:mm")}</h3>
@@ -185,20 +162,23 @@ export default function HighlightView({prop, presentingProduct}) {
                             : null
                         }
                     </Col>
-                    <Col className={defaultStyles.disableColumnPaddings} xs={12}>
+                    <Col xs={12} md={6} className={defaultStyles.disableColumnPaddings}>
                         {
                             !prop.disableButtonToProduct || !prop.disableButtonCart ?
                                 <div style={{background: hexToRgba(prop.buttonAreaBackground, prop.buttonAreaBackgroundOpacity)}} className={highlightViewStyles.buttonSector}>
-                                    {
-                                        !prop.disableButtonToProduct ?
-                                            <button style={{background: hexToRgba(prop.buttonToProductBackground, prop.buttonToProductBackgroundOpacity), color: prop.buttonToProductTextColor}}>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
-                                            : null
-                                    }
-                                    {
-                                        !prop.disableButtonCart ?
-                                            <button style={{background: hexToRgba(prop.buttonCartBackground, prop.buttonCartBackgroundOpacity), color: prop.buttonCartTextColor}}><FontAwesomeIcon icon={faCartShopping} color={prop.buttonCartIconColor}/>&nbsp;Add to Cart</button>
-                                            : null
-                                    }
+                                    <Stack direction={"horizontal"} gap={2}>
+                                        {
+                                            !prop.disableButtonToProduct ?
+                                                <button onClick={() => !editViewMode ? navigateToDetail() : null} style={{background: hexToRgba(prop.buttonToProductBackground, prop.buttonToProductBackgroundOpacity), color: prop.buttonToProductTextColor}}>{prop.buttonToProductText !== "" ? prop.buttonToProductText : "more..."}</button>
+                                                : null
+                                        }
+                                        {
+                                            !prop.disableButtonCart ?
+                                                <button onClick={() => !editViewMode ? addProductToCart() : null} style={{background: hexToRgba(prop.buttonCartBackground, prop.buttonCartBackgroundOpacity), color: prop.buttonCartTextColor}}><FontAwesomeIcon icon={faCartShopping} color={prop.buttonCartIconColor}/>&nbsp;Add to Cart</button>
+                                                : null
+                                        }
+                                    </Stack>
+
                                 </div>
                                 : null
                         }
