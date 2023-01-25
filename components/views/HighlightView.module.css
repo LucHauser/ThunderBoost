@@ -1,5 +1,5 @@
 .highlightView {
-    height: auto;
+    height: 100% !important;
     width: 100%
 }
 
@@ -30,11 +30,13 @@
     padding: 50%
 }
 
-@media (min-width: 992px) {
+@media (min-width: 764px) {
     .productImage {
         width: 400px;
         height: 400px;
     }
+
+
 }
 
 .eventType {
@@ -42,7 +44,7 @@
     display: flex;
     align-items: center;
     font-family: "Nunito", sans-serif;
-    font-size: 20px;
+    font-size: 15px;
     width: fit-content;
     gap: 5px;
     margin-bottom: 15px;
@@ -60,23 +62,39 @@
 }
 
 #productPrice {
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
     width: fit-content;
     margin-right: auto;
     display: flex;
-    padding: 5px 0
+    padding: 3px 0
 }
 
 #productPrice > span {
-    font-size: 15px;
+    font-size: 10px;
     margin-left: 5px;
     font-style: oblique;
+}
+
+@media (min-width: 992px) {
+    #productPrice {
+        font-size: 30px;
+        padding: 5px 10px
+    }
+
+    #productPrice > span {
+        font-size: 15px;
+    }
 }
 
 .contentArea > #highlightText {
     margin-top: 15px;
     width: fit-content;
+}
+
+.footerArea {
+    min-height: 60px;
+    padding: 5px
 }
 
 .dateUntilBox {

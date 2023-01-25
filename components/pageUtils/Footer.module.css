@@ -1,4 +1,5 @@
 .footer {
+    padding: 10px;
     width: 100%;
     background-color: #3C306D;
     font-family: Nunito, sans-serif;
@@ -6,12 +7,20 @@
     color: #FFFFFF;
 }
 
-.footer > p {
+.footer p {
     font-weight: bold;
+    margin-bottom: 0;
 }
 
-@media (min-width: 768px) {
+
+
+@media (min-width: 1200px) {
     .footer {
-        height: 75px;
+        display: flex;
+        align-items: center;
+    }
+
+    .footerLink {
+        text-align: center;
     }
 }

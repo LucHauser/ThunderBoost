@@ -82,7 +82,7 @@ export default function HighlightView({prop, presentingProduct, navigateToDetail
                     {/**/}
                 </div>
                 <Row className={highlightViewStyles.highlightMainContentRow}>
-                    <Col xs={12} md={4} xxl={3} className={highlightViewStyles.imageArea}>
+                    <Col xs={12} md={5} xxl={3} className={highlightViewStyles.imageArea}>
                         <div
                             style={
                                 Object.assign({}, {background: "transparent", backgroundImage: `url(${presentingProduct?.images[prop?.productImageIndex]})`, backgroundSize: "cover"})
@@ -90,7 +90,7 @@ export default function HighlightView({prop, presentingProduct, navigateToDetail
                             className={highlightViewStyles.productImage}
                         />
                     </Col>
-                    <Col xs={12} md={8} xxl={9}>
+                    <Col xs={12} md={7} xxl={9} className={defaultStyles.disableColumnPaddings}>
                         <Stack className={highlightViewStyles.highlightInformation}>
                             <h2
                                 style={Object.assign(

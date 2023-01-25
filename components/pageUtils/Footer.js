@@ -6,22 +6,22 @@ export default function Footer() {
 
     return (
         <div className={footerStyle.footer}>
-            <Container>
+            <Container fluid={true}>
                 <Row>
-                    <Col sm={12} lg>
+                    <Col sm={12} xl>
                         <p>{new Date().getFullYear()} Thunderboost</p>
                     </Col>
-                    <Col sm={12} lg>
-                        <NavLink href="../about">About Thunderboost</NavLink>
+                    <Col sm={12} xl>
+                        <NavLink href="../about" className={footerStyle.footerLink}>About Thunderboost</NavLink>
                     </Col>
-                    <Col sm={12} lg>
-                        <NavLink href={"#"}>Payment and Shipment</NavLink>
+                    <Col sm={12} xl>
+                        <NavLink href={"#"} className={footerStyle.footerLink}>Payment and Shipment</NavLink>
                     </Col>
-                    <Col sm={12} lg>
-                        <NavLink href={"#"}>Impressum</NavLink>
+                    <Col sm={12} xl>
+                        <NavLink href={"#"} className={footerStyle.footerLink}>Impressum</NavLink>
                     </Col>
-                    <Col sm={12} lg>
-                        <NavLink href={"#"}>Privacy Policy</NavLink>
+                    <Col sm={12} xl>
+                        <NavLink href={"#"} className={footerStyle.footerLink}>Privacy Policy</NavLink>
                     </Col>
                 </Row>
             </Container>
