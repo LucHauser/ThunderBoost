@@ -45,6 +45,7 @@ export default function ProductArticle({product, routeToDetail, addThisToCart, s
                                         half={true}
                                         size={24}
                                         value={getAvgStarRating(product?.productReviews)}
+                                        color2={"#D707F1"}
                                     />
                                     <p>({product?.productReviews?.length})</p>
                                 </Stack>

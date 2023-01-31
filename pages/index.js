@@ -6,6 +6,7 @@ import {useEffect, useRef, useState} from "react";
 import {getAllHighligtsInclusiveProduct, getProductReviewsByParam} from "@lib/api";
 import {isEventNow} from "@components/Utils";
 import HighlightView from "@components/views/HighlightView";
+import Highlight from "@components/views/Highlight";
 import {useElementSize} from "usehooks-ts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {placeholderText100, whyThunderboostInformations} from "@lib/database/constants";
@@ -32,16 +33,15 @@ export default function IndexPage({session, host, shoppingCart}) {
     }, [host])
 
     useEffect(() => {
-        const loadHights = async () => {
+        const loadHighlights = async () => {
             try {
                 const response = await getAllHighligtsInclusiveProduct(host)
                 setActiveHighlights(response.filter(h => h.active && !h.isDraft && isEventNow(h.dateFrom, h.dateUntil)))
-                console.log(activeHighlights)
             } catch (e) {
                 console.log(e)
             }
         }
-        loadHights()
+        loadHighlights()
     }, [host])
 
     const router = useRouter()
@@ -55,12 +55,13 @@ export default function IndexPage({session, host, shoppingCart}) {
                     </Row>
                     <Row>
                         <Col>
-                            <div style={{width: "100%", height: 300, background: "#F784D6"}}/>
+                            <p>{placeholderText100}</p>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <p>{placeholderText100}</p>
+                            <img src={"https://via.placeholder.com/1600x300"} alt={"Landing Page Image"} style={{width: "100%"}}/>
+                            <div style={{width: "100%", backgroundImage: "url(https://via.placeholder.com/1600x360)"}}/>
                         </Col>
                     </Row>
                     <Row>
@@ -68,34 +69,18 @@ export default function IndexPage({session, host, shoppingCart}) {
                             <h2 className={defaultStyles.pageSubtitle}>Special Offer</h2>
                         </Col>
                     </Row>
-                </Container>
-                <div className={landingPageStyles.highlightCarousel}>
-                    <Carousel className={landingPageStyles.highlightCarouselElement} interval={10000} fade>
+                    <Row>
                         {
                             activeHighlights.map((highlight, index) => {
                                 return (
-                                    <Carousel.Item key={index}>
-                                        <div className={landingPageStyles.highlightView} ref={carouselItemRef}>
-                                            <HighlightView prop={highlight} presentingProduct={highlight.product} navigateToDetail={() => router.push(`./boosters/${highlight.product.id}`)}/>
-                                        </div>
-                                    </Carousel.Item>
+                                    <Col key={index} xs={12}>
+                                        <Highlight prop={highlight} presentingProduct={highlight.product} navigateToDetail={() => router.push(`./boosters/${highlight.product.id}`)}/>
+                                    </Col>
                                 )
                             })
                         }
-                    </Carousel>
-                </div>
-                <div className={landingPageStyles.highlightMobile}>
-                    {
-                        activeHighlights.map((highlight, index) => {
-                            return (
-                                <div key={index} className={landingPageStyles.highlightView} style={{marginBottom: 30}}>
-                                    <HighlightView prop={highlight} presentingProduct={highlight.product}/>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-                <Container fluid={true} className={`${defaultStyles.page} ${defaultStyles.pageContentGap15}`}>
+
+                    </Row>
                     <Row>
                         <Col>
                             <h2 className={defaultStyles.pageSubtitle}>Why Thunderboost</h2>
@@ -103,9 +88,9 @@ export default function IndexPage({session, host, shoppingCart}) {
                     </Row>
                     <Row id={landingPageStyles["why-thunderboost"]}>
                         {
-                            whyThunderboostInformations.map((c, index) => {
+                            whyThunderboostInformations.slice(0, 3).map((c, index) => {
                                 return (
-                                    <Col key={index} xs={12} sm={6} lg={3} style={{marginBottom: 20}}>
+                                    <Col key={index} xs={12} lg={4} style={{marginBottom: 20}}>
                                         <div>
                                             <FontAwesomeIcon icon={c.icon} color={"white"} size={"2xl"}/>
                                             <p>{c.text}</p>

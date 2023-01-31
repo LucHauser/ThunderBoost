@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "HKModular-Bold";
+    src: url("https://font-public.canva.com/YAD5jdnkFxc/0/HKModular-Bold.983580fd602872378cf332fc1.85bb75c5cbd14f2827b114e5b050205d.woff2") format("woff");
+    font-weight: bold;
+}
+
+.container {
+    background: linear-gradient(to bottom, #6D49A7, transparent);
+    border: solid #707070 1px;
+    border-radius: 10px;
+    padding: 10px 0;
+    margin-bottom: 15px;
+}
+
+.productImage {
+    padding: 50%
+}
+
+.content {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.content div {
+    width: 100%;
+}
+
+.content h2 {
+    color: #8DF3E8;
+    font-size: 40px;
+}
+
+.content > div:last-child {
+    margin-bottom: 0;
+}
+
+.productPrice {
+    font-size: 15px;
+    font-family: "HKModular-Bold", sans-serif;
+    color: #FF0080;
+}
+
+.productPrice span {
+    color: #FFFFFF;
+}
+
+@media (max-width: 768px) {
+    .layoutParent > div:not(:last-child) {
+        margin-bottom: 10px;
+    }
+}
+
+@media (min-width: 576px) {
+    .productPrice {
+        font-size: 20px !important;
+    }
+}

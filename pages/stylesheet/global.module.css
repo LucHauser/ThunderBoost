@@ -22,12 +22,12 @@
 
 @media (min-width: 992px) {
     .pageTitle {
-        font-size: 40px;
+        font-size: 40px !important;
         margin-bottom: 60px;
     }
 
     .pageSubtitle {
-        font-size: 40px;
+        font-size: 40px !important;
     }
 }
 
@@ -46,14 +46,14 @@
 
 .pageTitle {
     color: #8DF3E8;
-    font-size: 20px;
+    font-size: 30px;
     font-family: 'HKModular-Bold', sans-serif;
     text-align: center;
     margin-bottom: 15px !important;
 }
 
 .pageSubtitle {
-    font-size: 25px;
+    font-size: 30px;
     font-family: 'Nunito', sans-serif;
     color: #8DF3E8;
     text-align: center;

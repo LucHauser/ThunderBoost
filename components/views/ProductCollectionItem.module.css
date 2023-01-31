@@ -32,7 +32,7 @@
     border-radius: 8px;
 }
 
-.starRating {
+.starRating > span {
 }
 
 .productName {

@@ -87,7 +87,7 @@ export default function HighlightView({prop, presentingProduct, navigateToDetail
                             style={
                                 Object.assign({}, {background: "transparent", backgroundImage: `url(${presentingProduct?.images[prop?.productImageIndex]})`, backgroundSize: "cover"})
                             }
-                            className={highlightViewStyles.productImage}
+                            className={`${highlightViewStyles.productImage}`}
                         />
                     </Col>
                     <Col xs={12} md={7} xxl={9} className={defaultStyles.disableColumnPaddings}>

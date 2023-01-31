@@ -140,7 +140,7 @@ export default function ProductReviewForm({session, productId, host, onReviewed,
                                     count={5}
                                     value={model.starRate}
                                     size={32}
-                                    color2={"#FFB800"}
+                                    color2={"#D707F1"}
                                     half={true}
                                     onChange={(e) =>
                                         setModel({...model, starRate: e})
