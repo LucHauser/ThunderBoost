@@ -31,7 +31,7 @@ export default function Highlight({prop, presentingProduct, navigateToDetail}) {
                             </div>
 
                             <Stack direction={"horizontal"} gap={4}>
-                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`}>
+                                <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`} onClick={() => navigateToDetail()}>
                                     more
                                 </button>
                                 <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth}`}>

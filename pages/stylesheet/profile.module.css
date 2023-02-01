@@ -19,11 +19,6 @@
     align-items: center;
 }
 
-.tableUserInformation {
-    width: 40%;
-    height: 150px
-}
-
-.tableUserInformation > tr {
-    padding: 7px 0
+.tableUserInformation > tr td{
+    padding: 5px 10px 5px 0;
 }

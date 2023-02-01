@@ -12,12 +12,12 @@
     margin-bottom: 0;
 }
 
-
-
 @media (min-width: 1200px) {
     .footer {
         display: flex;
         align-items: center;
+        height: 90px;
+        justify-content: center;
     }
 
     .footerLink {

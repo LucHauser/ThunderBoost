@@ -4,16 +4,15 @@ import markdown from "@components/views/MarkdownReview.module.css"
 
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {getAllProductByFilterParameter, getAllProducts, getProductById, getProductReviewsByParam} from "@lib/api";
+import {getAllProductByFilterParameter, getProductById, getProductReviewsByParam} from "@lib/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faMinus, faPlus, faShoppingCart, faWarehouse} from "@fortawesome/free-solid-svg-icons";
-import formatTimestamp, {getDiscountPrice, isEventNowWithBoolean} from "@components/Utils";
+import {faArrowLeft, faMinus, faPlus, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
+import {getDiscountPrice, isEventNowWithBoolean} from "@components/Utils";
 import ProductReviewForm from "@components/forms/ProductReviewForm";
 import {Carousel, Col, Container, Row, Stack} from "react-bootstrap";
-import ProductArticle from "@components/views/ProductCollectionItem";
 import ProductReviewItem from "@components/views/ProductReviewItem";
 import ReactStars from "react-stars/dist/react-stars";
 
@@ -23,7 +22,6 @@ export default function ArticleDetail({session, host, shoppingCart}) {
     const [reviews, setReviews] = useState([])
     const [reviewToEdit, setReviewToEdit] = useState({})
     const [averageStarRate, setAverageStarRate] = useState(0.0)
-    const [productSuggestions, setProductSuggestions] = useState([])
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const [amountToCart, setAmountToCart] = useState(1)
     const [showReviewForm, setShowReviewForm] = useState(false)
@@ -56,22 +54,8 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                 console.log(e)
             }
         }
-        const loadProductSuggestion = async () => {
-            try {
-                const response = await getAllProductByFilterParameter(host, `id_ne=${id}`)
-                if (response.length >= 6) {
-                    const shuffled = [...response].sort(() => 0.5 - Math.random())
-                    setProductSuggestions(shuffled.slice(0, 6))
-                } else {
-                    setProductSuggestions(response)
-                }
-            } catch (e) {
-                console.log(e)
-            }
-        }
         loadProduct()
         loadReviews()
-        loadProductSuggestion()
     }, [id])
 
     const editReview = async () => {
@@ -90,22 +74,28 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                         </button>
                     </Col>
                 </Row>
+                <Row>
+                    <Col>
+                        <h1 className={defaultStyles.pageTitle}>{product.name}</h1>
+                    </Col>
+                </Row>
 
                 <Row className={defaultStyles.margin24Bottom}>
 
                     <Col xs={{span: 12, order: 1}} sm={{span: 2, order: "first"}} md={{span: 2}} lg={{span: 2, order: "first"}} xl={{span: 2}}>
                         <div className={productDetailStyles.imagesList}>
                             {
-                                product.images?.map((img, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className={productDetailStyles.imageItem}
-                                            style={{backgroundImage: `url(${img})`, boxShadow: index === selectedImageIndex ? "0 0 2px 2px #8DF3E8" : "none"}}
-                                            onClick={() => setSelectedImageIndex(index)}
-                                        />
-                                    )
-                                })
+                                product.images?.length > 0 ?
+                                    product.images?.map((img, index) => {
+                                        return (
+                                            <div
+                                                key={index}
+                                                className={productDetailStyles.imageItem}
+                                                style={{backgroundImage: `url(${img})`, boxShadow: index === selectedImageIndex ? "0 0 2px 2px #8DF3E8" : "none"}}
+                                                onClick={() => setSelectedImageIndex(index)}
+                                            />
+                                        )
+                                    }) : <div className={productDetailStyles.imageItem} style={{backgroundImage: `url(https://via.placeholder.com/100x100)`, boxShadow: "0 0 2px 2px #8DF3E8"}}/>
                             }
                         </div>
                     </Col>
@@ -113,120 +103,67 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                     <Col xs={{order: "first"}} sm={{span: 7, offset: 1, order: 1}} md={{span: 7, offset: 1}} lg={{span: 5, offset: 0}} xl={{span: 5}} className={defaultStyles.disableColumnPaddings}>
                         <Carousel fade interval={null} activeIndex={selectedImageIndex} onSelect={(selectedIndex, e) => setSelectedImageIndex(selectedIndex)} className={productDetailStyles.actualImage}>
                             {
-                                product.images?.map((img, index) => {
-                                    return (
-                                        <Carousel.Item key={index}>
-                                            <div
-                                                className={productDetailStyles.productImage}
-                                                style={{backgroundImage: `url(${img})`}}
-                                            />
-                                        </Carousel.Item>
-                                    )
-                                })
+                                product.images?.length > 0 ?
+                                    product.images?.map((img, index) => {
+                                        return (
+                                            <Carousel.Item key={index}>
+                                                <div
+                                                    className={productDetailStyles.productImage}
+                                                    style={{backgroundImage: `url(${img})`}}
+                                                />
+                                            </Carousel.Item>
+                                        )
+                                    })
+                                    : <Carousel.Item>
+                                        <div className={productDetailStyles.productImage} style={{backgroundImage: `url(https://via.placeholder.com/300x300)`}}>
+
+                                        </div>
+                                    </Carousel.Item>
                             }
                         </Carousel>
                     </Col>
 
                     <Col xs={{order: "last"}} sm={{span: 12}} lg={5} xl={5}>
-                        <Container fluid={true} className={productDetailStyles.productInformation}>
-                            <Row className={productDetailStyles.productNameRow}>
-                                <Col>
-                                    <h2 className={productDetailStyles.productName}>{product.name}</h2>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Stack direction={"horizontal"}>
-                                    <ReactStars edit={false} count={5} half={true} size={25} value={averageStarRate} color2={"#FFB800"}/>
-                                    <i>({reviews.length})</i>
-                                </Stack>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <hr style={{marginTop: 5}}/>
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col md={6}>
-                                    <b className={defaultStyles.margin0Bottom}>Size</b>
-                                    <p className={productDetailStyles.productServings}>{product.servings} Portions</p>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={12}>
-                                    <b className={defaultStyles.margin0Bottom}>Varieties</b>
-                                </Col>
-                            </Row>
-                            <Row>
+                        <div className={productDetailStyles.productInfo}>
+                            <Stack>
+                                <p className={productDetailStyles.productServings}>{product.servings} Portions</p>
                                 {
-                                    product?.varieties?.map(v => {
-                                        return (
-                                            <Col key={v} md={4} xs={6}>
-                                                <p className={productDetailStyles.productServings}>{v}</p>
-                                            </Col>
+                                    isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
+                                        <div className={productDetailStyles.productPriceBox}>
+                                            <h3 className={`${productDetailStyles.productPriceSign} ${defaultStyles.getHKModular}`}>{getDiscountPrice(product.price, product?.discountPercent)} CHF <p>instead {product.price} CHF</p></h3>
 
-                                        )
-                                    })
+                                        </div>
+                                        : <p className={`${productDetailStyles.productPriceSign} ${defaultStyles.getHKModular}`}>{product.price} CHF</p>
                                 }
-                            </Row>
-                            <Row>
-                                <Col xs={12}>
-                                    {
-                                        isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
-                                            <div className={productDetailStyles.productPriceBox}>
-                                                <h3 className={productDetailStyles.productPriceSign}>{getDiscountPrice(product.price, product?.discountPercent)}$<p>instead {product.price}$</p></h3>
+                                <i style={{fontFamily: `"Nunito", sans-serif`}}>including VAT</i>
+                                <h2>Product Description</h2>
+                                <div className={productDetailStyles.descriptionArea}>
+                                    {/* eslint-disable-next-line react/no-children-prop */}
+                                    <ReactMarkdown children={product.description}
+                                                   rehypePlugins={[remarkGfm, rehypeRaw]}
+                                                   className={markdown.elements}
+                                    />
+                                </div>
 
-                                            </div>
-                                            : <p className={productDetailStyles.productPriceSign}>{product.price}</p>
-                                    }
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col xs={12}>
-                                    <b>Quantity</b>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <Stack direction={"horizontal"} gap={2} className={defaultStyles.margin24Bottom} style={{marginTop: 10}}>
-
-                                        <button onClick={() => setAmountToCart(prev => prev - 1)} disabled={amountToCart === 1} className={productDetailStyles.productQuantityButton}>
-                                            <FontAwesomeIcon icon={faMinus} size={"xs"} color={"white"}/>
-                                        </button>
-                                        <p className={defaultStyles.margin0Bottom}>{amountToCart}</p>
-                                        <button onClick={() => setAmountToCart(prev => prev + 1)} disabled={amountToCart === parseInt(product.stockAmount)} className={productDetailStyles.productQuantityButton}>
-                                            <FontAwesomeIcon icon={faPlus} size={"xs"} color={"white"}/>
-                                        </button>
-                                        <p
-                                            className={`${productDetailStyles.stockAmountInformation} ms-auto`}
-                                            style={Object.assign(parseInt(product.stockAmount) === 0 ? {background: "#a84f4f"} : parseInt(product.stockAmount) < 5 ? {background: "#a87e4f"} : {background: "#6aa84f"})}>
-                                            <FontAwesomeIcon icon={faWarehouse} style={{marginRight: 10}}/>
-                                            {parseInt(product.stockAmount) > 0 ? `${product.stockAmount} in Stock` : `Sold out`}
-                                        </p>
-                                    </Stack>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <button className={`${defaultStyles.buttonFilled}`} onClick={() => session.user ? shoppingCart.addProduct(product.id, amountToCart) : router.push("./login")}>
+                            </Stack>
+                            <div>
+                                <h2>Quantity</h2>
+                                <Stack direction={"horizontal"} gap={2} style={{marginTop: 10}}>
+                                    <button onClick={() => setAmountToCart(prev => prev - 1)} disabled={amountToCart === 1} className={productDetailStyles.productQuantityButton}>
+                                        <FontAwesomeIcon icon={faMinus} size={"xs"} color={"white"}/>
+                                    </button>
+                                    <p className={defaultStyles.margin0Bottom}>{amountToCart}</p>
+                                    <button onClick={() => setAmountToCart(prev => prev + 1)} disabled={amountToCart === parseInt(product.stockAmount)} className={productDetailStyles.productQuantityButton}>
+                                        <FontAwesomeIcon icon={faPlus} size={"xs"} color={"white"}/>
+                                    </button>
+                                    <button className={`${defaultStyles.buttonFilled} ${defaultStyles.buttonFilledAutoWidth} ms-auto`} onClick={() => session.user ? shoppingCart.addProduct(product.id, amountToCart) : router.push("./login")}>
                                         <FontAwesomeIcon icon={faShoppingCart} style={{marginRight: 10}}/>
                                         Add to Cart
                                     </button>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </Col>
-                </Row>
-
-                <Row className={`${defaultStyles.margin24Bottom}`}>
-                    <Col>
-                        <div className={productDetailStyles.descriptionArea}>
-                            <h3>Description</h3>
-                            {/* eslint-disable-next-line react/no-children-prop */}
-                            <ReactMarkdown children={product.description}
-                                           rehypePlugins={[remarkGfm, rehypeRaw]}
-                                           className={markdown.elements}/>
+                                </Stack>
+                            </div>
                         </div>
+
                     </Col>
                 </Row>
                 <Row>
@@ -315,27 +252,6 @@ export default function ArticleDetail({session, host, shoppingCart}) {
                         </>
                         : <p className={productDetailStyles.emptyReviewText}>No Reviews</p>
                 }
-                <Row>
-                    <Col>
-                        <div className={productDetailStyles.reviewSubline}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={12}>
-                        <h3>This might interest you</h3>
-                    </Col>
-                </Row>
-                <Row>
-                    {
-                        productSuggestions.map((product, index) => {
-                            return (
-                                <Col key={index} xs={6} sm={4} md={4} lg={4} xl={3} xxl={2} className={defaultStyles.margin10Bottom}>
-                                    <ProductArticle product={product} session={session} showAll={false} routeToDetail={() => router.push(`../boosters/${product.id}`)}/>
-                                </Col>
-                            )
-                        })
-                    }
-                </Row>
             </Container>
         </div>
     )

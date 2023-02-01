@@ -49,7 +49,7 @@ export default function ImageSelectionList({usage, selectedImage, toggleDialog, 
                             .map((image, index) => {
                                 return (
                                     <Col key={index} xs={4}>
-                                        <img src={image.img} className={imageSelectionListStyles.imageObj}/>
+                                        <img src={image.img} className={imageSelectionListStyles.imageObj} onClick={() => onChooseImage(image.img)}/>
                                     </Col>
 
                                 )

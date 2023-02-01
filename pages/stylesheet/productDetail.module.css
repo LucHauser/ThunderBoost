@@ -42,32 +42,24 @@
     height: fit-content !important;
 }
 
-.productInformation > div > div {
-    padding: 0 !important;
-}
-
-.productName {
-    font-size: 30px;
-    color: #8DF3E8;
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
 
 .productServings {
-    background: rgba(255, 255, 255, 9%);
-    font-size: 15px;
+    font-size: 20px;
     font-weight: bold;
-    text-align: center;
-    padding: 5px 10px;
-    width: 100%;
-    min-height: fit-content;
-    border-radius: 10px;
+    padding: 5px 0;
+    width: fit-content;
     margin-bottom: 0;
 }
 
 .productPriceBox {
-    padding: 5px 10px;
+    padding: 5px 0;
     width: fit-content;
-    background: rgba(255, 255, 255, 9%);
-    border-radius: 10px;
     display: flex;
     gap: 20px;
     align-items: center;
@@ -82,32 +74,27 @@
     font-size: 30px;
     color: #EB3E7A;
     display: flex;
-    align-items: end;
     margin-bottom: 0 !important;
+    align-items: center;
 }
 
 .productPriceSign > p {
-    font-size: 12px;
+    font-size: 20px;
     color: #FFFFFF;
     margin-left: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 0;
     font-style: italic;
 }
 
 .descriptionArea {
     font-family: Nunito, sans-serif;
-    max-height: 300px;
     color: #FFFFFF;
+    height: 100%;
+    overflow: auto;
 }
 
-.stockAmountInformation {
-    width: fit-content;
-    height: fit-content;
-    padding: 5px 10px;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 10px;
-    margin-bottom: 0 !important;
+.descriptionArea::-webkit-scrollbar {
+    display: none
 }
 
 .addToCartContainer {
@@ -152,7 +139,8 @@
 
 .reviewSubline {
     width: 100%;
-    border: solid #D707F1 1px
+    border: solid #D707F1 1px;
+    margin: 90px 0
 }
 
 @media (min-width: 576px) {

@@ -181,7 +181,7 @@ export default function BoostersPage({session, host, shoppingCart}) {
                     <Col xxl={3} lg={4} md={{span: 4}} sm={12} xs={{span: 12, order: 1}}>
                         <h2 className={defaultStyles.pageSubtitle}>Filter</h2>
                         <div className={defaultStyles.formSubtitleSeparatorLine}/>
-                        <Accordion>
+                        <Accordion defaultActiveKey={"0"}>
                             <Accordion.Item eventKey={"0"} className={`${defaultStyles.accordionItem}`}>
                                 <Accordion.Header className={`${defaultStyles.accordionHeaderTransparent} ${defaultStyles.accordionHeader} ${boosterPageStyles.filterTitle}`}>Filter by Variety:</Accordion.Header>
                                 <Accordion.Body className={defaultStyles.accordionBody}>
@@ -200,7 +200,8 @@ export default function BoostersPage({session, host, shoppingCart}) {
                                     </Stack>
                                 </Accordion.Body>
                             </Accordion.Item>
-                            <Accordion.Item eventKey={"1"} className={`${defaultStyles.accordionItem}`}>
+                            {/*
+                            <Accordion.Item eventKey={"0"} className={`${defaultStyles.accordionItem}`}>
                                 <Accordion.Header className={`${defaultStyles.accordionHeaderTransparent} ${defaultStyles.accordionHeader}`}>Filter by Usage</Accordion.Header>
                                 <Accordion.Body className={defaultStyles.accordionBody}>
                                     <Stack gap={2}>
@@ -218,6 +219,7 @@ export default function BoostersPage({session, host, shoppingCart}) {
                                     </Stack>
                                 </Accordion.Body>
                             </Accordion.Item>
+                            */}
                         </Accordion>
                     </Col>
                     <Col xxl={9} lg={8} md={{span: 8, order: 3}} sm={12} xs={{span: 12, order: 3}}>

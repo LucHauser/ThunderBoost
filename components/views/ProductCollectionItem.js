@@ -37,7 +37,7 @@ export default function ProductArticle({product, routeToDetail, addThisToCart, s
                     {
                         showAll ?
                             <>
-                                <Stack gap={1} direction={"horizontal"}>
+                                <Stack gap={1} direction={"horizontal"} style={{justifyContent: "center"}}>
                                     <ReactStars
                                         className={productArticleStyles.starRating}
                                         count={5}
@@ -52,14 +52,14 @@ export default function ProductArticle({product, routeToDetail, addThisToCart, s
 
                                 {
                                     isEventNowWithBoolean(product.discountFrom, product.discountUntil, product.discountActive) ?
-                                        <Stack direction={"horizontal"} gap={2}>
+                                        <Stack direction={"horizontal"} gap={2} style={{justifyContent: "center"}}>
                                             <p className={productArticleStyles.productPrice}
                                                style={{textDecoration: "line-through"}}>{getDiscountPrice(product.price, product.discountPercent)}$</p>
                                             <p className={productArticleStyles.productPrice}
                                                style={{color: "#EB3E7A"}}>{product.price}$</p>
                                         </Stack>
 
-                                        : <p className={productArticleStyles.productPrice}>{product.price}$</p>
+                                        : <p className={productArticleStyles.productPrice} style={{textAlign: "center"}}>{product.price}$</p>
                                 }
                             </> : null
                     }
@@ -68,9 +68,8 @@ export default function ProductArticle({product, routeToDetail, addThisToCart, s
                 {
                     showAll ?
                         <Stack direction={"horizontal"}>
-                            <p>{product.stockAmount} in Stock</p>
-                            <button className={productArticleStyles.buttonCart} onClick={() => addThisToCart(product.id)}>
-                                <FontAwesomeIcon icon={faShoppingCart}/>
+                            <button className={defaultStyles.buttonFilled} onClick={() => addThisToCart(product.id)}>
+                                <FontAwesomeIcon icon={faShoppingCart}/>Add to cart
                             </button>
                         </Stack> : null
                 }
